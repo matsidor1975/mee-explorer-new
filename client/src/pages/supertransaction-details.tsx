@@ -68,8 +68,11 @@ export default function SupertransactionDetails() {
         {showHashDetails && (
           <div className="space-y-6">
             <HashOverview hashDetails={hashDetails} />
-            <PaymentInfo paymentInfo={hashDetails.paymentInfo} />
-            <UserOperations userOps={hashDetails.userOps} />
+            <PaymentInfo 
+              paymentInfo={hashDetails.paymentInfo} 
+              feePayerUserOp={hashDetails.userOps[0]} 
+            />
+            <UserOperations userOps={hashDetails.userOps.slice(1)} />
           </div>
         )}
 
