@@ -14,8 +14,12 @@ interface UserOperationsProps {
 
 export default function UserOperations({ userOps }: UserOperationsProps) {
   const [expandedOps, setExpandedOps] = useState<Set<number>>(new Set());
+  const [expandedCleanupOps, setExpandedCleanupOps] = useState<Set<number>>(new Set());
   const { toast } = useToast();
   const { chains } = useChainInfo();
+
+  const regularOperations = userOps.filter(op => !op.isCleanUpUserOp);
+  const cleanupOperations = userOps.filter(op => op.isCleanUpUserOp);
 
   const toggleExpanded = (index: number) => {
     const newExpanded = new Set(expandedOps);
@@ -25,6 +29,16 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
       newExpanded.add(index);
     }
     setExpandedOps(newExpanded);
+  };
+
+  const toggleCleanupExpanded = (index: number) => {
+    const newExpanded = new Set(expandedCleanupOps);
+    if (newExpanded.has(index)) {
+      newExpanded.delete(index);
+    } else {
+      newExpanded.add(index);
+    }
+    setExpandedCleanupOps(newExpanded);
   };
 
   const copyToClipboard = async (text: string, label: string) => {
@@ -141,245 +155,240 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
     </div>
   );
 
-  return (
-    <Card className="border-0 shadow-sm">
-      <CardContent className="p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-[var(--biconomy-orange)]/10 rounded-lg flex items-center justify-center">
-              <Layers className="h-5 w-5 text-[var(--biconomy-orange)]" />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900">User Operations</h3>
-          </div>
-          <Badge variant="secondary" className="bg-[var(--biconomy-orange)]/10 text-[var(--biconomy-orange)] border-0">
-            {userOps.length} operation{userOps.length !== 1 ? 's' : ''}
-          </Badge>
-        </div>
+  const renderOperation = (userOp: UserOp, index: number, isCleanup: boolean = false) => {
+    const isExpanded = isCleanup ? expandedCleanupOps.has(index) : expandedOps.has(index);
+    const toggleFunction = isCleanup ? toggleCleanupExpanded : toggleExpanded;
+    const { verificationGasLimit, callGasLimit } = parseAccountGasLimits(userOp.userOp.accountGasLimits);
+    const { maxPriorityFeePerGas, maxFeePerGas } = parseGasFees(userOp.userOp.gasFees);
+    const executionTime = formatTimestamp(userOp.minedTimestamp || userOp.miningTimestamp);
+    const chainInfo = chains.find(c => c.chainId.toString() === userOp.chainId);
 
-        <div className="space-y-4">
-          {userOps.map((userOp, index) => {
-            const isExpanded = expandedOps.has(index);
-            const { verificationGasLimit, callGasLimit } = parseAccountGasLimits(userOp.userOp.accountGasLimits);
-            const { maxPriorityFeePerGas, maxFeePerGas } = parseGasFees(userOp.userOp.gasFees);
-            const executionTime = formatTimestamp(userOp.minedTimestamp || userOp.miningTimestamp);
-            const chainInfo = chains.find(c => c.chainId.toString() === userOp.chainId);
-
-            return (
-              <div key={index} className="border border-gray-200 rounded-lg overflow-hidden">
-                {/* Operation Header */}
-                <div className="p-4 bg-gray-50/50 border-b border-gray-200">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-[var(--biconomy-orange)]/10 rounded-lg flex items-center justify-center">
-                        <User className="h-4 w-4 text-[var(--biconomy-orange)]" />
-                      </div>
-                      <div>
-                        <div className="flex items-center space-x-2">
-                          <h4 className="font-medium text-gray-900">
-                            {userOp.isCleanUpUserOp ? 'Cleanup Operation' : `Operation #${index + 1}`}
-                          </h4>
-                          {userOp.isCleanUpUserOp && (
-                            <Badge variant="outline" className="text-xs">
-                              Cleanup
-                            </Badge>
-                          )}
-                        </div>
-                        <p className="text-sm text-gray-500">{chainInfo?.name || `Chain ${userOp.chainId}`}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Badge className={getExecutionStatusColor(userOp.executionStatus)}>
-                        {userOp.executionStatus}
-                      </Badge>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => toggleExpanded(index)}
-                        className="text-gray-500 hover:text-[var(--biconomy-orange)]"
-                      >
-                        <ChevronDown className={`h-4 w-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Operation Details - Always visible inline */}
-                <div className="p-4 bg-white">
-                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                    {/* Transaction Hash with Explorer Link */}
-                    <div className="flex-1">
-                      {userOp.executionData ? (
-                        <div className="flex items-center space-x-3">
-                          <div className="flex items-center space-x-2">
-                            <ExternalLink className="h-4 w-4 text-gray-500" />
-                            <span className="text-sm font-medium text-gray-600">Transaction:</span>
-                          </div>
-                          <code className="text-sm font-mono text-gray-900">
-                            {formatHash(userOp.executionData)}
-                          </code>
-                          <div className="flex items-center space-x-2">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => copyToClipboard(userOp.executionData, "Transaction Hash")}
-                              className="text-gray-400 hover:text-[var(--biconomy-orange)] h-6 w-6 p-0"
-                            >
-                              <Copy className="h-3 w-3" />
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => window.open(getExplorerUrl(userOp.chainId, userOp.executionData), '_blank')}
-                              className="text-xs h-6 px-2 flex items-center space-x-1 hover:bg-[var(--biconomy-orange)] hover:text-white"
-                            >
-                              <ExternalLink className="h-3 w-3" />
-                              <span>{getExplorerName(userOp.chainId)}</span>
-                            </Button>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="flex items-center space-x-2">
-                          <ExternalLink className="h-4 w-4 text-gray-400" />
-                          <span className="text-sm text-gray-400">
-                            {userOp.isCleanUpUserOp 
-                              ? "Not executed (no tokens to cleanup)" 
-                              : "No transaction data available"
-                            }
-                          </span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Mined Time */}
-                    <div className="flex items-center space-x-2 text-sm text-gray-600">
-                      <Clock className="h-4 w-4" />
-                      <span className="font-medium">Mined:</span>
-                      <span>{executionTime.relative}</span>
-                      <span className="text-gray-400">({executionTime.formatted})</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Expandable Details */}
-                {isExpanded && (
-                  <div className="px-4 pb-4">
-                    <div className="space-y-4 pt-4 border-t border-gray-100">
-                      {/* Cleanup Operation Explanation */}
-                      {userOp.isCleanUpUserOp && (
-                        <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                          <div className="flex items-start space-x-2">
-                            <Settings className="h-4 w-4 text-blue-600 mt-0.5" />
-                            <div>
-                              <p className="text-sm font-medium text-blue-800">Cleanup Operation</p>
-                              <p className="text-xs text-blue-700 mt-1">
-                                This operation executes after all regular operations to clean up any remaining tokens from the account. 
-                                If no tokens need cleanup, the operation will not execute and this is normal behavior.
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      {/* User Operation Details */}
-                      <div>
-                        <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-2">
-                          <Settings className="h-4 w-4" />
-                          <span>Operation Details</span>
-                        </h5>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          <DataField icon={User} label="Sender" value={userOp.userOp.sender} />
-                          <DataField icon={Hash} label="Nonce" value={userOp.userOp.nonce} />
-                          <DataField icon={Fuel} label="Pre-verification Gas" value={formatGas(userOp.userOp.preVerificationGas)} />
-                          <DataField icon={Zap} label="Chain ID" value={userOp.chainId} />
-                          <DataField icon={CreditCard} label="Max Gas Limit" value={formatGas(userOp.maxGasLimit)} />
-                          <DataField icon={Fuel} label="Max Fee Per Gas" value={formatGas(userOp.maxFeePerGas)} />
-                        </div>
-                      </div>
-
-                      {/* Gas Information */}
-                      <div>
-                        <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-2">
-                          <Fuel className="h-4 w-4" />
-                          <span>Gas Information</span>
-                        </h5>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          <DataField icon={Fuel} label="Verification Gas Limit" value={formatGas(verificationGasLimit)} />
-                          <DataField icon={Fuel} label="Call Gas Limit" value={formatGas(callGasLimit)} />
-                          <DataField icon={Zap} label="Max Priority Fee Per Gas" value={formatGas(maxPriorityFeePerGas)} />
-                          <DataField icon={Zap} label="Max Fee Per Gas" value={formatGas(maxFeePerGas)} />
-                        </div>
-                      </div>
-
-                      {/* Timing Information */}
-                      <div>
-                        <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-2">
-                          <Clock className="h-4 w-4" />
-                          <span>Timing Information</span>
-                        </h5>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          {userOp.lowerBoundTimestamp > 0 && (
-                            <DataField 
-                              icon={Clock} 
-                              label="Lower Bound" 
-                              value={formatTimestamp(userOp.lowerBoundTimestamp).formatted}
-                              showCopy={false}
-                            />
-                          )}
-                          <DataField 
-                            icon={Clock} 
-                            label="Upper Bound" 
-                            value={formatTimestamp(userOp.upperBoundTimestamp).formatted}
-                            showCopy={false}
-                          />
-                          <DataField 
-                            icon={Clock} 
-                            label="Simulation Finished" 
-                            value={formatTimestamp(userOp.simulationFinishedAt).formatted}
-                            showCopy={false}
-                          />
-                          <DataField 
-                            icon={Clock} 
-                            label="Mining Time" 
-                            value={formatTimestamp(userOp.miningTimestamp).formatted}
-                            showCopy={false}
-                          />
-                        </div>
-                      </div>
-
-                      {/* Code Fields */}
-                      <div className="space-y-3">
-                        <CodeField icon={Code} label="Init Code" value={userOp.userOp.initCode} />
-                        <CodeField icon={Code} label="Call Data" value={userOp.userOp.callData} />
-                        <CodeField icon={Settings} label="Paymaster and Data" value={userOp.userOp.paymasterAndData} />
-                        <CodeField icon={Settings} label="Signature" value={userOp.userOp.signature} />
-                      </div>
-
-                      {/* Additional Flags */}
-                      {userOp.shortEncoding !== undefined && (
-                        <div className="flex items-center space-x-4 pt-2">
-                          <div className="flex items-center space-x-2">
-                            <span className="text-sm text-gray-600">Short Encoding:</span>
-                            <Badge variant={userOp.shortEncoding ? "default" : "secondary"}>
-                              {userOp.shortEncoding ? "Enabled" : "Disabled"}
-                            </Badge>
-                          </div>
-                          {userOp.isCleanUpUserOp !== undefined && (
-                            <div className="flex items-center space-x-2">
-                              <span className="text-sm text-gray-600">Cleanup Operation:</span>
-                              <Badge variant={userOp.isCleanUpUserOp ? "default" : "secondary"}>
-                                {userOp.isCleanUpUserOp ? "Yes" : "No"}
-                              </Badge>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
+    return (
+      <div key={index} className="border border-gray-200 rounded-lg overflow-hidden">
+        {/* Operation Header */}
+        <div className="p-4 bg-gray-50/50 border-b border-gray-200">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-[var(--biconomy-orange)]/10 rounded-lg flex items-center justify-center">
+                <User className="h-4 w-4 text-[var(--biconomy-orange)]" />
               </div>
-            );
-          })}
+              <div>
+                <div className="flex items-center space-x-2">
+                  <h4 className="font-medium text-gray-900">
+                    {isCleanup ? 'Cleanup Operation' : `Operation #${index + 1}`}
+                  </h4>
+                  {isCleanup && (
+                    <Badge variant="outline" className="text-xs">
+                      Cleanup
+                    </Badge>
+                  )}
+                </div>
+                <p className="text-sm text-gray-500">{chainInfo?.name || `Chain ${userOp.chainId}`}</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Badge className={getExecutionStatusColor(userOp.executionStatus)}>
+                {userOp.executionStatus}
+              </Badge>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => toggleFunction(index)}
+                className="text-gray-500 hover:text-[var(--biconomy-orange)]"
+              >
+                <ChevronDown className={`h-4 w-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+              </Button>
+            </div>
+          </div>
         </div>
-      </CardContent>
-    </Card>
+
+        {/* Operation Details - Always visible inline */}
+        <div className="p-4 bg-white">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            {/* Transaction Hash with Explorer Link */}
+            <div className="flex-1">
+              {userOp.executionData ? (
+                <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-2">
+                    <ExternalLink className="h-4 w-4 text-gray-500" />
+                    <span className="text-sm font-medium text-gray-600">Transaction:</span>
+                  </div>
+                  <code className="text-sm font-mono text-gray-900">
+                    {formatHash(userOp.executionData)}
+                  </code>
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => copyToClipboard(userOp.executionData, "Transaction Hash")}
+                      className="text-gray-400 hover:text-[var(--biconomy-orange)] h-6 w-6 p-0"
+                    >
+                      <Copy className="h-3 w-3" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => window.open(getExplorerUrl(userOp.chainId, userOp.executionData), '_blank')}
+                      className="text-xs h-6 px-2 flex items-center space-x-1 hover:bg-[var(--biconomy-orange)] hover:text-white"
+                    >
+                      <ExternalLink className="h-3 w-3" />
+                      <span>{getExplorerName(userOp.chainId)}</span>
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center space-x-2">
+                  <ExternalLink className="h-4 w-4 text-gray-400" />
+                  <span className="text-sm text-gray-400">
+                    {isCleanup
+                      ? "Not executed (no tokens to cleanup)" 
+                      : "No transaction data available"
+                    }
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Mined Time */}
+            <div className="flex items-center space-x-2 text-sm text-gray-600">
+              <Clock className="h-4 w-4" />
+              <span className="font-medium">Mined:</span>
+              <span>{executionTime.relative}</span>
+              <span className="text-gray-400">({executionTime.formatted})</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Expandable Details */}
+        {isExpanded && (
+          <div className="px-4 pb-4">
+            <div className="space-y-4 pt-4 border-t border-gray-100">
+              {/* User Operation Details */}
+              <div>
+                <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-2">
+                  <Settings className="h-4 w-4" />
+                  <span>Operation Details</span>
+                </h5>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <DataField icon={Hash} label="User Op Hash" value={userOp.userOp.userOpHash} />
+                  <DataField icon={User} label="Sender" value={userOp.userOp.sender} />
+                  <DataField icon={Hash} label="Nonce" value={userOp.userOp.nonce} />
+                  <DataField icon={CreditCard} label="Paymaster" value={userOp.userOp.paymaster} />
+                  <DataField icon={Fuel} label="Verification Gas Limit" value={formatGas(verificationGasLimit)} showCopy={false} />
+                  <DataField icon={Fuel} label="Call Gas Limit" value={formatGas(callGasLimit)} showCopy={false} />
+                  <DataField icon={Zap} label="Max Priority Fee Per Gas" value={formatGas(maxPriorityFeePerGas)} showCopy={false} />
+                  <DataField icon={Zap} label="Max Fee Per Gas" value={formatGas(maxFeePerGas)} showCopy={false} />
+                </div>
+              </div>
+
+              {/* Transaction Hash with Explorer Integration */}
+              {userOp.executionData && (
+                <div>
+                  <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-2">
+                    <ExternalLink className="h-4 w-4" />
+                    <span>On-Chain Transaction</span>
+                  </h5>
+                  <ExplorerLink txHash={userOp.executionData} chainId={userOp.chainId} />
+                </div>
+              )}
+
+              {/* Call Data */}
+              <div>
+                <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-2">
+                  <Code className="h-4 w-4" />
+                  <span>Call Data</span>
+                </h5>
+                <CodeField icon={Code} label="Call Data" value={userOp.userOp.callData} />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Regular Operations Card */}
+      {regularOperations.length > 0 && (
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-[var(--biconomy-orange)]/10 rounded-lg flex items-center justify-center">
+                  <Layers className="h-5 w-5 text-[var(--biconomy-orange)]" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900">User Operations</h3>
+              </div>
+              <Badge variant="secondary" className="bg-[var(--biconomy-orange)]/10 text-[var(--biconomy-orange)] border-0">
+                {regularOperations.length} operation{regularOperations.length !== 1 ? 's' : ''}
+              </Badge>
+            </div>
+
+            <div className="space-y-4">
+              {regularOperations.map((userOp, index) => renderOperation(userOp, index, false))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Cleanup Operations Card */}
+      {cleanupOperations.length > 0 && (
+        <Card className="border-0 shadow-sm bg-blue-50/30">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <Settings className="h-5 w-5 text-blue-600" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900">Cleanup Operations</h3>
+                  <p className="text-sm text-blue-700 mt-1">
+                    These operations execute after regular operations to clean up remaining tokens
+                  </p>
+                </div>
+              </div>
+              <Badge variant="secondary" className="bg-blue-100 text-blue-700 border-0">
+                {cleanupOperations.length} cleanup{cleanupOperations.length !== 1 ? 's' : ''}
+              </Badge>
+            </div>
+
+            {/* Cleanup Explanation */}
+            <div className="p-4 bg-blue-100 border border-blue-200 rounded-lg mb-6">
+              <div className="flex items-start space-x-3">
+                <Settings className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                <div>
+                  <h4 className="text-sm font-medium text-blue-800 mb-2">About Cleanup Operations</h4>
+                  <p className="text-sm text-blue-700">
+                    Cleanup operations automatically execute after all regular operations complete. They remove any 
+                    remaining tokens from the smart account. If there are no tokens to cleanup, these operations 
+                    will not execute, which is completely normal behavior.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              {cleanupOperations.map((userOp, index) => renderOperation(userOp, index, true))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* No Operations Message */}
+      {regularOperations.length === 0 && cleanupOperations.length === 0 && (
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-6">
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="w-10 h-10 bg-[var(--biconomy-orange)]/10 rounded-lg flex items-center justify-center">
+                <Layers className="h-5 w-5 text-[var(--biconomy-orange)]" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900">User Operations</h3>
+            </div>
+            <p className="text-gray-500">No user operations found.</p>
+          </CardContent>
+        </Card>
+      )}
+    </div>
   );
 }
