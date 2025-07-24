@@ -58,3 +58,24 @@ export const isValidSupertransactionHash = (hash: string): boolean => {
   const hashRegex = /^0x[a-fA-F0-9]{64}$/;
   return hashRegex.test(hash);
 };
+
+export const fetchTokenInfo = async (tokenAddress: string, chainId: string): Promise<{ name: string; symbol: string; decimals: number } | null> => {
+  try {
+    const response = await fetch(`${NODE_URL}/v1/info?tokenAddress=${tokenAddress}&chainId=${chainId}`, {
+      headers: {
+        'X-API-KEY': API_KEY,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch token info:', error);
+    return null;
+  }
+};

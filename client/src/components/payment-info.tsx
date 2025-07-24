@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Copy, DollarSign, CreditCard, Wallet, Hash, Key, Circle, ChevronDown, Receipt, Users } from "lucide-react";
@@ -6,6 +6,7 @@ import { PaymentInfo, UserOp } from "@/types";
 import { formatAddress, formatNumber, getTokenInfo, getNetworkIcon, getTokenIcon } from "@/lib/format";
 import { useToast } from "@/hooks/use-toast";
 import { useChainInfo } from "@/hooks/use-chain-info";
+import { fetchTokenInfo } from "@/lib/api";
 
 interface PaymentInfoProps {
   paymentInfo: PaymentInfo;
@@ -16,9 +17,21 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
   const { toast } = useToast();
   const { chains } = useChainInfo();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [apiTokenInfo, setApiTokenInfo] = useState<{ name: string; symbol: string; decimals: number } | null>(null);
   
-  // Get token information
-  const tokenInfo = getTokenInfo(paymentInfo.token, paymentInfo.chainId);
+  // Fetch token information from API
+  useEffect(() => {
+    const loadTokenInfo = async () => {
+      const tokenData = await fetchTokenInfo(paymentInfo.token, paymentInfo.chainId);
+      setApiTokenInfo(tokenData);
+    };
+    
+    loadTokenInfo();
+  }, [paymentInfo.token, paymentInfo.chainId]);
+  
+  // Get token information (use API data if available, fallback to hardcoded)
+  const fallbackTokenInfo = getTokenInfo(paymentInfo.token, paymentInfo.chainId);
+  const tokenInfo = apiTokenInfo || fallbackTokenInfo;
   const chainInfo = chains.find(c => c.chainId === paymentInfo.chainId);
   
   // Calculate total fees
