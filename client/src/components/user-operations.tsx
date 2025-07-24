@@ -263,18 +263,20 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                 </div>
               )}
               
-              {/* Status and Time - only show if simulate button is not available */}
-              {userOp.executionStatus === "MINED_SUCCESS" && (
-                <div className="flex items-center space-x-2">
-                  <span className="text-gray-400">•</span>
-                  <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge text-xs`}>
-                    {userOp.executionStatus}
-                  </Badge>
-                  <span className="text-gray-400">•</span>
-                  <Clock className="h-3 w-3 text-gray-500" />
-                  <span className="text-xs text-gray-600">{executionTime.formatted}</span>
-                </div>
-              )}
+              {/* Status and Time - show status always, time only for mined operations */}
+              <div className="flex items-center space-x-2">
+                <span className="text-gray-400">•</span>
+                <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge text-xs`}>
+                  {userOp.executionStatus}
+                </Badge>
+                {userOp.executionStatus === "MINED_SUCCESS" && (
+                  <>
+                    <span className="text-gray-400">•</span>
+                    <Clock className="h-3 w-3 text-gray-500" />
+                    <span className="text-xs text-gray-600">{executionTime.formatted}</span>
+                  </>
+                )}
+              </div>
             </div>
             
             <div className="flex items-center space-x-2">
@@ -350,18 +352,20 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
               </div>
             </div>
 
-            {/* Status and Time Row - only show if simulate button is not available */}
-            {userOp.executionStatus === "MINED_SUCCESS" && (
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge text-xs`}>
-                    {userOp.executionStatus}
-                  </Badge>
-                  <Clock className="h-3 w-3 text-gray-500" />
-                  <span className="text-xs text-gray-600">{executionTime.formatted}</span>
-                </div>
+            {/* Status and Time Row - show status always, time only for mined operations */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge text-xs`}>
+                  {userOp.executionStatus}
+                </Badge>
+                {userOp.executionStatus === "MINED_SUCCESS" && (
+                  <>
+                    <Clock className="h-3 w-3 text-gray-500" />
+                    <span className="text-xs text-gray-600">{executionTime.formatted}</span>
+                  </>
+                )}
               </div>
-            )}
+            </div>
 
             {/* Transaction Hash Row - only show if simulate button is not available */}
             {userOp.executionData && userOp.executionStatus === "MINED_SUCCESS" && (
