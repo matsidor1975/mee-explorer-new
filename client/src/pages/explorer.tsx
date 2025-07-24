@@ -1,14 +1,21 @@
 import { useState } from "react";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 import HashSearch from "@/components/hash-search";
-import { Search } from "lucide-react";
+import { Search, Activity } from "lucide-react";
 
 export default function Explorer() {
   const [searchHash, setSearchHash] = useState<string>("");
   const [, navigate] = useLocation();
+  const [location] = useLocation();
 
   const handleSearch = (hash: string) => {
     navigate(`/details/${hash}`);
+  };
+
+  const isActive = (path: string) => {
+    if (path === "/" && location === "/") return true;
+    if (path !== "/" && location.startsWith(path)) return true;
+    return false;
   };
 
   return (
@@ -24,12 +31,36 @@ export default function Explorer() {
                 className="h-8"
               />
             </div>
-            <nav className="hidden md:flex items-center space-x-1">
+            <nav className="flex items-center space-x-1">
+              <Link 
+                href="/" 
+                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
+                  isActive("/") 
+                    ? "bg-biconomy-orange text-white" 
+                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                }`}
+              >
+                <Search className="h-4 w-4" />
+                <span className="font-medium">Explorer</span>
+              </Link>
+              
+              <Link 
+                href="/network" 
+                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
+                  isActive("/network") 
+                    ? "bg-biconomy-orange text-white" 
+                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                }`}
+              >
+                <Activity className="h-4 w-4" />
+                <span className="font-medium">Network Status</span>
+              </Link>
+              
               <a 
                 href="https://docs.biconomy.io" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="px-3 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+                className="px-3 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors rounded-lg"
               >
                 Documentation
               </a>
