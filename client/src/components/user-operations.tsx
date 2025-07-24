@@ -339,19 +339,16 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
     <div className="space-y-6">
       {/* Regular Operations Card */}
       {regularOperations.length > 0 && (
-        <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-sm">
-          <div className="p-6 border-b border-slate-200/50">
+        <div className="bg-white border border-slate-200">
+          <div className="px-6 py-4 border-b border-slate-200">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
-                  <Layers className="h-6 w-6 text-white" />
+                <div className="w-8 h-8 bg-blue-500 flex items-center justify-center">
+                  <Layers className="h-4 w-4 text-white" />
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold text-slate-900">User Operations</h3>
-                  <p className="text-sm text-slate-500">Detailed execution information</p>
-                </div>
+                <h3 className="text-lg font-semibold text-slate-900">User Operations</h3>
               </div>
-              <Badge className="px-3 py-1 text-xs bg-blue-100 text-blue-800 border-blue-200 rounded-full">
+              <Badge className="px-2 py-1 text-xs bg-blue-100 text-blue-800 border border-blue-200">
                 {regularOperations.length} operation{regularOperations.length !== 1 ? 's' : ''}
               </Badge>
             </div>
@@ -367,15 +364,15 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
 
       {/* Cleanup Operations Toggle */}
       {cleanupOperations.length > 0 && (
-        <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-sm">
-          <div className="p-6">
+        <div className="bg-white border border-slate-200">
+          <div className="px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-slate-500 to-slate-600 rounded-2xl flex items-center justify-center shadow-lg">
-                  <Settings className="h-6 w-6 text-white" />
+                <div className="w-8 h-8 bg-slate-500 flex items-center justify-center">
+                  <Settings className="h-4 w-4 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900">Cleanup Operations</h3>
+                  <h3 className="text-lg font-semibold text-slate-900">Cleanup Operations</h3>
                   <p className="text-sm text-slate-500">
                     {cleanupOperations.length} cleanup operation{cleanupOperations.length !== 1 ? 's' : ''} available
                   </p>
@@ -385,7 +382,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowCleanupOperations(!showCleanupOperations)}
-                className="flex items-center space-x-2 hover:bg-slate-50 border-slate-200 rounded-xl"
+                className="flex items-center space-x-2 hover:bg-slate-50 border-slate-200"
               >
                 <span>{showCleanupOperations ? 'Hide' : 'Show'} Cleanup Operations</span>
                 <ChevronDown className={`h-4 w-4 transition-transform ${showCleanupOperations ? 'rotate-180' : ''}`} />
@@ -397,7 +394,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
 
       {/* Expanded Cleanup Operations Card */}
       {cleanupOperations.length > 0 && showCleanupOperations && (
-        <div className="bg-blue-50/50 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-sm">
+        <div className="bg-blue-50 border border-slate-200">
           <div className="p-6">
             {/* Cleanup Explanation */}
             <div className="p-4 bg-blue-100 border border-blue-200 rounded-lg mb-6">
@@ -423,14 +420,14 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
 
       {/* No Operations Message */}
       {regularOperations.length === 0 && cleanupOperations.length === 0 && (
-        <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-sm">
+        <div className="bg-white border border-slate-200">
           <div className="p-6">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <Layers className="h-6 w-6 text-white" />
+              <div className="w-8 h-8 bg-orange-500 flex items-center justify-center">
+                <Layers className="h-4 w-4 text-white" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-slate-900">User Operations</h3>
+                <h3 className="text-lg font-semibold text-slate-900">User Operations</h3>
                 <p className="text-sm text-slate-500">No operations found</p>
               </div>
             </div>

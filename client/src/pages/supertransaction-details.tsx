@@ -22,33 +22,30 @@ export default function SupertransactionDetails() {
   const showHashDetails = hashDetails && !isLoading && !error;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="min-h-screen bg-slate-50">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-xl border-b border-slate-200/50 sticky top-0 z-50">
+      <header className="bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-14">
             <div className="flex items-center space-x-4">
               <Link href="/">
-                <Button variant="ghost" size="sm" className="flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl">
+                <Button variant="ghost" size="sm" className="flex items-center space-x-2 text-slate-600 hover:text-slate-900">
                   <ArrowLeft className="h-4 w-4" />
                   <span>Back to Search</span>
                 </Button>
               </Link>
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-lg">
-                  <div className="w-5 h-5 bg-white rounded-lg transform rotate-45"></div>
+                <div className="w-8 h-8 bg-orange-500 rounded flex items-center justify-center">
+                  <div className="w-4 h-4 bg-white rounded transform rotate-45"></div>
                 </div>
-                <div>
-                  <h1 className="text-xl font-bold text-slate-900">Biconomy Explorer</h1>
-                  <p className="text-xs text-slate-500">Blockchain Transaction Analytics</p>
-                </div>
+                <h1 className="text-lg font-semibold text-slate-900">Biconomy Explorer</h1>
               </div>
             </div>
-            <nav className="hidden md:flex items-center space-x-2">
-              <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl">Dashboard</Button>
-              <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl">Transactions</Button>
-              <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl">Analytics</Button>
-              <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl">Documentation</Button>
+            <nav className="hidden md:flex items-center space-x-1">
+              <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900">Dashboard</Button>
+              <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900">Transactions</Button>
+              <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900">Analytics</Button>
+              <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900">Documentation</Button>
             </nav>
           </div>
         </div>

@@ -49,17 +49,15 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
     subtitle: string;
     color: string;
   }) => (
-    <div className="bg-white/70 backdrop-blur-sm border border-slate-200/50 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200">
-      <div className="flex items-center justify-between">
-        <div className="flex-1">
-          <div className="flex items-center space-x-3 mb-2">
-            <div className={`w-10 h-10 ${color} rounded-xl flex items-center justify-center shadow-sm`}>
-              <Icon className="h-5 w-5 text-white" />
-            </div>
-            <p className="text-sm font-medium text-slate-600 uppercase tracking-wide">{label}</p>
-          </div>
-          <p className="text-2xl font-bold text-slate-900">{value || 'Not available'}</p>
-          {subtitle && <p className="text-sm text-slate-500 mt-1">{subtitle}</p>}
+    <div className="bg-white border border-slate-200 p-4">
+      <div className="flex items-start space-x-3">
+        <div className={`w-8 h-8 ${color} flex items-center justify-center`}>
+          <Icon className="h-4 w-4 text-white" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">{label}</p>
+          <p className="text-lg font-semibold text-slate-900">{value || 'Not available'}</p>
+          {subtitle && <p className="text-xs text-slate-500 mt-1">{subtitle}</p>}
         </div>
       </div>
     </div>
@@ -94,27 +92,24 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
   );
 
   return (
-    <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-sm">
-      <div className="p-6 border-b border-slate-200/50">
+    <div className="bg-white border border-slate-200">
+      <div className="px-6 py-4 border-b border-slate-200">
         <div className="flex items-center space-x-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
-            <CreditCard className="h-6 w-6 text-white" />
+          <div className="w-8 h-8 bg-emerald-500 flex items-center justify-center">
+            <CreditCard className="h-4 w-4 text-white" />
           </div>
-          <div>
-            <h3 className="text-xl font-bold text-slate-900">Payment Information</h3>
-            <p className="text-sm text-slate-500">Transaction fees and payment details</p>
-          </div>
+          <h3 className="text-lg font-semibold text-slate-900">Payment Information</h3>
         </div>
       </div>
       <div className="p-6">
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-px mb-6 bg-slate-200">
           <MetricCard
             icon={Receipt}
             label="Gas Fee"
             value={`$${paymentInfo.gasFee || 'Not available'}`}
             subtitle="Paid to blockchain validators"
-            color="bg-gradient-to-br from-purple-500 to-purple-600"
+            color="bg-purple-500"
           />
           
           <MetricCard
@@ -122,7 +117,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
             label="Orchestration Fee"
             value={`$${paymentInfo.orchestrationFee || 'Not available'}`}
             subtitle="Paid to Biconomy network relayers"
-            color="bg-gradient-to-br from-orange-500 to-orange-600"
+            color="bg-orange-500"
           />
           
           <MetricCard
@@ -130,7 +125,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
             label="Total Fees"
             value={`$${totalFees.toFixed(6)}`}
             subtitle="Gas + Orchestration fees"
-            color="bg-gradient-to-br from-emerald-500 to-emerald-600"
+            color="bg-emerald-500"
           />
         </div>
         
