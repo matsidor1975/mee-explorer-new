@@ -94,7 +94,6 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
     <div className="p-3 bg-white border border-gray-100 rounded">
       <div className="flex items-center space-x-2 mb-2">
         <Icon className="h-4 w-4 text-gray-500" />
-        <span className="text-sm font-medium text-gray-600">{label}</span>
       </div>
       <div className="flex items-center justify-between">
         <code className={`text-xs font-mono text-gray-900 truncate flex-1 ${!value ? 'text-gray-400' : ''}`}>
