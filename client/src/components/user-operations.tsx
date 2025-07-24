@@ -206,7 +206,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
     return (
       <div key={index} className="border border-gray-200 rounded overflow-hidden">
         {/* Compact Operation Header - Everything Inline */}
-        <div className="p-3 bg-gray-50/50">
+        <div className="p-2 bg-gray-50/50">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4 flex-1">
               {/* Operation number and chain */}

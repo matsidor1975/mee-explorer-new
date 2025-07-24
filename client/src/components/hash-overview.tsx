@@ -45,10 +45,10 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
     showCopy?: boolean;
     truncate?: boolean;
   }) => (
-    <div className="p-4 bg-white border border-gray-100 rounded-lg">
-      <div className="flex items-center space-x-2 mb-2">
+    <div className="p-3 bg-white border border-gray-100 rounded-lg">
+      <div className="flex items-center space-x-2 mb-1">
         <Icon className="h-4 w-4 text-gray-500" />
-        <span className="text-sm font-medium text-gray-600">{label}</span>
+        <span className="text-sm font-medium text-slate-600">{label}</span>
       </div>
       <div className="flex items-center justify-between">
         <code className={`text-sm font-mono text-gray-900 ${truncate ? 'truncate' : 'break-all'} flex-1 ${!value ? 'text-gray-400' : ''}`}>
@@ -85,37 +85,43 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
       <div className="p-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Supertx Hash */}
-          <div>
-            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">Supertransaction Hash</p>
-            <div className="flex items-center space-x-2">
-              <code className="text-sm font-mono text-slate-900 bg-slate-50 px-3 py-2 border border-slate-200 flex-1">
-                {formatHash(hashDetails.itxHash)}
+          <div className="bg-white border border-slate-200 p-3 rounded">
+            <div className="flex items-center space-x-2 mb-1">
+              <Hash className="h-4 w-4 text-gray-500" />
+              <span className="text-sm font-medium text-slate-600">Supertransaction Hash</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <code className="text-sm font-mono text-gray-900 truncate flex-1">
+                {hashDetails.itxHash}
               </code>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => copyToClipboard(hashDetails.itxHash, "Supertransaction Hash")}
-                className="text-slate-400 hover:text-orange-500 h-8 w-8 p-0"
+                className="text-gray-400 hover:text-[var(--biconomy-orange)] shrink-0 ml-2"
               >
-                <Copy className="h-4 w-4" />
+                <Copy className="h-3 w-3" />
               </Button>
             </div>
           </div>
 
           {/* Executing Relayer */}
-          <div>
-            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-2">Executing Relayer</p>
-            <div className="flex items-center space-x-2">
-              <code className="text-sm font-mono text-slate-900 bg-slate-50 px-3 py-2 border border-slate-200 flex-1">
-                {formatHash(hashDetails.node)}
+          <div className="bg-white border border-slate-200 p-3 rounded">
+            <div className="flex items-center space-x-2 mb-1">
+              <Server className="h-4 w-4 text-gray-500" />
+              <span className="text-sm font-medium text-slate-600">Executing Relayer</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <code className="text-sm font-mono text-gray-900 truncate flex-1">
+                {hashDetails.node}
               </code>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => copyToClipboard(hashDetails.node, "Executing Relayer")}
-                className="text-slate-400 hover:text-orange-500 h-8 w-8 p-0"
+                className="text-gray-400 hover:text-[var(--biconomy-orange)] shrink-0 ml-2"
               >
-                <Copy className="h-4 w-4" />
+                <Copy className="h-3 w-3" />
               </Button>
             </div>
           </div>

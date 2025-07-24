@@ -129,48 +129,54 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
               <h3 className="text-base font-semibold text-slate-900">Fees</h3>
             </div>
             
-            {/* Payment UserOp Transaction Link - Inline */}
+            {/* Payment UserOp Transaction Link - Inline with Separator */}
             {feePayerUserOp?.executionData && (
-              <div className="flex items-center space-x-2">
-                <span className="text-xs text-slate-500">Payment Transaction:</span>
-                <code className="text-xs font-mono text-slate-700">{formatAddress(feePayerUserOp.executionData)}</code>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => copyToClipboard(feePayerUserOp.executionData!, "Transaction Hash")}
-                  className="text-gray-400 hover:text-[var(--biconomy-orange)] h-6 w-6 p-0"
-                >
-                  <Copy className="h-3 w-3" />
-                </Button>
-                {hasExplorerSupport(feePayerUserOp.chainId) && (
+              <>
+                <span className="text-slate-300">|</span>
+                <div className="flex items-center space-x-2">
+                  <span className="text-xs text-slate-500">Payment Transaction:</span>
+                  <code className="text-xs font-mono text-slate-700">{formatAddress(feePayerUserOp.executionData)}</code>
                   <Button
-                    variant="outline"
+                    variant="ghost"
                     size="sm"
-                    onClick={() => window.open(getExplorerUrl(feePayerUserOp.chainId, feePayerUserOp.executionData!)!, '_blank')}
-                    className="text-xs px-2 py-1 h-6 flex items-center space-x-1 hover:bg-biconomy-orange hover:text-white"
+                    onClick={() => copyToClipboard(feePayerUserOp.executionData!, "Transaction Hash")}
+                    className="text-gray-400 hover:text-[var(--biconomy-orange)] h-6 w-6 p-0"
                   >
-                    <ExternalLink className="h-3 w-3" />
-                    <span>{getExplorerName(feePayerUserOp.chainId)}</span>
+                    <Copy className="h-3 w-3" />
                   </Button>
-                )}
-              </div>
+                  {hasExplorerSupport(feePayerUserOp.chainId) && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => window.open(getExplorerUrl(feePayerUserOp.chainId, feePayerUserOp.executionData!)!, '_blank')}
+                      className="text-xs px-2 py-1 h-6 flex items-center space-x-1 hover:bg-biconomy-orange hover:text-white"
+                    >
+                      <ExternalLink className="h-3 w-3" />
+                      <span>{getExplorerName(feePayerUserOp.chainId)}</span>
+                    </Button>
+                  )}
+                </div>
+              </>
             )}
           </div>
           
-          {/* Detailed Payment Information Button - Inline in Header */}
-          <Button
-            variant="outline"
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="flex items-center space-x-2 px-3 py-1 h-7 text-xs hover:bg-slate-50 hover:text-slate-900 border border-slate-200 rounded"
-          >
-            <span className="text-xs font-medium text-slate-600">
-              {isExpanded ? 'Hide' : 'Show'} details
-            </span>
-            <ChevronDown className={`h-3 w-3 text-slate-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
-          </Button>
+          <div className="flex items-center space-x-3">
+            <span className="text-slate-300">|</span>
+            {/* Detailed Payment Information Button - Inline in Header */}
+            <Button
+              variant="outline"
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="flex items-center space-x-2 px-3 py-1 h-7 text-xs hover:bg-slate-50 hover:text-slate-900 border border-slate-200 rounded"
+            >
+              <span className="text-xs font-medium text-slate-600">
+                {isExpanded ? 'Hide' : 'Show'} details
+              </span>
+              <ChevronDown className={`h-3 w-3 text-slate-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+            </Button>
+          </div>
         </div>
       </div>
-      <div className="p-4">
+      <div className="px-4 pt-4 pb-2">
         
         {/* Fee Information Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
@@ -209,7 +215,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
           
           <div className="bg-white border border-slate-200 p-3 rounded">
             <div className="flex items-center space-x-2 mb-1">
-              <Circle className="h-4 w-4 text-blue-500" />
+              <CreditCard className="h-4 w-4 text-blue-500" />
               <span className="text-sm font-medium text-slate-600">Payment Method</span>
             </div>
             <div className="flex items-center space-x-2 mb-1">
