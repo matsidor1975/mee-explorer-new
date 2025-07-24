@@ -121,92 +121,100 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
 
   return (
     <div className="bg-white border border-slate-200 rounded">
-      <div className="px-6 py-4 border-b border-slate-200">
-        <div className="flex items-center space-x-3">
-          <CreditCard className="h-4 w-4 text-emerald-500" />
-          <h3 className="text-base font-semibold text-slate-900">Fees</h3>
+      <div className="px-4 py-3 border-b border-slate-200">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <CreditCard className="h-4 w-4 text-emerald-500" />
+            <h3 className="text-base font-semibold text-slate-900">Fees</h3>
+          </div>
+          
+          {/* Payment UserOp Transaction Link - Always visible */}
+          {feePayerUserOp?.executionData && (
+            <div className="flex items-center space-x-2">
+              <span className="text-xs text-slate-500">Payment Transaction:</span>
+              <code className="text-xs font-mono text-slate-700">{formatAddress(feePayerUserOp.executionData)}</code>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => copyToClipboard(feePayerUserOp.executionData!, "Transaction Hash")}
+                className="text-gray-400 hover:text-[var(--biconomy-orange)] h-6 w-6 p-0"
+              >
+                <Copy className="h-3 w-3" />
+              </Button>
+              {hasExplorerSupport(feePayerUserOp.chainId) && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => window.open(getExplorerUrl(feePayerUserOp.chainId, feePayerUserOp.executionData!)!, '_blank')}
+                  className="text-xs px-2 py-1 h-6 flex items-center space-x-1 hover:bg-biconomy-orange hover:text-white"
+                >
+                  <ExternalLink className="h-3 w-3" />
+                  <span>{getExplorerName(feePayerUserOp.chainId)}</span>
+                </Button>
+              )}
+            </div>
+          )}
         </div>
       </div>
-      <div className="p-6">
+      <div className="p-4">
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 mb-6">
-          <MetricCard
-            icon={Receipt}
-            label="Gas Fee"
-            value={paymentInfo.gasFee ? `$${paymentInfo.gasFee}` : 'Not available'}
-            subtitle="Paid to blockchain validators"
-            color="text-purple-500"
-          />
+        {/* Inline Fee Information */}
+        <div className="flex flex-wrap items-center gap-6 mb-4">
+          <div className="flex items-center space-x-2">
+            <Receipt className="h-4 w-4 text-purple-500" />
+            <span className="text-sm text-slate-600">Gas:</span>
+            <span className="font-semibold text-slate-900">
+              {paymentInfo.gasFee ? `$${paymentInfo.gasFee}` : 'N/A'}
+            </span>
+          </div>
           
-          <MetricCard
-            icon={Users}
-            label="Orchestration Fee"
-            value={paymentInfo.orchestrationFee ? `$${paymentInfo.orchestrationFee}` : 'Not available'}
-            subtitle="Paid to Biconomy network relayers"
-            color="text-orange-500"
-          />
+          <div className="flex items-center space-x-2">
+            <Users className="h-4 w-4 text-orange-500" />
+            <span className="text-sm text-slate-600">Orchestration:</span>
+            <span className="font-semibold text-slate-900">
+              {paymentInfo.orchestrationFee ? `$${paymentInfo.orchestrationFee}` : 'N/A'}
+            </span>
+          </div>
           
-          <MetricCard
-            icon={DollarSign}
-            label="Total Fees"
-            value={`$${totalFees.toFixed(6)}`}
-            subtitle="Gas + Orchestration fees"
-            color="text-emerald-500"
-          />
+          <div className="flex items-center space-x-2">
+            <DollarSign className="h-4 w-4 text-emerald-500" />
+            <span className="text-sm text-slate-600">Total:</span>
+            <span className="font-semibold text-emerald-600">
+              ${totalFees.toFixed(6)}
+            </span>
+          </div>
           
-          <div className="bg-white border border-slate-200 p-4">
-            <div className="flex items-start space-x-3">
-              <Circle className="h-4 w-4 text-blue-500" />
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">Payment Method</p>
-                <div className="flex items-center space-x-2 mb-1">
-                  {tokenInfo?.symbol && (
-                    getTokenIcon(tokenInfo.symbol) ? (
-                      <img 
-                        src={getTokenIcon(tokenInfo.symbol)!} 
-                        alt={tokenInfo.symbol}
-                        className="w-4 h-4"
-                      />
-                    ) : (
-                      <div className="w-4 h-4 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                        <span className="text-[8px] font-bold text-white">
-                          {tokenInfo.symbol.charAt(0)}
-                        </span>
-                      </div>
-                    )
-                  )}
-                  <span className="text-lg font-semibold text-slate-900">{tokenInfo?.symbol || 'Unknown Token'}</span>
-                </div>
-                <div className="flex items-center space-x-2 mb-1">
-                  {getNetworkIcon(paymentInfo.chainId) && (
-                    <img 
-                      src={getNetworkIcon(paymentInfo.chainId)!} 
-                      alt={chainInfo?.name || 'Unknown Network'}
-                      className="w-4 h-4"
-                    />
-                  )}
-                  <span className="text-sm font-medium text-slate-600">{chainInfo?.name || 'Unknown Network'}</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <p className="text-xs text-slate-500">
-                    {paymentInfo.token === '0x0000000000000000000000000000000000000000' ? 'Native Token: ' : 'Token: '}
-                    {tokenInfo?.name || 'Loading...'}
-                  </p>
-                  {isLoadingViem && hasViemSupport(paymentInfo.chainId) && (
-                    <div className="w-2 h-2 border border-biconomy-orange border-t-transparent rounded-full animate-spin"></div>
-                  )}
-                </div>
-              </div>
+          <div className="flex items-center space-x-2">
+            <Circle className="h-4 w-4 text-blue-500" />
+            <span className="text-sm text-slate-600">Paid with:</span>
+            <div className="flex items-center space-x-1">
+              {tokenInfo?.symbol && getTokenIcon(tokenInfo.symbol) && (
+                <img 
+                  src={getTokenIcon(tokenInfo.symbol)!} 
+                  alt={tokenInfo.symbol}
+                  className="w-4 h-4"
+                />
+              )}
+              <span className="font-semibold text-slate-900">{tokenInfo?.symbol || 'Unknown'}</span>
+              <span className="text-xs text-slate-500">on</span>
+              {getNetworkIcon(paymentInfo.chainId) && (
+                <img 
+                  src={getNetworkIcon(paymentInfo.chainId)!} 
+                  alt={chainInfo?.name || 'Unknown Network'}
+                  className="w-4 h-4"
+                />
+              )}
+              <span className="text-sm text-slate-600">{chainInfo?.name || 'Unknown'}</span>
             </div>
           </div>
         </div>
         
         {/* Expandable payment details */}
-        <div className="mt-4">
+        <div className="mt-2">
           <Button
             variant="outline"
             onClick={() => setIsExpanded(!isExpanded)}
-            className="w-full flex items-center justify-between p-4 text-left hover:bg-slate-50 hover:text-slate-900 border border-slate-200 rounded"
+            className="w-full flex items-center justify-between p-2 text-left hover:bg-slate-50 hover:text-slate-900 border border-slate-200 rounded text-sm"
           >
             <span className="text-sm font-medium text-slate-600">
               {isExpanded ? 'Hide' : 'Show'} detailed payment information
