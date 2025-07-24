@@ -1,21 +1,58 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, Link } from "wouter";
 import HashSearch from "@/components/hash-search";
-import { Search, Activity } from "lucide-react";
+import { Search, Activity, Clock, X, Trash2 } from "lucide-react";
+import { getSearchHistory, removeFromSearchHistory, clearSearchHistory, type HistoryItem } from "@/lib/storage";
+import { Button } from "@/components/ui/button";
 
 export default function Explorer() {
   const [searchHash, setSearchHash] = useState<string>("");
   const [, navigate] = useLocation();
   const [location] = useLocation();
+  const [history, setHistory] = useState<HistoryItem[]>([]);
+
+  useEffect(() => {
+    setHistory(getSearchHistory());
+  }, []);
 
   const handleSearch = (hash: string) => {
     navigate(`/details/${hash}`);
+    // History will be updated by the details page when data loads successfully
+  };
+
+  const handleHistoryClick = (hash: string) => {
+    navigate(`/details/${hash}`);
+  };
+
+  const handleRemoveHistoryItem = (hash: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    removeFromSearchHistory(hash);
+    setHistory(getSearchHistory());
+  };
+
+  const handleClearHistory = () => {
+    clearSearchHistory();
+    setHistory([]);
   };
 
   const isActive = (path: string) => {
     if (path === "/" && location === "/") return true;
     if (path !== "/" && location.startsWith(path)) return true;
     return false;
+  };
+
+  const formatTimestamp = (timestamp: number) => {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
+    
+    if (diffInHours < 1) {
+      return "Just now";
+    } else if (diffInHours < 24) {
+      return `${Math.floor(diffInHours)}h ago`;
+    } else {
+      return date.toLocaleDateString();
+    }
   };
 
   return (
@@ -95,7 +132,60 @@ export default function Explorer() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         
-
+        {/* Search History */}
+        {history.length > 0 && (
+          <div className="mb-12">
+            <div className="bg-white border border-slate-200 rounded-lg p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center space-x-2">
+                  <Clock className="h-5 w-5 text-slate-500" />
+                  <h2 className="text-lg font-semibold text-slate-900">Recent Searches</h2>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleClearHistory}
+                  className="text-slate-500 hover:text-slate-700"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  Clear
+                </Button>
+              </div>
+              
+              <div className="space-y-2">
+                {history.map((item) => (
+                  <div
+                    key={item.hash}
+                    className="flex items-center justify-between p-3 border border-slate-100 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors group"
+                    onClick={() => handleHistoryClick(item.hash)}
+                  >
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-2 h-2 bg-biconomy-orange rounded-full flex-shrink-0"></div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-mono text-slate-900 truncate">
+                            {item.hash}
+                          </p>
+                          <p className="text-xs text-slate-500">
+                            {formatTimestamp(item.timestamp)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={(e) => handleRemoveHistoryItem(item.hash, e)}
+                      className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-slate-600"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* How to Use */}
         <div className="bg-white border border-slate-200 p-8">

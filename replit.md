@@ -99,3 +99,14 @@ Preferred communication style: Simple, everyday language.
 - Database schema changes via Drizzle push commands
 
 The application is designed to be easily deployable on platforms like Replit, Vercel, or traditional VPS with minimal configuration required.
+
+## Recent Changes
+
+- Fixed search input alignment with proper vertical centering of icon and button
+- Enhanced payment method to fetch real token information from Biconomy /info endpoint with fallback icons for tokens without assets
+- Reorganized payment layout to display chain information under token symbol
+- Created Network Status page with real-time health monitoring, collapsible chains, and table-formatted module status
+- Merged navigation into explorer pages for unified user experience with inline navigation between Explorer and Network Status
+- Added local storage search history functionality with Recent Searches section on explorer page
+- Implemented history management with individual item removal and clear all functionality
+- Added timestamp formatting for search history items (Just now, hours ago, date format)

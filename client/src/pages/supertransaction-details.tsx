@@ -7,6 +7,8 @@ import PaymentInfo from "@/components/payment-info";
 import UserOperations from "@/components/user-operations";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, TriangleAlert, Search, Activity } from "lucide-react";
+import { addToSearchHistory } from "@/lib/storage";
+import { useEffect } from "react";
 
 export default function SupertransactionDetails() {
   const { hash } = useParams();
@@ -21,6 +23,14 @@ export default function SupertransactionDetails() {
 
   const showErrorState = error && !isLoading;
   const showHashDetails = hashDetails && !isLoading && !error;
+
+  // Save successful searches to history
+  useEffect(() => {
+    if (hash && hashDetails && !error) {
+      // Save to history with hash as identifier
+      addToSearchHistory(hash);
+    }
+  }, [hash, hashDetails, error]);
 
   const isActive = (path: string) => {
     if (path === "/" && location === "/") return true;
