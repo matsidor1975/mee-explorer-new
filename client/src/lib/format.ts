@@ -137,36 +137,47 @@ export const setChainsCache = (chains: Record<string, string>) => {
   chainInfoCache = { ...chainInfoCache, ...chains };
 };
 
-// Get network icon path
+// Import network icons using dynamic imports that work with Vite
+
+// Get network icon path using dynamic imports
 export const getNetworkIcon = (chainId: string | number): string | null => {
   const chainIdNum = typeof chainId === 'string' ? parseInt(chainId) : chainId;
   
-  const networkIcons: Record<number, string> = {
-    1: '/src/assets/networks/ethereum.svg',
-    8453: '/src/assets/networks/base.svg',
-    137: '/src/assets/networks/polygon.svg',
-    42161: '/src/assets/networks/arbitrum one.svg',
-    10: '/src/assets/networks/optimism.svg',
-    56: '/src/assets/networks/bnb smart chain.svg',
-    100: '/src/assets/networks/gnosis.svg',
-    43114: '/src/assets/networks/avalanche c-chain.svg',
-    534352: '/src/assets/networks/scroll.svg'
+  const networkIconsMap: Record<number, string> = {
+    1: 'ethereum.svg',
+    8453: 'base.svg',
+    137: 'polygon.svg',
+    42161: 'arbitrum one.svg',
+    10: 'optimism.svg',
+    56: 'bnb smart chain.svg',
+    100: 'gnosis.svg',
+    43114: 'avalanche c-chain.svg',
+    534352: 'scroll.svg',
+    146: 'sonic.svg',
+    33139: 'apechain.svg',
+    999: 'hyperevm.svg'
   };
   
-  return networkIcons[chainIdNum] || null;
+  const fileName = networkIconsMap[chainIdNum];
+  if (!fileName) return null;
+  
+  // Return the vite processed URL - Vite will handle the import during build
+  return new URL(`../assets/networks/${fileName}`, import.meta.url).href;
 };
 
 // Get token icon path  
 export const getTokenIcon = (symbol: string): string | null => {
-  const tokenIcons: Record<string, string> = {
-    'ETH': '/src/assets/tokens/eth.png',
-    'USDC': '/src/assets/tokens/usd coin.png',
-    'USDT': '/src/assets/tokens/tether usd.png',
-    'stETH': '/src/assets/tokens/steth.png',
-    'LINK': '/src/assets/tokens/link.png'
+  const tokenIconsMap: Record<string, string> = {
+    'USDC': 'usd coin.png',
+    'ETH': 'eth.png',
+    'USDT': 'tether usd.png',
   };
   
-  return tokenIcons[symbol.toUpperCase()] || null;
+  const fileName = tokenIconsMap[symbol.toUpperCase()];
+  if (!fileName) return null;
+  
+  // Return the vite processed URL
+  return new URL(`../assets/tokens/${fileName}`, import.meta.url).href;
 };
 
 // Token information utilities
