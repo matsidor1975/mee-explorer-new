@@ -53,8 +53,11 @@ export async function fetchTokenInfoViem(tokenAddress: string, chainId: string):
       return null;
     }
 
-    // Handle native token (0x0 address) - fetch from blockchain
-    if (tokenAddress === '0x0000000000000000000000000000000000000000' || !tokenAddress) {
+    // Handle native token (0x0 address or variations) - fetch from blockchain
+    if (tokenAddress === '0x0000000000000000000000000000000000000000' || 
+        tokenAddress === '0x0000' || 
+        tokenAddress === '0x0' ||
+        !tokenAddress) {
       return await fetchNativeTokenInfo(client, chainId, tokenAddress || '0x0000000000000000000000000000000000000000');
     }
 
