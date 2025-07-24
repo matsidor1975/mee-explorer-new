@@ -69,13 +69,11 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
   );
 
   return (
-    <div className="bg-white border border-slate-200">
+    <div className="bg-white border border-slate-200 rounded">
       <div className="px-6 py-4 border-b border-slate-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-orange-500 flex items-center justify-center">
-              <Hash className="h-4 w-4 text-white" />
-            </div>
+            <Hash className="h-4 w-4 text-orange-500" />
             <h3 className="text-lg font-semibold text-slate-900">Supertransaction Details</h3>
           </div>
           <Badge className={`${statusColorClass} font-medium px-2 py-1 text-xs`}>

@@ -51,9 +51,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
   }) => (
     <div className="bg-white border border-slate-200 p-4">
       <div className="flex items-start space-x-3">
-        <div className={`w-8 h-8 ${color} flex items-center justify-center`}>
-          <Icon className="h-4 w-4 text-white" />
-        </div>
+        <Icon className={`h-4 w-4 ${color.replace('bg-', 'text-')}`} />
         <div className="flex-1 min-w-0">
           <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">{label}</p>
           <p className="text-lg font-semibold text-slate-900">{value || 'Not available'}</p>
@@ -92,24 +90,22 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
   );
 
   return (
-    <div className="bg-white border border-slate-200">
+    <div className="bg-white border border-slate-200 rounded">
       <div className="px-6 py-4 border-b border-slate-200">
         <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-emerald-500 flex items-center justify-center">
-            <CreditCard className="h-4 w-4 text-white" />
-          </div>
+          <CreditCard className="h-4 w-4 text-emerald-500" />
           <h3 className="text-lg font-semibold text-slate-900">Payment Information</h3>
         </div>
       </div>
       <div className="p-6">
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-px mb-6 bg-slate-200">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-6">
           <MetricCard
             icon={Receipt}
             label="Gas Fee"
             value={`$${paymentInfo.gasFee || 'Not available'}`}
             subtitle="Paid to blockchain validators"
-            color="bg-purple-500"
+            color="text-purple-500"
           />
           
           <MetricCard
@@ -117,7 +113,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
             label="Orchestration Fee"
             value={`$${paymentInfo.orchestrationFee || 'Not available'}`}
             subtitle="Paid to Biconomy network relayers"
-            color="bg-orange-500"
+            color="text-orange-500"
           />
           
           <MetricCard
@@ -125,16 +121,16 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
             label="Total Fees"
             value={`$${totalFees.toFixed(6)}`}
             subtitle="Gas + Orchestration fees"
-            color="bg-emerald-500"
+            color="text-emerald-500"
           />
         </div>
         
         {/* Expandable payment details */}
         <div className="mt-4">
           <Button
-            variant="ghost"
+            variant="outline"
             onClick={() => setIsExpanded(!isExpanded)}
-            className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 rounded-lg"
+            className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 border border-slate-200 rounded"
           >
             <span className="text-sm font-medium text-gray-600">
               {isExpanded ? 'Hide' : 'Show'} detailed payment information
@@ -145,7 +141,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
           {isExpanded && (
             <div className="mt-4 space-y-4">
               {/* Token information */}
-              <div className="bg-white border border-gray-100 rounded-lg p-4">
+              <div className="bg-white border border-gray-100 rounded p-4">
                 <div className="flex items-center space-x-2 mb-2">
                   <Circle className="h-4 w-4 text-blue-500" />
                   <span className="text-sm font-medium text-gray-600">Token Information</span>
@@ -181,7 +177,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
               
               {/* Fee payer user operation */}
               {feePayerUserOp && (
-                <div className="bg-white border border-gray-100 rounded-lg p-4">
+                <div className="bg-white border border-gray-100 rounded p-4">
                   <div className="flex items-center space-x-2 mb-2">
                     <Wallet className="h-4 w-4 text-[var(--biconomy-orange)]" />
                     <span className="text-sm font-medium text-gray-600">Fee Payer Operation</span>

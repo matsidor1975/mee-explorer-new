@@ -64,7 +64,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
     value: string;
     showCopy?: boolean;
   }) => (
-    <div className="p-3 bg-white border border-gray-100 rounded-lg">
+    <div className="p-3 bg-white border border-gray-100 rounded">
       <div className="flex items-center space-x-2 mb-2">
         <Icon className="h-4 w-4 text-gray-500" />
         <span className="text-sm font-medium text-gray-600">{label}</span>
@@ -93,7 +93,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
     const hasExplorer = hasExplorerSupport(chainId);
     
     return (
-      <div className="p-3 bg-white border border-gray-100 rounded-lg">
+      <div className="p-3 bg-white border border-gray-100 rounded">
         <div className="flex items-center space-x-2 mb-2">
           <ExternalLink className="h-4 w-4 text-gray-500" />
           <span className="text-sm font-medium text-gray-600">On-Chain Transaction</span>
@@ -143,7 +143,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
     label: string;
     value: string;
   }) => (
-    <div className="p-3 bg-white border border-gray-100 rounded-lg">
+    <div className="p-3 bg-white border border-gray-100 rounded">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center space-x-2">
           <Icon className="h-4 w-4 text-gray-500" />
@@ -177,14 +177,12 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
     const chainInfo = chains.find(c => c.chainId.toString() === userOp.chainId);
 
     return (
-      <div key={index} className="border border-gray-200 rounded-lg overflow-hidden">
+      <div key={index} className="border border-gray-200 rounded overflow-hidden">
         {/* Operation Header */}
         <div className="p-4 bg-gray-50/50 border-b border-gray-200">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-[var(--biconomy-orange)]/10 rounded-lg flex items-center justify-center">
-                <User className="h-4 w-4 text-[var(--biconomy-orange)]" />
-              </div>
+              <User className="h-4 w-4 text-[var(--biconomy-orange)]" />
               <div>
                 <div className="flex items-center space-x-2">
                   <h4 className="font-medium text-gray-900">
@@ -339,13 +337,11 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
     <div className="space-y-6">
       {/* Regular Operations Card */}
       {regularOperations.length > 0 && (
-        <div className="bg-white border border-slate-200">
+        <div className="bg-white border border-slate-200 rounded">
           <div className="px-6 py-4 border-b border-slate-200">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-blue-500 flex items-center justify-center">
-                  <Layers className="h-4 w-4 text-white" />
-                </div>
+                <Layers className="h-4 w-4 text-blue-500" />
                 <h3 className="text-lg font-semibold text-slate-900">User Operations</h3>
               </div>
               <Badge className="px-2 py-1 text-xs bg-blue-100 text-blue-800 border border-blue-200">
@@ -364,13 +360,11 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
 
       {/* Cleanup Operations Toggle */}
       {cleanupOperations.length > 0 && (
-        <div className="bg-white border border-slate-200">
+        <div className="bg-white border border-slate-200 rounded">
           <div className="px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-slate-500 flex items-center justify-center">
-                  <Settings className="h-4 w-4 text-white" />
-                </div>
+                <Settings className="h-4 w-4 text-slate-500" />
                 <div>
                   <h3 className="text-lg font-semibold text-slate-900">Cleanup Operations</h3>
                   <p className="text-sm text-slate-500">
@@ -394,7 +388,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
 
       {/* Expanded Cleanup Operations Card */}
       {cleanupOperations.length > 0 && showCleanupOperations && (
-        <div className="bg-blue-50 border border-slate-200">
+        <div className="bg-blue-50 border border-slate-200 rounded">
           <div className="p-6">
             {/* Cleanup Explanation */}
             <div className="p-4 bg-blue-100 border border-blue-200 rounded-lg mb-6">
@@ -420,12 +414,10 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
 
       {/* No Operations Message */}
       {regularOperations.length === 0 && cleanupOperations.length === 0 && (
-        <div className="bg-white border border-slate-200">
+        <div className="bg-white border border-slate-200 rounded">
           <div className="p-6">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-8 h-8 bg-orange-500 flex items-center justify-center">
-                <Layers className="h-4 w-4 text-white" />
-              </div>
+              <Layers className="h-4 w-4 text-orange-500" />
               <div>
                 <h3 className="text-lg font-semibold text-slate-900">User Operations</h3>
                 <p className="text-sm text-slate-500">No operations found</p>
