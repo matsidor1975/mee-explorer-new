@@ -54,39 +54,41 @@ export async function fetchTokenInfoViem(tokenAddress: string, chainId: string):
       return null;
     }
 
-    // Handle native token (0x0 address or variations) - fetch from blockchain
-    if (tokenAddress === '0x0000000000000000000000000000000000000000' || 
-        tokenAddress === '0x0000' || 
-        tokenAddress === '0x0' ||
-        !tokenAddress) {
-      return await fetchNativeTokenInfo(client, chainId, tokenAddress || '0x0000000000000000000000000000000000000000');
+    // If token address is 0x0000000000000000000000000000000000000000, get native currency from chain
+    if (tokenAddress === '0x0000000000000000000000000000000000000000') {
+      return await fetchNativeTokenInfo(client, chainId, tokenAddress);
     }
 
-    // Fetch token data sequentially to avoid type issues
-    const name = await client.readContract({
-      address: tokenAddress as Address,
-      abi: erc20Abi,
-      functionName: 'name',
-    });
-    
-    const symbol = await client.readContract({
-      address: tokenAddress as Address,
-      abi: erc20Abi,
-      functionName: 'symbol',
-    });
-    
-    const decimals = await client.readContract({
-      address: tokenAddress as Address,
-      abi: erc20Abi,
-      functionName: 'decimals',
-    });
+    // Otherwise, it's an ERC-20 token - fetch from contract
+    try {
+      const name = await client.readContract({
+        address: tokenAddress as Address,
+        abi: erc20Abi,
+        functionName: 'name',
+      });
+      
+      const symbol = await client.readContract({
+        address: tokenAddress as Address,
+        abi: erc20Abi,
+        functionName: 'symbol',
+      });
+      
+      const decimals = await client.readContract({
+        address: tokenAddress as Address,
+        abi: erc20Abi,
+        functionName: 'decimals',
+      });
 
-    return {
-      name: name as string,
-      symbol: symbol as string,
-      decimals: decimals as number,
-      address: tokenAddress,
-    };
+      return {
+        name: name as string,
+        symbol: symbol as string,
+        decimals: decimals as number,
+        address: tokenAddress,
+      };
+    } catch (contractError) {
+      console.warn(`Failed to fetch ERC-20 token info for ${tokenAddress} on chain ${chainId}:`, contractError);
+      return null;
+    }
   } catch (error) {
     console.warn(`Failed to fetch token info via viem for ${tokenAddress} on chain ${chainId}:`, error);
     return null;
