@@ -82,7 +82,7 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
           </Badge>
         </div>
       </div>
-      <div className="p-6">
+      <div className="p-6 pl-[12px] pr-[12px] pt-[12px] pb-[12px]">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Supertx Hash */}
           <div className="bg-white border border-slate-200 p-3 rounded">
