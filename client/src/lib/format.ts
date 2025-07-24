@@ -276,3 +276,25 @@ export function getExplorerName(chainId: string | number): string | null {
       return null; // No explorer available for this chain
   }
 }
+
+// Get explorer URL for a token address on a specific chain
+export function getTokenExplorerUrl(chainId: string | number, tokenAddress: string): string | null {
+  const chainIdNum = typeof chainId === 'string' ? parseInt(chainId) : chainId;
+  
+  switch (chainIdNum) {
+    case 1: // Ethereum
+      return `https://etherscan.io/token/${tokenAddress}`;
+    case 8453: // Base
+      return `https://basescan.org/token/${tokenAddress}`;
+    case 137: // Polygon
+      return `https://polygonscan.com/token/${tokenAddress}`;
+    case 42161: // Arbitrum
+      return `https://arbiscan.io/token/${tokenAddress}`;
+    case 10: // Optimism
+      return `https://optimistic.etherscan.io/token/${tokenAddress}`;
+    case 56: // BSC
+      return `https://bscscan.com/token/${tokenAddress}`;
+    default:
+      return null; // No explorer available for this chain
+  }
+}

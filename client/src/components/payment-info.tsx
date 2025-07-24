@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Copy, DollarSign, CreditCard, Wallet, Hash, Key, Circle, ChevronDown, Receipt, Users } from "lucide-react";
+import { Copy, DollarSign, CreditCard, Wallet, Hash, Key, Circle, ChevronDown, Receipt, Users, ExternalLink } from "lucide-react";
 import { PaymentInfo, UserOp } from "@/types";
-import { formatAddress, formatNumber, getTokenInfo, getNetworkIcon, getTokenIcon } from "@/lib/format";
+import { formatAddress, formatNumber, getTokenInfo, getNetworkIcon, getTokenIcon, getTokenExplorerUrl, getExplorerName } from "@/lib/format";
 import { useToast } from "@/hooks/use-toast";
 import { useChainInfo } from "@/hooks/use-chain-info";
 import { fetchTokenInfo } from "@/lib/api";
@@ -197,7 +197,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                   <Circle className="h-4 w-4 text-blue-500" />
                   <span className="text-sm font-medium text-gray-600">Token Information</span>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
                     <p className="text-xs text-gray-500">Token Amount</p>
                     <div className="flex items-center space-x-2">
@@ -223,6 +223,46 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                       {paymentInfo.tokenValue ? `$${paymentInfo.tokenValue}` : 'Not available'}
                     </p>
                   </div>
+                </div>
+                
+                {/* Token Address with Explorer Link */}
+                <div className="pt-4 border-t border-gray-100">
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs text-gray-500 mb-1">Token Address</p>
+                      <div className="flex items-center space-x-2">
+                        <code className="text-sm font-mono text-gray-900 truncate">
+                          {paymentInfo.token}
+                        </code>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => copyToClipboard(paymentInfo.token, "Token Address")}
+                          className="text-gray-400 hover:text-biconomy-orange shrink-0"
+                        >
+                          <Copy className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    {getTokenExplorerUrl(paymentInfo.chainId, paymentInfo.token) && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => window.open(getTokenExplorerUrl(paymentInfo.chainId, paymentInfo.token)!, '_blank')}
+                        className="ml-3 text-xs flex items-center space-x-1 hover:bg-biconomy-orange hover:text-white shrink-0"
+                      >
+                        <ExternalLink className="h-3 w-3" />
+                        <span>View on {getExplorerName(paymentInfo.chainId)}</span>
+                      </Button>
+                    )}
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {getTokenExplorerUrl(paymentInfo.chainId, paymentInfo.token) 
+                      ? "View token details on blockchain explorer"
+                      : "Copy the address above to view in your preferred explorer"
+                    }
+                  </p>
                 </div>
               </div>
               
