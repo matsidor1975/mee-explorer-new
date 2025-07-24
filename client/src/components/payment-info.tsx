@@ -176,10 +176,10 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
           </div>
         </div>
       </div>
-      <div className="px-4 pl-[12px] pr-[12px] pt-[12px] pb-[12px]">
+      <div className="px-3 py-3">
         
         {/* Fee Information Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
           <div className="bg-white border border-slate-200 p-3 rounded">
             <div className="flex items-center space-x-2 mb-1">
               <Receipt className="h-4 w-4 text-purple-500" />
