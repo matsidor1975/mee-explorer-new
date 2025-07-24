@@ -430,7 +430,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
         </div>
         {/* Expandable Details */}
         {isExpanded && (
-          <div className="pt-3">
+          <div className="pt-3 px-4">
             <div className="space-y-6 pt-4 border-t border-gray-100">
               {/* Core Operation Data */}
               <div>
