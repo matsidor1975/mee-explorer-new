@@ -174,7 +174,16 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                         <User className="h-4 w-4 text-[var(--biconomy-orange)]" />
                       </div>
                       <div>
-                        <h4 className="font-medium text-gray-900">Operation #{index + 1}</h4>
+                        <div className="flex items-center space-x-2">
+                          <h4 className="font-medium text-gray-900">
+                            {userOp.isCleanUpUserOp ? 'Cleanup Operation' : `Operation #${index + 1}`}
+                          </h4>
+                          {userOp.isCleanUpUserOp && (
+                            <Badge variant="outline" className="text-xs">
+                              Cleanup
+                            </Badge>
+                          )}
+                        </div>
                         <p className="text-sm text-gray-500">{chainInfo?.name || `Chain ${userOp.chainId}`}</p>
                       </div>
                     </div>
@@ -229,9 +238,14 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                           </div>
                         </div>
                       ) : (
-                        <div className="flex items-center space-x-2 text-gray-400">
-                          <ExternalLink className="h-4 w-4" />
-                          <span className="text-sm">No transaction data available</span>
+                        <div className="flex items-center space-x-2">
+                          <ExternalLink className="h-4 w-4 text-gray-400" />
+                          <span className="text-sm text-gray-400">
+                            {userOp.isCleanUpUserOp 
+                              ? "Not executed (no tokens to cleanup)" 
+                              : "No transaction data available"
+                            }
+                          </span>
                         </div>
                       )}
                     </div>
@@ -250,6 +264,21 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                 {isExpanded && (
                   <div className="px-4 pb-4">
                     <div className="space-y-4 pt-4 border-t border-gray-100">
+                      {/* Cleanup Operation Explanation */}
+                      {userOp.isCleanUpUserOp && (
+                        <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                          <div className="flex items-start space-x-2">
+                            <Settings className="h-4 w-4 text-blue-600 mt-0.5" />
+                            <div>
+                              <p className="text-sm font-medium text-blue-800">Cleanup Operation</p>
+                              <p className="text-xs text-blue-700 mt-1">
+                                This operation executes after all regular operations to clean up any remaining tokens from the account. 
+                                If no tokens need cleanup, the operation will not execute and this is normal behavior.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                       {/* User Operation Details */}
                       <div>
                         <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-2">
