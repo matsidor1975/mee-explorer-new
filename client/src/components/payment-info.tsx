@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Copy, DollarSign, CreditCard, Wallet, Hash, Key, Circle, ChevronDown, Receipt, Users, ExternalLink } from "lucide-react";
 import { PaymentInfo, UserOp } from "@/types";
-import { formatAddress, formatNumber, getTokenInfo, getNetworkIcon, getTokenIcon, getTokenExplorerUrl, getExplorerName } from "@/lib/format";
+import { formatAddress, formatNumber, getTokenInfo, getNetworkIcon, getTokenIcon, getTokenExplorerUrl, getExplorerName, getExplorerUrl, hasExplorerSupport } from "@/lib/format";
 import { useToast } from "@/hooks/use-toast";
 import { useChainInfo } from "@/hooks/use-chain-info";
 import { fetchTokenInfo } from "@/lib/api";
@@ -298,6 +298,43 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                     <Wallet className="h-4 w-4 text-[var(--biconomy-orange)]" />
                     <span className="text-sm font-medium text-gray-600">Fee Payer Operation</span>
                   </div>
+                  
+                  {/* Transaction Hash with Explorer Link */}
+                  {feePayerUserOp.executionData && (
+                    <div className="mb-4 bg-white border border-gray-100 rounded-lg p-4">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <ExternalLink className="h-4 w-4 text-gray-500" />
+                        <span className="text-sm font-medium text-gray-600">Transaction</span>
+                      </div>
+                      <div className="flex items-center justify-between flex-wrap gap-2">
+                        <code className="text-sm font-mono text-gray-900 truncate flex-1">
+                          {feePayerUserOp.executionData}
+                        </code>
+                        <div className="flex items-center space-x-2 shrink-0">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => copyToClipboard(feePayerUserOp.executionData!, "Transaction Hash")}
+                            className="text-gray-400 hover:text-[var(--biconomy-orange)] h-6 w-6 p-0"
+                          >
+                            <Copy className="h-3 w-3" />
+                          </Button>
+                          {hasExplorerSupport(feePayerUserOp.chainId) && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => window.open(getExplorerUrl(feePayerUserOp.chainId, feePayerUserOp.executionData!)!, '_blank')}
+                              className="text-xs flex items-center space-x-1 hover:bg-biconomy-orange hover:text-white"
+                            >
+                              <ExternalLink className="h-3 w-3" />
+                              <span>View on {getExplorerName(feePayerUserOp.chainId)}</span>
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="bg-white border border-gray-100 rounded-lg p-4">
                       <div className="flex items-center space-x-2 mb-2">
