@@ -205,7 +205,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
     return (
       <div key={index} className="border border-gray-200 rounded overflow-hidden">
         {/* Compact Operation Header - Everything Inline */}
-        <div className="p-2 bg-gray-50/50">
+        <div className="p-2 bg-gray-50/50 pl-[12px] pr-[12px] pt-[12px] pb-[12px]">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4 flex-1">
               {/* Operation number and chain */}
@@ -297,9 +297,6 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
             </div>
           </div>
         </div>
-
-
-
         {/* Expandable Details */}
         {isExpanded && (
           <div className="px-4 pb-4">
