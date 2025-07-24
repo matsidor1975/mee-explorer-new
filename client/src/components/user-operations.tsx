@@ -173,7 +173,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center space-x-2">
           <Icon className="h-4 w-4 text-gray-500" />
-          <span className="text-sm font-medium text-gray-600">{label}</span>
+
         </div>
         {value && (
           <Button
@@ -325,20 +325,12 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
               {/* Transaction Hash with Explorer Integration */}
               {userOp.executionData && (
                 <div>
-                  <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-2">
-                    <ExternalLink className="h-4 w-4" />
-                    <span>On-Chain Transaction</span>
-                  </h5>
                   <ExplorerLink txHash={userOp.executionData} chainId={userOp.chainId} />
                 </div>
               )}
 
               {/* Call Data */}
               <div>
-                <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-2">
-                  <Code className="h-4 w-4" />
-                  <span>Call Data</span>
-                </h5>
                 <CodeField icon={Code} label="Call Data" value={userOp.userOp.callData} />
               </div>
             </div>
