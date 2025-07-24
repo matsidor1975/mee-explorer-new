@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Copy, DollarSign, CreditCard, Wallet, Hash, Key, Circle, ChevronDown, Receipt, Users, ExternalLink } from "lucide-react";
+import { Copy, DollarSign, CreditCard, Wallet, Hash, Key, Circle, ChevronDown, Receipt, Users, ExternalLink, User, Database, Settings } from "lucide-react";
 import { PaymentInfo, UserOp } from "@/types";
 import { formatAddress, formatNumber, getTokenInfo, getNetworkIcon, getTokenIcon, getTokenExplorerUrl, getExplorerName, getExplorerUrl, hasExplorerSupport } from "@/lib/format";
 import { useToast } from "@/hooks/use-toast";
@@ -73,55 +73,60 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
   };
 
   const MetricCard = ({ icon: Icon, label, value, subtitle, color }: {
-    icon: React.ComponentType<any>;
+    icon: any;
     label: string;
     value: string;
     subtitle: string;
     color: string;
   }) => (
-    <div className="bg-white border border-slate-200 p-4">
-      <div className="flex items-start space-x-3">
-        <Icon className={`h-4 w-4 ${color.replace('bg-', 'text-')}`} />
-        <div className="flex-1 min-w-0">
-          <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">{label}</p>
-          <p className="text-lg font-semibold text-slate-900">{value || 'Not available'}</p>
-          {subtitle && <p className="text-xs text-slate-500 mt-1">{subtitle}</p>}
-        </div>
+    <div className="bg-white border border-slate-200 p-3 rounded">
+      <div className="flex items-center space-x-2 mb-1">
+        <Icon className={`h-4 w-4 ${color}`} />
+        <span className="text-sm font-medium text-slate-600">{label}</span>
       </div>
+      <div className="text-lg font-semibold text-slate-900 mb-1">
+        {value}
+      </div>
+      <p className="text-xs text-slate-500">{subtitle}</p>
     </div>
   );
 
-  const DataField = ({ icon: Icon, label, value }: {
-    icon: React.ComponentType<any>;
+  const TableDataField = ({ icon: Icon, label, value, showCopy = true }: {
+    icon: any;
     label: string;
     value: string;
+    showCopy?: boolean;
   }) => (
-    <div className="bg-white border border-gray-100 rounded-lg p-4">
-      <div className="flex items-center space-x-2 mb-2">
-        <Icon className="h-4 w-4 text-gray-500" />
-        <span className="text-sm font-medium text-gray-600">{label}</span>
-      </div>
-      <div className="flex items-center justify-between">
-        <code className={`text-sm font-mono text-gray-900 truncate flex-1 ${!value ? 'text-gray-400' : ''}`}>
-          {value || 'Not available'}
-        </code>
-        {value && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => copyToClipboard(value, label)}
-            className="text-gray-400 hover:text-[var(--biconomy-orange)] shrink-0 ml-2"
-          >
-            <Copy className="h-3 w-3" />
-          </Button>
-        )}
-      </div>
-    </div>
+    <tr className="border-b border-gray-100">
+      <td className="py-2 pr-4">
+        <div className="flex items-center space-x-2">
+          <Icon className="h-3 w-3 text-gray-500 shrink-0" />
+          <span className="text-xs text-gray-600 font-medium">{label}</span>
+        </div>
+      </td>
+      <td className="py-2 pl-4">
+        <div className="flex items-center justify-between">
+          <code className="text-xs font-mono text-gray-900">
+            {value.length > 50 ? `${value.substring(0, 24)}...${value.substring(value.length - 24)}` : value}
+          </code>
+          {showCopy && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => copyToClipboard(value, label)}
+              className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0 ml-2"
+            >
+              <Copy className="h-2.5 w-2.5" />
+            </Button>
+          )}
+        </div>
+      </td>
+    </tr>
   );
 
   return (
-    <div className="bg-white border border-slate-200 rounded">
-      <div className="px-4 py-3 border-b border-slate-200">
+    <div className="bg-slate-50 border border-slate-200 rounded-lg shadow-sm">
+      <div className="px-3 py-2 border-b border-slate-200">
         {/* Desktop Layout */}
         <div className="hidden md:flex items-center justify-between">
           <div className="flex items-center space-x-4">
@@ -290,122 +295,106 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
         
         {/* Expandable payment details */}
         {isExpanded && (
-          <div className="mt-4 space-y-4 border-t border-slate-100 pt-4">
-            <div className="space-y-4">
-              {/* Token information */}
-              <div className="bg-white border border-gray-100 rounded p-4">
-                <div className="flex items-center space-x-2 mb-3">
-                  <Circle className="h-4 w-4 text-blue-500" />
-                  <span className="text-sm font-medium text-gray-600">Token Information</span>
-                </div>
-                
-                {/* Compact horizontal layout in three columns */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-2 text-xs">
-                  {/* Token Amount */}
-                  <div className="flex items-center justify-between min-w-0">
-                    <div className="flex items-center space-x-2 flex-1 min-w-0">
-                      <Circle className="h-3 w-3 text-gray-500 shrink-0" />
-                      <span className="text-xs text-gray-600 shrink-0">Amount:</span>
-                      <div className="flex items-center space-x-1 min-w-0">
-                        <code className="text-xs font-mono text-gray-900 truncate">
-                          {paymentInfo.tokenAmount ? formatNumber(paymentInfo.tokenAmount) : 'N/A'}
-                        </code>
-                        {getTokenIcon(tokenInfo.symbol) && (
-                          <img 
-                            src={getTokenIcon(tokenInfo.symbol)!} 
-                            alt={tokenInfo.symbol}
-                            className="w-3 h-3 shrink-0"
-                          />
-                        )}
-                        <span className="text-xs text-gray-500 shrink-0">{tokenInfo.symbol}</span>
+          <div className="mt-4 space-y-6 border-t border-slate-100 pt-4">
+            {/* Payment Details */}
+            <div>
+              <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-2">
+                <DollarSign className="h-4 w-4" />
+                <span>Payment Details</span>
+              </h5>
+              <table className="w-full text-xs">
+                <tbody>
+                  <TableDataField icon={User} label="Sender" value={paymentInfo.sender} />
+                  <TableDataField icon={Hash} label="Nonce" value={paymentInfo.nonce} showCopy={false} />
+                  <TableDataField icon={Database} label="Chain ID" value={paymentInfo.chainId} showCopy={false} />
+                  <tr className="border-b border-gray-100">
+                    <td className="py-2 pr-4">
+                      <div className="flex items-center space-x-2">
+                        <Settings className="h-3 w-3 text-gray-500 shrink-0" />
+                        <span className="text-xs text-gray-600 font-medium">Short Encoding</span>
                       </div>
-                    </div>
-                  </div>
-                  
-                  {/* Token Value */}
-                  <div className="flex items-center justify-between min-w-0">
-                    <div className="flex items-center space-x-2 flex-1 min-w-0">
-                      <DollarSign className="h-3 w-3 text-gray-500 shrink-0" />
-                      <span className="text-xs text-gray-600 shrink-0">Value:</span>
-                      <code className="text-xs font-mono text-gray-900 truncate">
-                        {paymentInfo.tokenValue ? `$${paymentInfo.tokenValue}` : 'N/A'}
-                      </code>
-                    </div>
-                  </div>
-                  
-                  {/* Token Address */}
-                  <div className="flex items-center justify-between min-w-0">
-                    <div className="flex items-center space-x-2 flex-1 min-w-0">
-                      <Hash className="h-3 w-3 text-gray-500 shrink-0" />
-                      <span className="text-xs text-gray-600 shrink-0">Address:</span>
-                      <code className="text-xs font-mono text-gray-900 truncate">
-                        {paymentInfo.token.length > 12 
-                          ? `${paymentInfo.token.substring(0, 6)}...${paymentInfo.token.substring(paymentInfo.token.length - 6)}`
-                          : paymentInfo.token
-                        }
-                      </code>
-                    </div>
-                    <div className="flex items-center space-x-1 shrink-0 ml-1">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => copyToClipboard(paymentInfo.token, "Token Address")}
-                        className="text-gray-400 hover:text-biconomy-orange h-4 w-4 p-0"
-                      >
-                        <Copy className="h-2.5 w-2.5" />
-                      </Button>
-                      {getTokenExplorerUrl(paymentInfo.chainId, paymentInfo.token) && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => window.open(getTokenExplorerUrl(paymentInfo.chainId, paymentInfo.token)!, '_blank')}
-                          className="text-xs px-1 py-0.5 h-5 flex items-center hover:bg-biconomy-orange hover:text-white"
-                        >
-                          <ExternalLink className="h-2.5 w-2.5" />
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Fee payer user operation */}
-              {feePayerUserOp && (
-                <div className="bg-white border border-gray-100 rounded p-4">
-                  <div className="flex items-center space-x-2 mb-3">
-                    <Wallet className="h-4 w-4 text-[var(--biconomy-orange)]" />
-                    <span className="text-sm font-medium text-gray-600">Fee Payer Operation</span>
-                  </div>
-                  
-                  {/* Compact horizontal layout in three columns */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-2 text-xs">
-                    {/* Transaction Hash */}
-                    {feePayerUserOp.executionData && (
-                      <div className="flex items-center justify-between min-w-0">
-                        <div className="flex items-center space-x-2 flex-1 min-w-0">
-                          <ExternalLink className="h-3 w-3 text-gray-500 shrink-0" />
-                          <span className="text-xs text-gray-600 shrink-0">Tx:</span>
-                          <code className="text-xs font-mono text-gray-900 truncate">
-                            {feePayerUserOp.executionData.length > 12 
-                              ? `${feePayerUserOp.executionData.substring(0, 6)}...${feePayerUserOp.executionData.substring(feePayerUserOp.executionData.length - 6)}`
-                              : feePayerUserOp.executionData
-                            }
-                          </code>
-                        </div>
-                        <div className="flex items-center space-x-1 shrink-0 ml-1">
+                    </td>
+                    <td className="py-2 pl-4">
+                      <code className="text-xs font-mono text-gray-900">{paymentInfo.shortEncoding ? 'Yes' : 'No'}</code>
+                    </td>
+                  </tr>
+                  <tr className="border-b border-gray-100">
+                    <td className="py-2 pr-4">
+                      <div className="flex items-center space-x-2">
+                        <CreditCard className="h-3 w-3 text-gray-500 shrink-0" />
+                        <span className="text-xs text-gray-600 font-medium">Sponsored</span>
+                      </div>
+                    </td>
+                    <td className="py-2 pl-4">
+                      <code className="text-xs font-mono text-gray-900">{paymentInfo.sponsored ? 'Yes' : 'No'}</code>
+                    </td>
+                  </tr>
+                  {paymentInfo.sponsorshipUrl && (
+                    <TableDataField icon={ExternalLink} label="Sponsorship URL" value={paymentInfo.sponsorshipUrl} />
+                  )}
+                  <tr className="border-b border-gray-100">
+                    <td className="py-2 pr-4">
+                      <div className="flex items-center space-x-2">
+                        <Key className="h-3 w-3 text-gray-500 shrink-0" />
+                        <span className="text-xs text-gray-600 font-medium">Init Code</span>
+                      </div>
+                    </td>
+                    <td className="py-2 pl-4">
+                      <div className="flex items-center justify-between">
+                        <code className="text-xs font-mono text-gray-900">
+                          {paymentInfo.initCode ? (paymentInfo.initCode.length > 50 ? `${paymentInfo.initCode.substring(0, 24)}...${paymentInfo.initCode.substring(paymentInfo.initCode.length - 24)}` : paymentInfo.initCode) : 'N/A'}
+                        </code>
+                        {paymentInfo.initCode && (
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => copyToClipboard(feePayerUserOp.executionData!, "Transaction Hash")}
-                            className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0"
+                            onClick={() => copyToClipboard(paymentInfo.initCode, "Init Code")}
+                            className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0 ml-2"
                           >
                             <Copy className="h-2.5 w-2.5" />
                           </Button>
-                          {hasExplorerSupport(feePayerUserOp.chainId) && (
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* Token Information */}
+            <div>
+              <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-2">
+                <Circle className="h-4 w-4" />
+                <span>Token Information</span>
+              </h5>
+              <table className="w-full text-xs">
+                <tbody>
+                  <tr className="border-b border-gray-100">
+                    <td className="py-2 pr-4">
+                      <div className="flex items-center space-x-2">
+                        <Hash className="h-3 w-3 text-gray-500 shrink-0" />
+                        <span className="text-xs text-gray-600 font-medium">Token Address</span>
+                      </div>
+                    </td>
+                    <td className="py-2 pl-4">
+                      <div className="flex items-center justify-between">
+                        <code className="text-xs font-mono text-gray-900">
+                          {paymentInfo.token.length > 50 ? `${paymentInfo.token.substring(0, 24)}...${paymentInfo.token.substring(paymentInfo.token.length - 24)}` : paymentInfo.token}
+                        </code>
+                        <div className="flex items-center space-x-1 ml-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => copyToClipboard(paymentInfo.token, "Token Address")}
+                            className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0"
+                          >
+                            <Copy className="h-2.5 w-2.5" />
+                          </Button>
+                          {getTokenExplorerUrl(paymentInfo.chainId, paymentInfo.token) && (
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => window.open(getExplorerUrl(feePayerUserOp.chainId, feePayerUserOp.executionData!)!, '_blank')}
+                              onClick={() => window.open(getTokenExplorerUrl(paymentInfo.chainId, paymentInfo.token)!, '_blank')}
                               className="text-xs px-1 py-0.5 h-5 flex items-center hover:bg-biconomy-orange hover:text-white"
                             >
                               <ExternalLink className="h-2.5 w-2.5" />
@@ -413,113 +402,137 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                           )}
                         </div>
                       </div>
-                    )}
-                    
-                    {/* Sender */}
-                    <div className="flex items-center justify-between min-w-0">
-                      <div className="flex items-center space-x-2 flex-1 min-w-0">
-                        <Wallet className="h-3 w-3 text-gray-500 shrink-0" />
-                        <span className="text-xs text-gray-600 shrink-0">Sender:</span>
-                        <code className="text-xs font-mono text-gray-900 truncate">
-                          {feePayerUserOp.userOp.sender.length > 12 
-                            ? `${feePayerUserOp.userOp.sender.substring(0, 6)}...${feePayerUserOp.userOp.sender.substring(feePayerUserOp.userOp.sender.length - 6)}`
-                            : feePayerUserOp.userOp.sender
-                          }
-                        </code>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => copyToClipboard(feePayerUserOp.userOp.sender, "Sender Address")}
-                        className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0 ml-1"
-                      >
-                        <Copy className="h-2.5 w-2.5" />
-                      </Button>
-                    </div>
-                    
-                    {/* User Op Hash */}
-                    <div className="flex items-center justify-between min-w-0">
-                      <div className="flex items-center space-x-2 flex-1 min-w-0">
-                        <Hash className="h-3 w-3 text-gray-500 shrink-0" />
-                        <span className="text-xs text-gray-600 shrink-0">Op Hash:</span>
-                        <code className="text-xs font-mono text-gray-900 truncate">
-                          {feePayerUserOp.userOpHash.length > 12 
-                            ? `${feePayerUserOp.userOpHash.substring(0, 6)}...${feePayerUserOp.userOpHash.substring(feePayerUserOp.userOpHash.length - 6)}`
-                            : feePayerUserOp.userOpHash
-                          }
-                        </code>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => copyToClipboard(feePayerUserOp.userOpHash, "User Op Hash")}
-                        className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0 ml-1"
-                      >
-                        <Copy className="h-2.5 w-2.5" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              )}
-              
-              {/* Additional payment details */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <DataField
-                  icon={Wallet}
-                  label="Sender"
-                  value={paymentInfo.sender}
-                />
-                
-                <DataField
-                  icon={Hash}
-                  label="Nonce"
-                  value={paymentInfo.nonce}
-                />
-                
-                <DataField
-                  icon={CreditCard}
-                  label="Call Gas Limit"  
-                  value={paymentInfo.callGasLimit}
-                />
-                
-                <div className="bg-white border border-gray-100 rounded-lg p-4">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <Key className="h-4 w-4 text-gray-500" />
-                    <span className="text-sm font-medium text-gray-600">Chain</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
+                    </td>
+                  </tr>
+                  <tr className="border-b border-gray-100">
+                    <td className="py-2 pr-4">
                       <div className="flex items-center space-x-2">
-                        <div className={`w-3 h-3 rounded-full ${
-                          chainInfo?.healthCheck?.status === 'healthy' ? 'bg-green-500' : 'bg-gray-400'
-                        }`}></div>
-                        {getNetworkIcon(paymentInfo.chainId) && (
+                        <Circle className="h-3 w-3 text-gray-500 shrink-0" />
+                        <span className="text-xs text-gray-600 font-medium">Token Symbol</span>
+                      </div>
+                    </td>
+                    <td className="py-2 pl-4">
+                      <div className="flex items-center space-x-2">
+                        {getTokenIcon(tokenInfo.symbol) && (
                           <img 
-                            src={getNetworkIcon(paymentInfo.chainId)!} 
-                            alt={chainInfo?.name || `Chain ${paymentInfo.chainId}`}
-                            className="w-4 h-4"
+                            src={getTokenIcon(tokenInfo.symbol)!} 
+                            alt={tokenInfo.symbol}
+                            className="w-3 h-3 shrink-0"
                           />
                         )}
-                        <code className="text-sm font-mono text-gray-900">
-                          {chainInfo?.name || `Chain ${paymentInfo.chainId}`}
-                        </code>
+                        <code className="text-xs font-mono text-gray-900">{tokenInfo?.symbol || 'Unknown'}</code>
                       </div>
-                      <p className="text-xs text-gray-500 mt-1">ID: {paymentInfo.chainId}</p>
-                    </div>
-                    {paymentInfo.chainId && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => copyToClipboard(paymentInfo.chainId, "Chain ID")}
-                        className="text-gray-400 hover:text-[var(--biconomy-orange)] shrink-0 ml-2"
-                      >
-                        <Copy className="h-3 w-3" />
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </div>
+                    </td>
+                  </tr>
+                  <tr className="border-b border-gray-100">
+                    <td className="py-2 pr-4">
+                      <div className="flex items-center space-x-2">
+                        <Circle className="h-3 w-3 text-gray-500 shrink-0" />
+                        <span className="text-xs text-gray-600 font-medium">Token Amount</span>
+                      </div>
+                    </td>
+                    <td className="py-2 pl-4">
+                      <code className="text-xs font-mono text-gray-900">
+                        {paymentInfo.tokenAmount ? formatNumber(paymentInfo.tokenAmount) : 'N/A'}
+                      </code>
+                    </td>
+                  </tr>
+                  <tr className="border-b border-gray-100">
+                    <td className="py-2 pr-4">
+                      <div className="flex items-center space-x-2">
+                        <Circle className="h-3 w-3 text-gray-500 shrink-0" />
+                        <span className="text-xs text-gray-600 font-medium">Token Wei Amount</span>
+                      </div>
+                    </td>
+                    <td className="py-2 pl-4">
+                      <div className="flex items-center justify-between">
+                        <code className="text-xs font-mono text-gray-900">
+                          {paymentInfo.tokenWeiAmount ? (paymentInfo.tokenWeiAmount.length > 50 ? `${paymentInfo.tokenWeiAmount.substring(0, 24)}...${paymentInfo.tokenWeiAmount.substring(paymentInfo.tokenWeiAmount.length - 24)}` : paymentInfo.tokenWeiAmount) : 'N/A'}
+                        </code>
+                        {paymentInfo.tokenWeiAmount && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => copyToClipboard(paymentInfo.tokenWeiAmount, "Token Wei Amount")}
+                            className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0 ml-2"
+                          >
+                            <Copy className="h-2.5 w-2.5" />
+                          </Button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr className="border-b border-gray-100">
+                    <td className="py-2 pr-4">
+                      <div className="flex items-center space-x-2">
+                        <DollarSign className="h-3 w-3 text-gray-500 shrink-0" />
+                        <span className="text-xs text-gray-600 font-medium">Token Value</span>
+                      </div>
+                    </td>
+                    <td className="py-2 pl-4">
+                      <code className="text-xs font-mono text-gray-900">
+                        {paymentInfo.tokenValue ? `$${paymentInfo.tokenValue}` : 'N/A'}
+                      </code>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
+
+            {/* Fee Payer Operation */}
+            {feePayerUserOp && (
+              <div>
+                <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-2">
+                  <Wallet className="h-4 w-4" />
+                  <span>Fee Payer Operation</span>
+                </h5>
+                <table className="w-full text-xs">
+                  <tbody>
+                    {feePayerUserOp.executionData && (
+                      <tr className="border-b border-gray-100">
+                        <td className="py-2 pr-4">
+                          <div className="flex items-center space-x-2">
+                            <ExternalLink className="h-3 w-3 text-gray-500 shrink-0" />
+                            <span className="text-xs text-gray-600 font-medium">Transaction Hash</span>
+                          </div>
+                        </td>
+                        <td className="py-2 pl-4">
+                          <div className="flex items-center justify-between">
+                            <code className="text-xs font-mono text-gray-900">
+                              {feePayerUserOp.executionData.length > 50 ? `${feePayerUserOp.executionData.substring(0, 24)}...${feePayerUserOp.executionData.substring(feePayerUserOp.executionData.length - 24)}` : feePayerUserOp.executionData}
+                            </code>
+                            <div className="flex items-center space-x-1 ml-2">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => copyToClipboard(feePayerUserOp.executionData!, "Transaction Hash")}
+                                className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0"
+                              >
+                                <Copy className="h-2.5 w-2.5" />
+                              </Button>
+                              {hasExplorerSupport(feePayerUserOp.chainId) && (
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => window.open(getExplorerUrl(feePayerUserOp.chainId, feePayerUserOp.executionData!)!, '_blank')}
+                                  className="text-xs px-1 py-0.5 h-5 flex items-center hover:bg-biconomy-orange hover:text-white"
+                                >
+                                  <ExternalLink className="h-2.5 w-2.5" />
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                    <TableDataField icon={User} label="Sender" value={feePayerUserOp.userOp.sender} />
+                    <TableDataField icon={Hash} label="User Op Hash" value={feePayerUserOp.userOpHash} />
+                    <TableDataField icon={Hash} label="Nonce" value={feePayerUserOp.userOp.nonce} showCopy={false} />
+                    <TableDataField icon={Database} label="Chain ID" value={feePayerUserOp.chainId} showCopy={false} />
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
       </div>
