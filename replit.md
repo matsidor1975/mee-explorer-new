@@ -110,3 +110,6 @@ The application is designed to be easily deployable on platforms like Replit, Ve
 - Added local storage search history functionality with Recent Searches section on explorer page
 - Implemented history management with individual item removal and clear all functionality
 - Added timestamp formatting for search history items (Just now, hours ago, date format)
+- Enhanced payment token display with viem integration for accurate blockchain data
+- Added token address display with blockchain explorer links in expandable fees section
+- Integrated viem for dynamic token name fetching from supported chains (Ethereum, Base, Polygon, Arbitrum, Optimism, BSC)

@@ -7,6 +7,7 @@ import { formatAddress, formatNumber, getTokenInfo, getNetworkIcon, getTokenIcon
 import { useToast } from "@/hooks/use-toast";
 import { useChainInfo } from "@/hooks/use-chain-info";
 import { fetchTokenInfo } from "@/lib/api";
+import { fetchTokenInfoViem, hasViemSupport, type TokenInfo } from "@/lib/viem";
 
 interface PaymentInfoProps {
   paymentInfo: PaymentInfo;
@@ -18,20 +19,36 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
   const { chains } = useChainInfo();
   const [isExpanded, setIsExpanded] = useState(false);
   const [apiTokenInfo, setApiTokenInfo] = useState<{ name: string; symbol: string; decimals: number } | null>(null);
+  const [viemTokenInfo, setViemTokenInfo] = useState<TokenInfo | null>(null);
+  const [isLoadingViem, setIsLoadingViem] = useState(false);
   
-  // Fetch token information from API
+  // Fetch token information from API and viem
   useEffect(() => {
     const loadTokenInfo = async () => {
+      // Always try API first
       const tokenData = await fetchTokenInfo(paymentInfo.token, paymentInfo.chainId);
       setApiTokenInfo(tokenData);
+      
+      // If viem is supported for this chain, also fetch via viem
+      if (hasViemSupport(paymentInfo.chainId)) {
+        setIsLoadingViem(true);
+        try {
+          const viemData = await fetchTokenInfoViem(paymentInfo.token, paymentInfo.chainId);
+          setViemTokenInfo(viemData);
+        } catch (error) {
+          console.warn('Failed to fetch token info via viem:', error);
+        } finally {
+          setIsLoadingViem(false);
+        }
+      }
     };
     
     loadTokenInfo();
   }, [paymentInfo.token, paymentInfo.chainId]);
   
-  // Get token information (use API data if available, fallback to hardcoded)
+  // Get token information (prioritize viem, then API, then fallback)
   const fallbackTokenInfo = getTokenInfo(paymentInfo.token, paymentInfo.chainId);
-  const tokenInfo = apiTokenInfo || fallbackTokenInfo;
+  const tokenInfo = viemTokenInfo || apiTokenInfo || fallbackTokenInfo;
   const chainInfo = chains.find(c => c.chainId === paymentInfo.chainId);
   
   // Calculate total fees
@@ -170,7 +187,14 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                   )}
                   <span className="text-sm font-medium text-slate-600">{chainInfo?.name || 'Unknown Network'}</span>
                 </div>
-                <p className="text-xs text-slate-500">Token: {tokenInfo?.name || 'Loading...'}</p>
+                <div className="flex items-center space-x-1">
+                  <p className="text-xs text-slate-500">
+                    Token: {tokenInfo?.name || 'Loading...'}
+                  </p>
+                  {isLoadingViem && hasViemSupport(paymentInfo.chainId) && (
+                    <div className="w-2 h-2 border border-biconomy-orange border-t-transparent rounded-full animate-spin"></div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
