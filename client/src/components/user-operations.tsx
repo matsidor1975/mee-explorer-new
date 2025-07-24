@@ -228,14 +228,14 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                   </>
                 )}
                 {isCleanup && (
-                  <Badge variant="outline" className="text-xs">
+                  <Badge variant="outline" className="text-xs badge">
                     Cleanup
                   </Badge>
                 )}
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <Badge className={getExecutionStatusColor(userOp.executionStatus)}>
+              <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge`}>
                 {userOp.executionStatus}
               </Badge>
               {userOp.executionStatus !== "MINED_SUCCESS" && (
@@ -383,7 +383,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                 <Layers className="h-4 w-4 text-blue-500" />
                 <h3 className="text-base font-semibold text-slate-900">User Operations</h3>
               </div>
-              <Badge className="px-2 py-1 text-xs bg-blue-100 text-blue-800 border border-blue-200">
+              <Badge className="px-3 py-1 text-xs bg-blue-100 text-blue-800 border border-blue-200 badge">
                 {regularOperations.length} operation{regularOperations.length !== 1 ? 's' : ''}
               </Badge>
             </div>

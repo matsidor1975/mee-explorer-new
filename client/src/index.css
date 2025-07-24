@@ -29,7 +29,7 @@
   --destructive: hsl(0, 84%, 60%);
   --destructive-foreground: hsl(210, 40%, 98%);
   --ring: hsl(217, 91%, 60%);
-  --radius: 0.75rem;
+  --radius: 0.25rem;
   --biconomy-orange: hsl(24, 100%, 50%);
   --biconomy-orange-light: hsl(24, 100%, 60%);
   --biconomy-orange-dark: hsl(24, 95%, 45%);
@@ -67,10 +67,16 @@
   --destructive: hsl(0, 62.8%, 30.6%);
   --destructive-foreground: hsl(0, 0%, 98%);
   --ring: hsl(240, 4.9%, 83.9%);
-  --radius: 0.5rem;
+  --radius: 0.25rem;
   --biconomy-orange: hsl(15, 100%, 60%);
   --biconomy-orange-light: hsl(15, 100%, 65%);
   --biconomy-orange-dark: hsl(15, 95%, 50%);
+}
+
+/* Badge component customization */
+.badge {
+  border-radius: 0.25rem !important;
+  padding: 0.25rem 0.75rem !important;
 }
 
 @layer base {
