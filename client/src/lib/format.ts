@@ -137,20 +137,54 @@ export const setChainsCache = (chains: Record<string, string>) => {
   chainInfoCache = { ...chainInfoCache, ...chains };
 };
 
+// Get network icon path
+export const getNetworkIcon = (chainId: string | number): string | null => {
+  const chainIdNum = typeof chainId === 'string' ? parseInt(chainId) : chainId;
+  
+  const networkIcons: Record<number, string> = {
+    1: '/src/assets/networks/ethereum.svg',
+    8453: '/src/assets/networks/base.svg',
+    137: '/src/assets/networks/polygon.svg',
+    42161: '/src/assets/networks/arbitrum one.svg',
+    10: '/src/assets/networks/optimism.svg',
+    56: '/src/assets/networks/bnb smart chain.svg',
+    100: '/src/assets/networks/gnosis.svg',
+    43114: '/src/assets/networks/avalanche c-chain.svg',
+    534352: '/src/assets/networks/scroll.svg'
+  };
+  
+  return networkIcons[chainIdNum] || null;
+};
+
+// Get token icon path  
+export const getTokenIcon = (symbol: string): string | null => {
+  const tokenIcons: Record<string, string> = {
+    'ETH': '/src/assets/tokens/eth.png',
+    'USDC': '/src/assets/tokens/usd coin.png',
+    'USDT': '/src/assets/tokens/tether usd.png',
+    'stETH': '/src/assets/tokens/steth.png',
+    'LINK': '/src/assets/tokens/link.png'
+  };
+  
+  return tokenIcons[symbol.toUpperCase()] || null;
+};
+
 // Token information utilities
 export const getTokenInfo = (tokenAddress: string, chainId: string): { name: string; symbol: string; icon?: string } => {
   // Common token mappings by chain
   const tokenMappings: Record<string, Record<string, { name: string; symbol: string; icon?: string }>> = {
     '1': {
-      '0xA0b86a33E6441c8C546C0C06F5C0D618D7cF6066': { name: 'USD Coin', symbol: 'USDC' },
-      '0xdAC17F958D2ee523a2206206994597C13D831ec7': { name: 'Tether USD', symbol: 'USDT' },
+      '0xA0b86a33E6441c8C546C0C06F5C0D618D7cF6066': { name: 'USD Coin', symbol: 'USDC', icon: getTokenIcon('USDC') || undefined },
+      '0xdAC17F958D2ee523a2206206994597C13D831ec7': { name: 'Tether USD', symbol: 'USDT', icon: getTokenIcon('USDT') || undefined },
+      '0x0000000000000000000000000000000000000000': { name: 'Ethereum', symbol: 'ETH', icon: getTokenIcon('ETH') || undefined },
     },
     '8453': {
-      '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913': { name: 'USD Coin', symbol: 'USDC' },
+      '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913': { name: 'USD Coin', symbol: 'USDC', icon: getTokenIcon('USDC') || undefined },
+      '0x0000000000000000000000000000000000000000': { name: 'Ethereum', symbol: 'ETH', icon: getTokenIcon('ETH') || undefined },
     },
     '137': {
-      '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174': { name: 'USD Coin', symbol: 'USDC' },
-      '0xc2132D05D31c914a87C6611C10748AEb04B58e8F': { name: 'Tether USD', symbol: 'USDT' },
+      '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174': { name: 'USD Coin', symbol: 'USDC', icon: getTokenIcon('USDC') || undefined },
+      '0xc2132D05D31c914a87C6611C10748AEb04B58e8F': { name: 'Tether USD', symbol: 'USDT', icon: getTokenIcon('USDT') || undefined },
     }
   };
   

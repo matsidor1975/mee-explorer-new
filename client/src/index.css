@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Cascadia Code';
+  src: url('./assets/fonts/CascadiaCode.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   --background: hsl(0, 0%, 100%);
   --foreground: hsl(20, 14.3%, 4.1%);
@@ -62,6 +69,11 @@
   body {
     @apply font-sans antialiased bg-background text-foreground;
   }
+}
+
+/* Use Cascadia Code for all monospace text */
+code, pre, .font-mono {
+  font-family: 'Cascadia Code', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace !important;
 }
 
 @layer utilities {

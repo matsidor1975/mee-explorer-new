@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Copy, DollarSign, CreditCard, Wallet, Hash, Key, Circle, ChevronDown, Receipt, Users } from "lucide-react";
 import { PaymentInfo, UserOp } from "@/types";
-import { formatAddress, formatNumber, getTokenInfo } from "@/lib/format";
+import { formatAddress, formatNumber, getTokenInfo, getNetworkIcon, getTokenIcon } from "@/lib/format";
 import { useToast } from "@/hooks/use-toast";
 import { useChainInfo } from "@/hooks/use-chain-info";
 
@@ -164,7 +164,16 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                       <p className="text-lg font-semibold text-gray-900">
                         {paymentInfo.tokenAmount ? formatNumber(paymentInfo.tokenAmount) : 'Not available'}
                       </p>
-                      <span className="text-sm text-gray-500">{tokenInfo.symbol}</span>
+                      <div className="flex items-center space-x-1">
+                        {getTokenIcon(tokenInfo.symbol) && (
+                          <img 
+                            src={getTokenIcon(tokenInfo.symbol)!} 
+                            alt={tokenInfo.symbol}
+                            className="w-4 h-4"
+                          />
+                        )}
+                        <span className="text-sm text-gray-500">{tokenInfo.symbol}</span>
+                      </div>
                     </div>
                     <p className="text-xs text-gray-500">{tokenInfo.name}</p>
                   </div>
@@ -187,11 +196,11 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <p className="text-xs text-gray-500">Sender</p>
-                      <p className="text-sm font-mono text-gray-900">{formatAddress(feePayerUserOp.sender)}</p>
+                      <p className="text-sm font-mono text-gray-900">{formatAddress(feePayerUserOp.userOp.sender)}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500">Smart Account</p>
-                      <p className="text-sm font-mono text-gray-900">{formatAddress(feePayerUserOp.smartAccount)}</p>
+                      <p className="text-xs text-gray-500">User Op Hash</p>
+                      <p className="text-sm font-mono text-gray-900">{formatAddress(feePayerUserOp.userOpHash)}</p>
                     </div>
                   </div>
                 </div>
@@ -228,6 +237,13 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                         <div className={`w-3 h-3 rounded-full ${
                           chainInfo?.healthCheck?.status === 'healthy' ? 'bg-green-500' : 'bg-gray-400'
                         }`}></div>
+                        {getNetworkIcon(paymentInfo.chainId) && (
+                          <img 
+                            src={getNetworkIcon(paymentInfo.chainId)!} 
+                            alt={chainInfo?.name || `Chain ${paymentInfo.chainId}`}
+                            className="w-4 h-4"
+                          />
+                        )}
                         <code className="text-sm font-mono text-gray-900">
                           {chainInfo?.name || `Chain ${paymentInfo.chainId}`}
                         </code>

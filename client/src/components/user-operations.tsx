@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Copy, ChevronDown, Code, User, Hash, Fuel, Clock, Zap, Layers, Settings, AlertTriangle, CheckCircle, ExternalLink, Wallet, CreditCard } from "lucide-react";
 import { UserOp } from "@/types";
-import { formatHash, formatGas, formatTimestamp, getExecutionStatusColor, parseAccountGasLimits, parseGasFees, getExplorerUrl, getExplorerName, hasExplorerSupport } from "@/lib/format";
+import { formatHash, formatGas, formatTimestamp, getExecutionStatusColor, parseAccountGasLimits, parseGasFees, getExplorerUrl, getExplorerName, hasExplorerSupport, getNetworkIcon } from "@/lib/format";
 import { useToast } from "@/hooks/use-toast";
 import { useChainInfo } from "@/hooks/use-chain-info";
 
@@ -196,7 +196,16 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                     </Badge>
                   )}
                 </div>
-                <p className="text-sm text-gray-500">{chainInfo?.name || `Chain ${userOp.chainId}`}</p>
+                <div className="flex items-center space-x-1">
+                  {getNetworkIcon(userOp.chainId) && (
+                    <img 
+                      src={getNetworkIcon(userOp.chainId)!} 
+                      alt={chainInfo?.name || `Chain ${userOp.chainId}`}
+                      className="w-4 h-4"
+                    />
+                  )}
+                  <p className="text-sm text-gray-500">{chainInfo?.name || `Chain ${userOp.chainId}`}</p>
+                </div>
               </div>
             </div>
             <div className="flex items-center space-x-2">
@@ -289,10 +298,10 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                   <span>Operation Details</span>
                 </h5>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <DataField icon={Hash} label="User Op Hash" value={userOp.userOp.userOpHash} />
+                  <DataField icon={Hash} label="User Op Hash" value={userOp.userOpHash} />
                   <DataField icon={User} label="Sender" value={userOp.userOp.sender} />
                   <DataField icon={Hash} label="Nonce" value={userOp.userOp.nonce} />
-                  <DataField icon={CreditCard} label="Paymaster" value={userOp.userOp.paymaster} />
+                  <DataField icon={CreditCard} label="Paymaster and Data" value={userOp.userOp.paymasterAndData} />
                   <DataField icon={Fuel} label="Verification Gas Limit" value={formatGas(verificationGasLimit)} showCopy={false} />
                   <DataField icon={Fuel} label="Call Gas Limit" value={formatGas(callGasLimit)} showCopy={false} />
                   <DataField icon={Zap} label="Max Priority Fee Per Gas" value={formatGas(maxPriorityFeePerGas)} showCopy={false} />
