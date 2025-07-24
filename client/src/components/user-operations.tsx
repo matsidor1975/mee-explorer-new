@@ -467,7 +467,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowCleanupOperations(!showCleanupOperations)}
-                className="flex items-center space-x-2 hover:bg-slate-50 border-slate-200"
+                className="flex items-center space-x-2 hover:bg-slate-50 border-slate-200 pt-[14px] pb-[14px] pl-[16px] pr-[16px]"
               >
                 <span>{showCleanupOperations ? 'Hide' : 'Show'} Cleanup Operations</span>
                 <ChevronDown className={`h-4 w-4 transition-transform ${showCleanupOperations ? 'rotate-180' : ''}`} />
