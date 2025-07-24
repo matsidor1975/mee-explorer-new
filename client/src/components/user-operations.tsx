@@ -205,18 +205,19 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
 
     return (
       <div key={index} className="border border-gray-200 rounded overflow-hidden">
-        {/* Operation Header */}
-        <div className="p-4 bg-gray-50/50 border-b border-gray-200">
+        {/* Compact Operation Header - Everything Inline */}
+        <div className="p-3 bg-gray-50/50">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <User className="h-4 w-4 text-[var(--biconomy-orange)]" />
+            <div className="flex items-center space-x-4 flex-1">
+              {/* Operation number and chain */}
               <div className="flex items-center space-x-2">
-                <h4 className="font-medium text-gray-900">
+                <User className="h-4 w-4 text-[var(--biconomy-orange)]" />
+                <h4 className="font-medium text-gray-900 text-sm">
                   {isCleanup ? 'Cleanup Operation' : `#${index + 1}`}
                 </h4>
                 {!isCleanup && (
                   <>
-                    <span className="text-gray-400">-</span>
+                    <span className="text-gray-400">•</span>
                     {getNetworkIcon(userOp.chainId) && (
                       <img 
                         src={getNetworkIcon(userOp.chainId)!} 
@@ -224,7 +225,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                         className="w-4 h-4"
                       />
                     )}
-                    <span className="font-medium text-gray-900">{chainInfo?.name || `Chain ${userOp.chainId}`}</span>
+                    <span className="font-medium text-gray-900 text-sm">{chainInfo?.name || `Chain ${userOp.chainId}`}</span>
                   </>
                 )}
                 {isCleanup && (
@@ -233,27 +234,64 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                   </Badge>
                 )}
               </div>
+              
+              {/* Transaction Hash */}
+              {userOp.executionData && (
+                <div className="flex items-center space-x-2">
+                  <span className="text-gray-400">•</span>
+                  <ExternalLink className="h-3 w-3 text-gray-500" />
+                  <span className="text-xs text-gray-600">Tx:</span>
+                  <code className="text-xs font-mono text-gray-900">{formatHash(userOp.executionData)}</code>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => copyToClipboard(userOp.executionData, "Transaction Hash")}
+                    className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0"
+                  >
+                    <Copy className="h-3 w-3" />
+                  </Button>
+                  {hasExplorerSupport(userOp.chainId) && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => window.open(getExplorerUrl(userOp.chainId, userOp.executionData)!, '_blank')}
+                      className="text-xs px-1 py-0.5 h-5 flex items-center hover:bg-[var(--biconomy-orange)] hover:text-white"
+                    >
+                      <ExternalLink className="h-3 w-3" />
+                    </Button>
+                  )}
+                </div>
+              )}
+              
+              {/* Status and Time */}
+              <div className="flex items-center space-x-2">
+                <span className="text-gray-400">•</span>
+                <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge text-xs`}>
+                  {userOp.executionStatus}
+                </Badge>
+                <span className="text-gray-400">•</span>
+                <Clock className="h-3 w-3 text-gray-500" />
+                <span className="text-xs text-gray-600">{executionTime.formatted}</span>
+              </div>
             </div>
+            
             <div className="flex items-center space-x-2">
-              <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge`}>
-                {userOp.executionStatus}
-              </Badge>
               {userOp.executionStatus !== "MINED_SUCCESS" && (
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => handleTenderlySimulation(userOp)}
-                  className="text-xs flex items-center space-x-1 hover:bg-blue-500 hover:text-white"
+                  className="text-xs px-2 py-1 h-6 flex items-center space-x-1 hover:bg-blue-500 hover:text-white"
                 >
                   <Play className="h-3 w-3" />
-                  <span>Simulate with Tenderly</span>
+                  <span>Simulate</span>
                 </Button>
               )}
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => toggleFunction(index)}
-                className="text-gray-500 hover:text-[var(--biconomy-orange)]"
+                className="text-gray-500 hover:text-[var(--biconomy-orange)] h-6 w-6 p-0"
               >
                 <ChevronDown className={`h-4 w-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
               </Button>
@@ -261,68 +299,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
           </div>
         </div>
 
-        {/* Operation Details - Always visible inline */}
-        <div className="p-4 bg-white">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            {/* Transaction Hash with Explorer Link */}
-            <div className="flex-1">
-              {userOp.executionData ? (
-                <div className="flex items-center space-x-3">
-                  <div className="flex items-center space-x-2">
-                    <ExternalLink className="h-4 w-4 text-gray-500" />
-                    <span className="text-sm font-medium text-gray-600">Transaction:</span>
-                  </div>
-                  <code className="text-sm font-mono text-gray-900">
-                    {formatHash(userOp.executionData)}
-                  </code>
-                  <div className="flex items-center space-x-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => copyToClipboard(userOp.executionData, "Transaction Hash")}
-                      className="text-gray-400 hover:text-[var(--biconomy-orange)] h-6 w-6 p-0"
-                    >
-                      <Copy className="h-3 w-3" />
-                    </Button>
-                    {hasExplorerSupport(userOp.chainId) ? (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => window.open(getExplorerUrl(userOp.chainId, userOp.executionData)!, '_blank')}
-                        className="text-xs h-6 px-2 flex items-center space-x-1 hover:bg-[var(--biconomy-orange)] hover:text-white"
-                      >
-                        <ExternalLink className="h-3 w-3" />
-                        <span>{getExplorerName(userOp.chainId)}</span>
-                      </Button>
-                    ) : (
-                      <span className="text-xs text-gray-500 px-2">
-                        No explorer available
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ) : (
-                <div className="flex items-center space-x-2">
-                  <ExternalLink className="h-4 w-4 text-gray-400" />
-                  <span className="text-sm text-gray-400">
-                    {isCleanup
-                      ? "Not executed (no tokens to cleanup)" 
-                      : "No transaction data available"
-                    }
-                  </span>
-                </div>
-              )}
-            </div>
 
-            {/* Mined Time */}
-            <div className="flex items-center space-x-2 text-sm text-gray-600">
-              <Clock className="h-4 w-4" />
-              <span className="font-medium">Mined:</span>
-              <span>{executionTime.relative}</span>
-              <span className="text-gray-400">({executionTime.formatted})</span>
-            </div>
-          </div>
-        </div>
 
         {/* Expandable Details */}
         {isExpanded && (

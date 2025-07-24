@@ -158,36 +158,47 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
       </div>
       <div className="p-4">
         
-        {/* Inline Fee Information */}
-        <div className="flex flex-wrap items-center gap-6 mb-4">
-          <div className="flex items-center space-x-2">
-            <Receipt className="h-4 w-4 text-purple-500" />
-            <span className="text-sm text-slate-600">Gas:</span>
-            <span className="font-semibold text-slate-900">
+        {/* Fee Information Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
+          <div className="bg-white border border-slate-200 p-3 rounded">
+            <div className="flex items-center space-x-2 mb-1">
+              <Receipt className="h-4 w-4 text-purple-500" />
+              <span className="text-sm font-medium text-slate-600">Gas Fee</span>
+            </div>
+            <div className="text-lg font-semibold text-slate-900 mb-1">
               {paymentInfo.gasFee ? `$${paymentInfo.gasFee}` : 'N/A'}
-            </span>
+            </div>
+            <p className="text-xs text-slate-500">Paid to blockchain validators</p>
           </div>
           
-          <div className="flex items-center space-x-2">
-            <Users className="h-4 w-4 text-orange-500" />
-            <span className="text-sm text-slate-600">Orchestration:</span>
-            <span className="font-semibold text-slate-900">
+          <div className="bg-white border border-slate-200 p-3 rounded">
+            <div className="flex items-center space-x-2 mb-1">
+              <Users className="h-4 w-4 text-orange-500" />
+              <span className="text-sm font-medium text-slate-600">Orchestration Fee</span>
+            </div>
+            <div className="text-lg font-semibold text-slate-900 mb-1">
               {paymentInfo.orchestrationFee ? `$${paymentInfo.orchestrationFee}` : 'N/A'}
-            </span>
+            </div>
+            <p className="text-xs text-slate-500">Paid to Biconomy network relayers</p>
           </div>
           
-          <div className="flex items-center space-x-2">
-            <DollarSign className="h-4 w-4 text-emerald-500" />
-            <span className="text-sm text-slate-600">Total:</span>
-            <span className="font-semibold text-emerald-600">
+          <div className="bg-white border border-slate-200 p-3 rounded">
+            <div className="flex items-center space-x-2 mb-1">
+              <DollarSign className="h-4 w-4 text-emerald-500" />
+              <span className="text-sm font-medium text-slate-600">Total Fees</span>
+            </div>
+            <div className="text-lg font-semibold text-emerald-600 mb-1">
               ${totalFees.toFixed(6)}
-            </span>
+            </div>
+            <p className="text-xs text-slate-500">Gas + Orchestration fees</p>
           </div>
           
-          <div className="flex items-center space-x-2">
-            <Circle className="h-4 w-4 text-blue-500" />
-            <span className="text-sm text-slate-600">Paid with:</span>
-            <div className="flex items-center space-x-1">
+          <div className="bg-white border border-slate-200 p-3 rounded">
+            <div className="flex items-center space-x-2 mb-1">
+              <Circle className="h-4 w-4 text-blue-500" />
+              <span className="text-sm font-medium text-slate-600">Payment Method</span>
+            </div>
+            <div className="flex items-center space-x-2 mb-1">
               {tokenInfo?.symbol && getTokenIcon(tokenInfo.symbol) && (
                 <img 
                   src={getTokenIcon(tokenInfo.symbol)!} 
@@ -195,16 +206,17 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                   className="w-4 h-4"
                 />
               )}
-              <span className="font-semibold text-slate-900">{tokenInfo?.symbol || 'Unknown'}</span>
-              <span className="text-xs text-slate-500">on</span>
+              <span className="text-lg font-semibold text-slate-900">{tokenInfo?.symbol || 'Unknown'}</span>
+            </div>
+            <div className="flex items-center space-x-1">
               {getNetworkIcon(paymentInfo.chainId) && (
                 <img 
                   src={getNetworkIcon(paymentInfo.chainId)!} 
                   alt={chainInfo?.name || 'Unknown Network'}
-                  className="w-4 h-4"
+                  className="w-3 h-3"
                 />
               )}
-              <span className="text-sm text-slate-600">{chainInfo?.name || 'Unknown'}</span>
+              <span className="text-xs text-slate-500">{chainInfo?.name || 'Unknown'}</span>
             </div>
           </div>
         </div>
