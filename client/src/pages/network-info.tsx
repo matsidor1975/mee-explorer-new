@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getBiconomyInfo, BiconomyInfo } from "@/lib/api";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, XCircle, Clock, Network, Server, Zap, Activity, ChevronDown, ChevronRight, Search } from "lucide-react";
+import { CheckCircle, XCircle, Clock, Network, Server, Zap, Activity, ChevronDown, ChevronRight, Search, FileText } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { getNetworkIcon } from "@/lib/format";
 import { Link, useLocation } from "wouter";
@@ -35,50 +35,51 @@ export default function NetworkInfo() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-screen">
         {/* Header */}
-        <header className="bg-white border-b border-slate-200">
+        <header className="glass-card border-b border-white/20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-14">
+            <div className="flex justify-between items-center h-10">
               <div className="flex items-center space-x-4">
                 <img 
                   src={new URL('@/assets/biconomy-explorer.webp', import.meta.url).href} 
                   alt="Biconomy Explorer"
-                  className="h-8"
+                  className="h-6"
                 />
               </div>
-              <nav className="flex items-center space-x-1">
+              <nav className="flex items-center space-x-6">
                 <Link 
                   href="/" 
-                  className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
+                  className={`flex items-center space-x-1.5 px-2 py-1 rounded-md transition-all duration-200 ${
                     isActive("/") 
-                      ? "bg-biconomy-orange text-white" 
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                      ? "bg-biconomy-orange/90 text-white shadow-sm" 
+                      : "text-slate-600 hover:text-biconomy-orange hover:bg-white/60"
                   }`}
                 >
-                  <Search className="h-4 w-4" />
-                  <span className="font-medium">Explorer</span>
+                  <Search className="h-3 w-3" />
+                  <span className="text-xs font-semibold uppercase tracking-wider">Explorer</span>
                 </Link>
                 
                 <Link 
                   href="/network" 
-                  className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
+                  className={`flex items-center space-x-1.5 px-2 py-1 rounded-md transition-all duration-200 ${
                     isActive("/network") 
-                      ? "bg-biconomy-orange text-white" 
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                      ? "bg-biconomy-orange/90 text-white shadow-sm" 
+                      : "text-slate-600 hover:text-biconomy-orange hover:bg-white/60"
                   }`}
                 >
-                  <Activity className="h-4 w-4" />
-                  <span className="font-medium">Network Status</span>
+                  <Activity className="h-3 w-3" />
+                  <span className="text-xs font-semibold uppercase tracking-wider">Network</span>
                 </Link>
                 
                 <a 
                   href="https://docs.biconomy.io" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="px-3 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors rounded-lg"
+                  className="flex items-center space-x-1.5 px-2 py-1 text-slate-600 hover:text-biconomy-orange hover:bg-white/60 transition-all duration-200 rounded-md"
                 >
-                  Documentation
+                  <FileText className="h-3 w-3" />
+                  <span className="text-xs font-semibold uppercase tracking-wider">Docs</span>
                 </a>
               </nav>
             </div>
@@ -97,11 +98,11 @@ export default function NetworkInfo() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-screen">
         {/* Header */}
-        <header className="bg-white border-b border-slate-200">
+        <header className="glass-card border-b border-white/20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-14">
+            <div className="flex justify-between items-center h-10">
               <div className="flex items-center space-x-4">
                 <img 
                   src={new URL('@/assets/biconomy-explorer.webp', import.meta.url).href} 
@@ -109,38 +110,39 @@ export default function NetworkInfo() {
                   className="h-6"
                 />
               </div>
-              <nav className="flex items-center space-x-1">
+              <nav className="flex items-center space-x-6">
                 <Link 
                   href="/" 
-                  className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
+                  className={`flex items-center space-x-1.5 px-2 py-1 rounded-md transition-all duration-200 ${
                     isActive("/") 
-                      ? "bg-biconomy-orange text-white" 
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                      ? "bg-biconomy-orange/90 text-white shadow-sm" 
+                      : "text-slate-600 hover:text-biconomy-orange hover:bg-white/60"
                   }`}
                 >
-                  <Search className="h-4 w-4" />
-                  <span className="font-medium">Explorer</span>
+                  <Search className="h-3 w-3" />
+                  <span className="text-xs font-semibold uppercase tracking-wider">Explorer</span>
                 </Link>
                 
                 <Link 
                   href="/network" 
-                  className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
+                  className={`flex items-center space-x-1.5 px-2 py-1 rounded-md transition-all duration-200 ${
                     isActive("/network") 
-                      ? "bg-biconomy-orange text-white" 
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                      ? "bg-biconomy-orange/90 text-white shadow-sm" 
+                      : "text-slate-600 hover:text-biconomy-orange hover:bg-white/60"
                   }`}
                 >
-                  <Activity className="h-4 w-4" />
-                  <span className="font-medium">Network Status</span>
+                  <Activity className="h-3 w-3" />
+                  <span className="text-xs font-semibold uppercase tracking-wider">Network</span>
                 </Link>
                 
                 <a 
                   href="https://docs.biconomy.io" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="px-3 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors rounded-lg"
+                  className="flex items-center space-x-1.5 px-2 py-1 text-slate-600 hover:text-biconomy-orange hover:bg-white/60 transition-all duration-200 rounded-md"
                 >
-                  Documentation
+                  <FileText className="h-3 w-3" />
+                  <span className="text-xs font-semibold uppercase tracking-wider">Docs</span>
                 </a>
               </nav>
             </div>
@@ -171,11 +173,11 @@ export default function NetworkInfo() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200">
+      <header className="glass-card border-b border-white/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-14">
+          <div className="flex justify-between items-center h-10">
             <div className="flex items-center space-x-4">
               <img 
                 src={new URL('@/assets/biconomy-explorer.webp', import.meta.url).href} 
@@ -183,38 +185,39 @@ export default function NetworkInfo() {
                 className="h-6"
               />
             </div>
-            <nav className="flex items-center space-x-1">
+            <nav className="flex items-center space-x-6">
               <Link 
                 href="/" 
-                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
+                className={`flex items-center space-x-1.5 px-2 py-1 rounded-md transition-all duration-200 ${
                   isActive("/") 
-                    ? "bg-biconomy-orange text-white" 
-                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                    ? "bg-biconomy-orange/90 text-white shadow-sm" 
+                    : "text-slate-600 hover:text-biconomy-orange hover:bg-white/60"
                 }`}
               >
-                <Search className="h-4 w-4" />
-                <span className="font-medium">Explorer</span>
+                <Search className="h-3 w-3" />
+                <span className="text-xs font-semibold uppercase tracking-wider">Explorer</span>
               </Link>
               
               <Link 
                 href="/network" 
-                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
+                className={`flex items-center space-x-1.5 px-2 py-1 rounded-md transition-all duration-200 ${
                   isActive("/network") 
-                    ? "bg-biconomy-orange text-white" 
-                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                    ? "bg-biconomy-orange/90 text-white shadow-sm" 
+                    : "text-slate-600 hover:text-biconomy-orange hover:bg-white/60"
                 }`}
               >
-                <Activity className="h-4 w-4" />
-                <span className="font-medium">Network Status</span>
+                <Activity className="h-3 w-3" />
+                <span className="text-xs font-semibold uppercase tracking-wider">Network</span>
               </Link>
               
               <a 
                 href="https://docs.biconomy.io" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="px-3 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors rounded-lg"
+                className="flex items-center space-x-1.5 px-2 py-1 text-slate-600 hover:text-biconomy-orange hover:bg-white/60 transition-all duration-200 rounded-md"
               >
-                Documentation
+                <FileText className="h-3 w-3" />
+                <span className="text-xs font-semibold uppercase tracking-wider">Docs</span>
               </a>
             </nav>
           </div>
