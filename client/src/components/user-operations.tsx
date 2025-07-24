@@ -365,7 +365,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
               </Badge>
             </div>
           </div>
-          <div className="p-6">
+          <div className="p-6 pl-[12px] pr-[12px] pt-[12px] pb-[12px]">
 
             <div className="space-y-4">
               {regularOperations.map((userOp, index) => renderOperation(userOp, index, false))}
@@ -373,7 +373,6 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
           </div>
         </div>
       )}
-
       {/* Cleanup Operations Toggle */}
       {cleanupOperations.length > 0 && (
         <div className="bg-white border border-slate-200 rounded">
@@ -401,7 +400,6 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
           </div>
         </div>
       )}
-
       {/* Expanded Cleanup Operations Card */}
       {cleanupOperations.length > 0 && showCleanupOperations && (
         <div className="bg-blue-50 border border-slate-200 rounded">
@@ -427,7 +425,6 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
           </div>
         </div>
       )}
-
       {/* No Operations Message */}
       {regularOperations.length === 0 && cleanupOperations.length === 0 && (
         <div className="bg-white border border-slate-200 rounded">
