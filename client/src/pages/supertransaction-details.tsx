@@ -1,15 +1,25 @@
-import { useState } from "react";
-import { useLocation } from "wouter";
-import HashSearch from "@/components/hash-search";
-import { Search } from "lucide-react";
+import { useParams, Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import { getHashDetails } from "@/lib/api";
+import { HashDetails } from "@/types";
+import HashOverview from "@/components/hash-overview";
+import PaymentInfo from "@/components/payment-info";
+import UserOperations from "@/components/user-operations";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, TriangleAlert } from "lucide-react";
 
-export default function Explorer() {
-  const [searchHash, setSearchHash] = useState<string>("");
-  const [, navigate] = useLocation();
+export default function SupertransactionDetails() {
+  const { hash } = useParams();
 
-  const handleSearch = (hash: string) => {
-    navigate(`/details/${hash}`);
-  };
+  const { data: hashDetails, isLoading, error } = useQuery<HashDetails>({
+    queryKey: ['/api/hash-details', hash],
+    queryFn: () => getHashDetails(hash!),
+    enabled: !!hash,
+    retry: false,
+  });
+
+  const showErrorState = error && !isLoading;
+  const showHashDetails = hashDetails && !isLoading && !error;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -18,6 +28,12 @@ export default function Explorer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
+              <Link href="/">
+                <Button variant="ghost" size="sm" className="flex items-center space-x-2">
+                  <ArrowLeft className="h-4 w-4" />
+                  <span>Back to Search</span>
+                </Button>
+              </Link>
               <div className="flex items-center space-x-2">
                 <div className="w-8 h-8 bg-biconomy-orange rounded-lg flex items-center justify-center">
                   <div className="w-4 h-4 bg-white rounded transform rotate-45"></div>
@@ -35,42 +51,47 @@ export default function Explorer() {
         </div>
       </header>
 
-      {/* Search Section */}
-      <div className="bg-biconomy-gradient">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-white mb-4">Explore Biconomy Network</h2>
-            <p className="text-white/80 text-lg mb-8">Search for Supertransaction hashes on the Biconomy Network</p>
-            
-            <div className="max-w-2xl mx-auto">
-              <HashSearch 
-                value={searchHash}
-                onChange={setSearchHash}
-                onSearch={handleSearch}
-                isLoading={false}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
-        {/* Empty State */}
-        <div className="text-center py-16">
-          <div className="max-w-md mx-auto">
-            <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Search className="h-12 w-12 text-gray-400" />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Search for a Supertransaction</h3>
-            <p className="text-gray-600 mb-6">Enter a Supertransaction hash to explore transactions on the Biconomy Network.</p>
-            <div className="flex flex-wrap justify-center gap-2 text-sm">
-              <span className="px-3 py-1 bg-gray-100 rounded-full text-gray-600">Supertransaction hash format:</span>
-              <code className="px-2 py-1 bg-[var(--biconomy-orange)]/10 text-[var(--biconomy-orange)] rounded">0x1a2b3c... (64 hex chars)</code>
+        {/* Loading State */}
+        {isLoading && (
+          <div className="text-center py-12">
+            <div className="inline-flex items-center space-x-3 text-[var(--biconomy-orange)]">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--biconomy-orange)]"></div>
+              <span className="text-lg font-medium">Loading Supertransaction details...</span>
             </div>
           </div>
-        </div>
+        )}
+
+        {/* Hash Details */}
+        {showHashDetails && (
+          <div className="space-y-6">
+            <HashOverview hashDetails={hashDetails} />
+            <PaymentInfo paymentInfo={hashDetails.paymentInfo} />
+            <UserOperations userOps={hashDetails.userOps} />
+          </div>
+        )}
+
+        {/* Error State */}
+        {showErrorState && (
+          <div className="text-center py-16">
+            <div className="max-w-md mx-auto">
+              <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <TriangleAlert className="h-12 w-12 text-red-500" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Supertransaction Not Found</h3>
+              <p className="text-gray-600 mb-6">
+                {error instanceof Error ? error.message : 'The Supertransaction hash you requested could not be found on the Biconomy Network.'}
+              </p>
+              <Link href="/">
+                <Button className="bg-biconomy-orange hover:bg-biconomy-orange-dark text-white font-medium">
+                  Back to Search
+                </Button>
+              </Link>
+            </div>
+          </div>
+        )}
 
       </main>
 
