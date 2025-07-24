@@ -342,7 +342,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <Layers className="h-4 w-4 text-blue-500" />
-                <h3 className="text-lg font-semibold text-slate-900">User Operations</h3>
+                <h3 className="text-base font-semibold text-slate-900">User Operations</h3>
               </div>
               <Badge className="px-2 py-1 text-xs bg-blue-100 text-blue-800 border border-blue-200">
                 {regularOperations.length} operation{regularOperations.length !== 1 ? 's' : ''}
@@ -366,7 +366,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
               <div className="flex items-center space-x-3">
                 <Settings className="h-4 w-4 text-slate-500" />
                 <div>
-                  <h3 className="text-lg font-semibold text-slate-900">Cleanup Operations</h3>
+                  <h3 className="text-base font-semibold text-slate-900">Cleanup Operations</h3>
                   <p className="text-sm text-slate-500">
                     {cleanupOperations.length} cleanup operation{cleanupOperations.length !== 1 ? 's' : ''} available
                   </p>
@@ -419,7 +419,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
             <div className="flex items-center space-x-3 mb-4">
               <Layers className="h-4 w-4 text-orange-500" />
               <div>
-                <h3 className="text-lg font-semibold text-slate-900">User Operations</h3>
+                <h3 className="text-base font-semibold text-slate-900">User Operations</h3>
                 <p className="text-sm text-slate-500">No operations found</p>
               </div>
             </div>

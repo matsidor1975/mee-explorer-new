@@ -94,12 +94,12 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
       <div className="px-6 py-4 border-b border-slate-200">
         <div className="flex items-center space-x-3">
           <CreditCard className="h-4 w-4 text-emerald-500" />
-          <h3 className="text-lg font-semibold text-slate-900">Payment Information</h3>
+          <h3 className="text-base font-semibold text-slate-900">Fees</h3>
         </div>
       </div>
       <div className="p-6">
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 mb-6">
           <MetricCard
             icon={Receipt}
             label="Gas Fee"
@@ -122,6 +122,14 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
             value={`$${totalFees.toFixed(6)}`}
             subtitle="Gas + Orchestration fees"
             color="text-emerald-500"
+          />
+          
+          <MetricCard
+            icon={Circle}
+            label="Payment Method"
+            value={`${tokenInfo.symbol} on ${chainInfo?.name || 'Unknown Network'}`}
+            subtitle={`Token: ${tokenInfo.name}`}
+            color="text-blue-500"
           />
         </div>
         
