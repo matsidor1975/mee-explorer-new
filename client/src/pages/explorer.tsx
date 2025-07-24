@@ -223,43 +223,7 @@ export default function Explorer() {
 
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white mt-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-biconomy-orange rounded-lg flex items-center justify-center">
-                  <div className="w-4 h-4 bg-white rounded transform rotate-45"></div>
-                </div>
-                <h3 className="text-lg font-bold">Biconomy Explorer</h3>
-              </div>
-              <p className="text-gray-400 max-w-md">Explore and analyze transactions on the Biconomy Network with our comprehensive blockchain explorer.</p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Resources</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-[var(--biconomy-orange)] transition-colors">Documentation</a></li>
-                <li><a href="#" className="hover:text-[var(--biconomy-orange)] transition-colors">API Reference</a></li>
-                <li><a href="#" className="hover:text-[var(--biconomy-orange)] transition-colors">Support</a></li>
-                <li><a href="#" className="hover:text-[var(--biconomy-orange)] transition-colors">Status</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Network</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-[var(--biconomy-orange)] transition-colors">Statistics</a></li>
-                <li><a href="#" className="hover:text-[var(--biconomy-orange)] transition-colors">Analytics</a></li>
-                <li><a href="#" className="hover:text-[var(--biconomy-orange)] transition-colors">Validators</a></li>
-                <li><a href="#" className="hover:text-[var(--biconomy-orange)] transition-colors">Charts</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 pt-8 mt-8 text-center text-gray-400">
-            <p>&copy; 2024 Biconomy Network Explorer. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+
     </div>
   );
 }
