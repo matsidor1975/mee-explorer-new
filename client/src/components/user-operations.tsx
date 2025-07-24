@@ -113,6 +113,33 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
     </div>
   );
 
+  const CompactDataField = ({ icon: Icon, label, value, showCopy = true }: {
+    icon: React.ComponentType<any>;
+    label: string;
+    value: string;
+    showCopy?: boolean;
+  }) => (
+    <div className="flex items-center justify-between py-1">
+      <div className="flex items-center space-x-2 flex-1 min-w-0">
+        <Icon className="h-3 w-3 text-gray-500 shrink-0" />
+        <span className="text-xs text-gray-600 shrink-0">{label}:</span>
+        <code className={`text-xs font-mono text-gray-900 truncate ${!value ? 'text-gray-400' : ''}`}>
+          {value ? (value.length > 12 ? `${value.substring(0, 6)}...${value.substring(value.length - 6)}` : value) : 'N/A'}
+        </code>
+      </div>
+      {showCopy && value && (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => copyToClipboard(value, label)}
+          className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0 ml-1"
+        >
+          <Copy className="h-2.5 w-2.5" />
+        </Button>
+      )}
+    </div>
+  );
+
   const ExplorerLink = ({ txHash, chainId }: { txHash: string; chainId: string }) => {
     const explorerUrl = getExplorerUrl(chainId, txHash);
     const explorerName = getExplorerName(chainId);
@@ -405,7 +432,19 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                   <Settings className="h-4 w-4" />
                   <span>Operation Details</span>
                 </h5>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Desktop: Compact 3-column layout */}
+                <div className="hidden md:grid md:grid-cols-3 gap-x-6 gap-y-1 text-xs">
+                  <CompactDataField icon={Hash} label="Op Hash" value={userOp.userOpHash} />
+                  <CompactDataField icon={User} label="Sender" value={userOp.userOp.sender} />
+                  <CompactDataField icon={Hash} label="Nonce" value={userOp.userOp.nonce} />
+                  <CompactDataField icon={CreditCard} label="Paymaster" value={userOp.userOp.paymasterAndData} />
+                  <CompactDataField icon={Fuel} label="Verify Gas" value={formatGas(verificationGasLimit)} showCopy={false} />
+                  <CompactDataField icon={Fuel} label="Call Gas" value={formatGas(callGasLimit)} showCopy={false} />
+                  <CompactDataField icon={Zap} label="Priority Fee" value={formatGas(maxPriorityFeePerGas)} showCopy={false} />
+                  <CompactDataField icon={Zap} label="Max Fee" value={formatGas(maxFeePerGas)} showCopy={false} />
+                </div>
+                {/* Mobile: Original card layout */}
+                <div className="md:hidden grid grid-cols-1 gap-4">
                   <DataField icon={Hash} label="User Op Hash" value={userOp.userOpHash} />
                   <DataField icon={User} label="Sender" value={userOp.userOp.sender} />
                   <DataField icon={Hash} label="Nonce" value={userOp.userOp.nonce} />
