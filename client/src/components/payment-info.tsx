@@ -206,12 +206,12 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
           <Button
             variant="outline"
             onClick={() => setIsExpanded(!isExpanded)}
-            className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 border border-slate-200 rounded"
+            className="w-full flex items-center justify-between p-4 text-left hover:bg-slate-50 hover:text-slate-900 border border-slate-200 rounded"
           >
-            <span className="text-sm font-medium text-gray-600">
+            <span className="text-sm font-medium text-slate-600">
               {isExpanded ? 'Hide' : 'Show'} detailed payment information
             </span>
-            <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+            <ChevronDown className={`h-4 w-4 text-slate-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
           </Button>
           
           {isExpanded && (

@@ -46,7 +46,7 @@ export default function SupertransactionDetails() {
           <div className="flex justify-between items-center h-14">
             <div className="flex items-center space-x-4">
               <Link href="/">
-                <Button variant="ghost" size="sm" className="flex items-center space-x-2 text-slate-600 hover:text-slate-900">
+                <Button variant="ghost" size="sm" className="flex items-center space-x-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
                   <ArrowLeft className="h-4 w-4" />
                   <span>Back to Search</span>
                 </Button>
