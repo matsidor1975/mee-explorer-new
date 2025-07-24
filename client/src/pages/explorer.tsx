@@ -18,14 +18,11 @@ export default function Explorer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-14">
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-3">
-                <img 
-                  src={new URL('@/assets/biconomy-explorer.webp', import.meta.url).href} 
-                  alt="Biconomy Explorer"
-                  className="w-8 h-8"
-                />
-                <h1 className="text-lg font-semibold text-slate-900">Biconomy Explorer</h1>
-              </div>
+              <img 
+                src={new URL('@/assets/biconomy-explorer.webp', import.meta.url).href} 
+                alt="Biconomy Explorer"
+                className="h-8"
+              />
             </div>
             <nav className="hidden md:flex items-center space-x-1">
               <a 

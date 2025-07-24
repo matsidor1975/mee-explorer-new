@@ -34,14 +34,11 @@ export default function SupertransactionDetails() {
                   <span>Back to Search</span>
                 </Button>
               </Link>
-              <div className="flex items-center space-x-3">
-                <img 
-                  src={new URL('@/assets/biconomy-explorer.webp', import.meta.url).href} 
-                  alt="Biconomy Explorer"
-                  className="w-8 h-8"
-                />
-                <h1 className="text-lg font-semibold text-slate-900">Biconomy Explorer</h1>
-              </div>
+              <img 
+                src={new URL('@/assets/biconomy-explorer.webp', import.meta.url).href} 
+                alt="Biconomy Explorer"
+                className="h-8"
+              />
             </div>
             <nav className="hidden md:flex items-center space-x-1">
               <a 
