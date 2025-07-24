@@ -115,3 +115,6 @@ The application is designed to be easily deployable on platforms like Replit, Ve
 - Integrated viem for dynamic token name fetching from supported chains (Ethereum, Base, Polygon, Arbitrum, Optimism, BSC)
 - Added native token support using viem to fetch chain-specific native currency information
 - Enhanced UI to distinguish between native tokens (0x0 address) and ERC-20 tokens
+- Fixed fee display formatting to show "Not available" instead of "$Not available"
+- Added Sonic chain support (64165) with proper native token detection and explorer links
+- Clarified token detection logic: native tokens use chain.nativeCurrency.name, ERC-20 tokens use contract calls

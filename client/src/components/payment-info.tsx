@@ -133,7 +133,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
           <MetricCard
             icon={Receipt}
             label="Gas Fee"
-            value={`$${paymentInfo.gasFee || 'Not available'}`}
+            value={paymentInfo.gasFee ? `$${paymentInfo.gasFee}` : 'Not available'}
             subtitle="Paid to blockchain validators"
             color="text-purple-500"
           />
@@ -141,7 +141,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
           <MetricCard
             icon={Users}
             label="Orchestration Fee"
-            value={`$${paymentInfo.orchestrationFee || 'Not available'}`}
+            value={paymentInfo.orchestrationFee ? `$${paymentInfo.orchestrationFee}` : 'Not available'}
             subtitle="Paid to Biconomy network relayers"
             color="text-orange-500"
           />
