@@ -96,9 +96,11 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
         <Icon className="h-4 w-4 text-gray-500" />
       </div>
       <div className="flex items-center justify-between">
-        <code className={`text-sm font-mono text-gray-900 truncate flex-1 ${!value ? 'text-gray-400' : ''}`}>
-          {value || 'Not available'}
-        </code>
+        <div className="flex-1 text-left">
+          <code className={`text-sm font-mono text-gray-900 ${!value ? 'text-gray-400' : ''}`}>
+            {value || 'Not available'}
+          </code>
+        </div>
         {showCopy && value && (
           <Button
             variant="ghost"
@@ -128,9 +130,11 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
       </td>
       <td className="py-2 pl-4">
         <div className="flex items-center justify-between">
-          <code className={`text-sm font-mono text-gray-900 ${!value ? 'text-gray-400' : ''}`}>
-            {value ? (value.length > 50 ? `${value.substring(0, 24)}...${value.substring(value.length - 24)}` : value) : 'N/A'}
-          </code>
+          <div className="flex-1 text-left">
+            <code className={`text-sm font-mono text-gray-900 ${!value ? 'text-gray-400' : ''}`}>
+              {value ? (value.length > 50 ? `${value.substring(0, 24)}...${value.substring(value.length - 24)}` : value) : 'N/A'}
+            </code>
+          </div>
           {showCopy && value && (
             <Button
               variant="ghost"
@@ -158,9 +162,11 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
           <span className="text-sm font-medium text-gray-600">On-Chain Transaction</span>
         </div>
         <div className="flex items-center justify-between">
-          <code className="text-sm font-mono text-gray-900 truncate flex-1">
-            {formatHash(txHash)}
-          </code>
+          <div className="flex-1 text-left">
+            <code className="text-sm font-mono text-gray-900">
+              {formatHash(txHash)}
+            </code>
+          </div>
           <div className="flex items-center space-x-2">
             <Button
               variant="ghost"
