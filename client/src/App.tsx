@@ -6,8 +6,12 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Explorer from "@/pages/explorer";
 import SupertransactionDetails from "@/pages/supertransaction-details";
 import NotFound from "@/pages/not-found";
+import { useChainInfo } from "@/hooks/use-chain-info";
 
 function Router() {
+  // Initialize chain info fetching
+  useChainInfo();
+  
   return (
     <Switch>
       <Route path="/" component={Explorer} />

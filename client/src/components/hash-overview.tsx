@@ -5,6 +5,7 @@ import { Copy, CheckCircle, Hash, Server, Link, Clock, Network } from "lucide-re
 import { HashDetails } from "@/types";
 import { formatHash, formatTimestamp, getChainName, getExecutionStatusColor } from "@/lib/format";
 import { useToast } from "@/hooks/use-toast";
+import { useChainInfo } from "@/hooks/use-chain-info";
 
 interface HashOverviewProps {
   hashDetails: HashDetails;
@@ -12,6 +13,10 @@ interface HashOverviewProps {
 
 export default function HashOverview({ hashDetails }: HashOverviewProps) {
   const { toast } = useToast();
+  const { chains } = useChainInfo();
+  
+  // Get chain information
+  const chainInfo = chains.find(c => c.chainId === hashDetails.paymentInfo.chainId);
 
   const copyToClipboard = async (text: string, label: string) => {
     try {
@@ -98,13 +103,28 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
             value={hashDetails.commitment}
           />
           
-          <DataField
-            icon={Network}
-            label="Chain"
-            value={hashDetails.paymentInfo.chainId ? `${hashDetails.paymentInfo.chainId} (${getChainName(hashDetails.paymentInfo.chainId)})` : ''}
-            showCopy={false}
-            truncate={false}
-          />
+          <div className="p-4 bg-white border border-gray-100 rounded-lg">
+            <div className="flex items-center space-x-2 mb-2">
+              <Network className="h-4 w-4 text-gray-500" />
+              <span className="text-sm font-medium text-gray-600">Chain</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className={`w-3 h-3 rounded-full ${
+                chainInfo?.healthCheck?.status === 'healthy' ? 'bg-green-500' : 'bg-gray-400'
+              }`}></div>
+              <code className="text-sm font-mono text-gray-900">
+                {chainInfo?.name || `Chain ${hashDetails.paymentInfo.chainId}`}
+              </code>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              ID: {hashDetails.paymentInfo.chainId}
+              {chainInfo?.healthCheck && (
+                <span className="ml-2">
+                  • {chainInfo.healthCheck.status}
+                </span>
+              )}
+            </p>
+          </div>
           
           <DataField
             icon={Clock}

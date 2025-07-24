@@ -1,9 +1,10 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Copy, Coins, DollarSign, Fuel, CreditCard, Wallet, Hash, Key } from "lucide-react";
+import { Copy, Coins, DollarSign, Fuel, CreditCard, Wallet, Hash, Key, Circle } from "lucide-react";
 import { PaymentInfo } from "@/types";
-import { formatAddress, formatNumber } from "@/lib/format";
+import { formatAddress, formatNumber, getTokenInfo } from "@/lib/format";
 import { useToast } from "@/hooks/use-toast";
+import { useChainInfo } from "@/hooks/use-chain-info";
 
 interface PaymentInfoProps {
   paymentInfo: PaymentInfo;
@@ -11,6 +12,11 @@ interface PaymentInfoProps {
 
 export default function PaymentInfoComponent({ paymentInfo }: PaymentInfoProps) {
   const { toast } = useToast();
+  const { chains } = useChainInfo();
+  
+  // Get token information
+  const tokenInfo = getTokenInfo(paymentInfo.token, paymentInfo.chainId);
+  const chainInfo = chains.find(c => c.chainId === paymentInfo.chainId);
 
   const copyToClipboard = async (text: string, label: string) => {
     try {
@@ -88,13 +94,24 @@ export default function PaymentInfoComponent({ paymentInfo }: PaymentInfoProps) 
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <MetricCard
-            icon={Coins}
-            label="Token Amount"
-            value={paymentInfo.tokenAmount ? formatNumber(paymentInfo.tokenAmount) : ''}
-            subtitle={paymentInfo.token || ''}
-            color="text-[var(--biconomy-orange)]"
-          />
+          <div className="bg-white border border-gray-100 rounded-lg p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <div className="flex items-center space-x-2 mb-1">
+                  <Coins className="h-4 w-4 text-[var(--biconomy-orange)]" />
+                  <p className="text-sm font-medium text-gray-600">Token Amount</p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Circle className="w-4 h-4 text-blue-500 fill-current" />
+                  <p className="text-xl font-semibold text-gray-900">
+                    {paymentInfo.tokenAmount ? formatNumber(paymentInfo.tokenAmount) : 'Not available'}
+                  </p>
+                  <span className="text-sm text-gray-500">{tokenInfo.symbol}</span>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">{tokenInfo.name}</p>
+              </div>
+            </div>
+          </div>
           
           <MetricCard
             icon={DollarSign}
@@ -128,11 +145,35 @@ export default function PaymentInfoComponent({ paymentInfo }: PaymentInfoProps) 
             value={paymentInfo.sender}
           />
           
-          <DataField
-            icon={Key}
-            label="Chain ID"
-            value={paymentInfo.chainId}
-          />
+          <div className="bg-white border border-gray-100 rounded-lg p-4">
+            <div className="flex items-center space-x-2 mb-2">
+              <Key className="h-4 w-4 text-gray-500" />
+              <span className="text-sm font-medium text-gray-600">Chain</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <div className="flex items-center space-x-2">
+                  <div className={`w-3 h-3 rounded-full ${
+                    chainInfo?.healthCheck?.status === 'healthy' ? 'bg-green-500' : 'bg-gray-400'
+                  }`}></div>
+                  <code className="text-sm font-mono text-gray-900">
+                    {chainInfo?.name || `Chain ${paymentInfo.chainId}`}
+                  </code>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">ID: {paymentInfo.chainId}</p>
+              </div>
+              {paymentInfo.chainId && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => copyToClipboard(paymentInfo.chainId, "Chain ID")}
+                  className="text-gray-400 hover:text-[var(--biconomy-orange)] shrink-0 ml-2"
+                >
+                  <Copy className="h-3 w-3" />
+                </Button>
+              )}
+            </div>
+          </div>
           
           <DataField
             icon={Hash}

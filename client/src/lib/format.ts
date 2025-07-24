@@ -111,15 +111,59 @@ export const parseGasFees = (gasFees: string): {
   }
 };
 
+// Cache for chain information
+let chainInfoCache: Record<string, string> = {};
+
 export const getChainName = (chainId: string): string => {
-  const chains: Record<string, string> = {
+  // Return cached value if available
+  if (chainInfoCache[chainId]) {
+    return chainInfoCache[chainId];
+  }
+  
+  // Fallback mapping for common chains
+  const fallbackChains: Record<string, string> = {
     '1': 'Ethereum',
-    '137': 'Polygon',
+    '137': 'Polygon', 
     '56': 'BSC',
     '42161': 'Arbitrum',
     '10': 'Optimism',
+    '8453': 'Base',
   };
-  return chains[chainId] || `Chain ${chainId}`;
+  
+  return fallbackChains[chainId] || `Chain ${chainId}`;
+};
+
+export const setChainsCache = (chains: Record<string, string>) => {
+  chainInfoCache = { ...chainInfoCache, ...chains };
+};
+
+// Token information utilities
+export const getTokenInfo = (tokenAddress: string, chainId: string): { name: string; symbol: string; icon?: string } => {
+  // Common token mappings by chain
+  const tokenMappings: Record<string, Record<string, { name: string; symbol: string; icon?: string }>> = {
+    '1': {
+      '0xA0b86a33E6441c8C546C0C06F5C0D618D7cF6066': { name: 'USD Coin', symbol: 'USDC' },
+      '0xdAC17F958D2ee523a2206206994597C13D831ec7': { name: 'Tether USD', symbol: 'USDT' },
+    },
+    '8453': {
+      '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913': { name: 'USD Coin', symbol: 'USDC' },
+    },
+    '137': {
+      '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174': { name: 'USD Coin', symbol: 'USDC' },
+      '0xc2132D05D31c914a87C6611C10748AEb04B58e8F': { name: 'Tether USD', symbol: 'USDT' },
+    }
+  };
+  
+  const chainTokens = tokenMappings[chainId];
+  if (chainTokens && chainTokens[tokenAddress]) {
+    return chainTokens[tokenAddress];
+  }
+  
+  // Fallback to formatted address
+  return {
+    name: formatAddress(tokenAddress),
+    symbol: 'TOKEN'
+  };
 };
 
 export const getExecutionStatusColor = (status: string): string => {
