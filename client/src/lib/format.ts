@@ -177,3 +177,47 @@ export const getExecutionStatusColor = (status: string): string => {
   }
   return 'bg-gray-100 text-gray-800';
 };
+
+// Get explorer URL for a transaction hash on a specific chain
+export function getExplorerUrl(chainId: string | number, txHash: string): string {
+  const chainIdNum = typeof chainId === 'string' ? parseInt(chainId) : chainId;
+  
+  switch (chainIdNum) {
+    case 1: // Ethereum
+      return `https://etherscan.io/tx/${txHash}`;
+    case 8453: // Base
+      return `https://basescan.org/tx/${txHash}`;
+    case 137: // Polygon
+      return `https://polygonscan.com/tx/${txHash}`;
+    case 42161: // Arbitrum
+      return `https://arbiscan.io/tx/${txHash}`;
+    case 10: // Optimism
+      return `https://optimistic.etherscan.io/tx/${txHash}`;
+    case 56: // BSC
+      return `https://bscscan.com/tx/${txHash}`;
+    default:
+      return `https://etherscan.io/tx/${txHash}`; // Default to Etherscan
+  }
+}
+
+// Get explorer name for a chain
+export function getExplorerName(chainId: string | number): string {
+  const chainIdNum = typeof chainId === 'string' ? parseInt(chainId) : chainId;
+  
+  switch (chainIdNum) {
+    case 1: // Ethereum
+      return 'Etherscan';
+    case 8453: // Base
+      return 'Basescan';
+    case 137: // Polygon
+      return 'Polygonscan';
+    case 42161: // Arbitrum
+      return 'Arbiscan';
+    case 10: // Optimism
+      return 'Optimistic Etherscan';
+    case 56: // BSC
+      return 'BscScan';
+    default:
+      return 'Etherscan';
+  }
+}
