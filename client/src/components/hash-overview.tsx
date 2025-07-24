@@ -70,7 +70,7 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
 
   return (
     <div className="glass-card rounded">
-      <div className="border-b border-white/20 pb-3 mb-4">
+      <div className="border-b border-white/20 pb-2 mb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <Hash className="h-4 w-4 text-orange-500" />
