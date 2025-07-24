@@ -353,7 +353,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
               </Badge>
             </div>
           </div>
-          <div className="p-6 pl-[12px] pr-[12px] pt-[12px] pb-[12px]">
+          <div className="p-6 pl-[16px] pr-[16px] pt-[16px] pb-[16px]">
 
             <div className="space-y-4">
               {regularOperations.map((userOp, index) => renderOperation(userOp, index, false))}
