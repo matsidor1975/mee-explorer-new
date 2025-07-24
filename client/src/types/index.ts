@@ -1,12 +1,18 @@
 export interface PaymentInfo {
-  chainId: string;
-  masterWallet: string;
-  salt: string;
+  sender: string;
+  initCode: string;
+  nonce: string;
   token: string;
+  chainId: string;
+  shortEncoding: boolean;
+  callGasLimit: string;
+  sponsored: boolean;
+  sponsorshipUrl: string;
   tokenAmount: string;
+  tokenWeiAmount: string;
   tokenValue: string;
-  orchestrationFee: string;
   gasFee: string;
+  orchestrationFee: string;
 }
 
 export interface UserOpDetails {
@@ -14,27 +20,33 @@ export interface UserOpDetails {
   nonce: string;
   initCode: string;
   callData: string;
-  callGasLimit: string;
-  verificationGasLimit: string;
-  preVerificationGas: string;
-  maxFeePerGas: string;
-  maxPriorityFeePerGas: string;
+  accountGasLimits: string;
+  gasFees: string;
   paymasterAndData: string;
+  preVerificationGas: string;
+  signature: string;
 }
 
 export interface UserOp {
   userOp: UserOpDetails;
   userOpHash: string;
-  lowerBoundTimestamp: string;
-  upperBoundTimestamp: string;
+  meeUserOpHash: string;
+  lowerBoundTimestamp: number;
+  upperBoundTimestamp: number;
   maxGasLimit: string;
+  maxFeePerGas: string;
   chainId: string;
+  shortEncoding: boolean;
+  simulationFinishedAt: number;
   executionStatus: string;
   executionData: string;
+  miningTimestamp: number;
+  minedTimestamp: number;
+  isCleanUpUserOp?: boolean;
 }
 
 export interface HashDetails {
-  hash: string;
+  itxHash: string;
   node: string;
   commitment: string;
   paymentInfo: PaymentInfo;

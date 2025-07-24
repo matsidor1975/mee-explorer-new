@@ -1,14 +1,20 @@
 import { z } from "zod";
 
 export const paymentInfoSchema = z.object({
-  chainId: z.string(),
-  masterWallet: z.string(),
-  salt: z.string(),
+  sender: z.string(),
+  initCode: z.string(),
+  nonce: z.string(),
   token: z.string(),
+  chainId: z.string(),
+  shortEncoding: z.boolean(),
+  callGasLimit: z.string(),
+  sponsored: z.boolean(),
+  sponsorshipUrl: z.string(),
   tokenAmount: z.string(),
+  tokenWeiAmount: z.string(),
   tokenValue: z.string(),
-  orchestrationFee: z.string(),
   gasFee: z.string(),
+  orchestrationFee: z.string(),
 });
 
 export const userOpDetailsSchema = z.object({
@@ -16,27 +22,33 @@ export const userOpDetailsSchema = z.object({
   nonce: z.string(),
   initCode: z.string(),
   callData: z.string(),
-  callGasLimit: z.string(),
-  verificationGasLimit: z.string(),
-  preVerificationGas: z.string(),
-  maxFeePerGas: z.string(),
-  maxPriorityFeePerGas: z.string(),
+  accountGasLimits: z.string(),
+  gasFees: z.string(),
   paymasterAndData: z.string(),
+  preVerificationGas: z.string(),
+  signature: z.string(),
 });
 
 export const userOpSchema = z.object({
   userOp: userOpDetailsSchema,
   userOpHash: z.string(),
-  lowerBoundTimestamp: z.string(),
-  upperBoundTimestamp: z.string(),
+  meeUserOpHash: z.string(),
+  lowerBoundTimestamp: z.number(),
+  upperBoundTimestamp: z.number(),
   maxGasLimit: z.string(),
+  maxFeePerGas: z.string(),
   chainId: z.string(),
+  shortEncoding: z.boolean(),
+  simulationFinishedAt: z.number(),
   executionStatus: z.string(),
   executionData: z.string(),
+  miningTimestamp: z.number(),
+  minedTimestamp: z.number(),
+  isCleanUpUserOp: z.boolean().optional(),
 });
 
 export const hashDetailsSchema = z.object({
-  hash: z.string(),
+  itxHash: z.string(),
   node: z.string(),
   commitment: z.string(),
   paymentInfo: paymentInfoSchema,

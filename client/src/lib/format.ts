@@ -26,9 +26,11 @@ export const formatGas = (gas: string): string => {
   return gasValue.toLocaleString();
 };
 
-export const formatTimestamp = (timestamp: string): { formatted: string; relative: string } => {
+export const formatTimestamp = (timestamp: number | string): { formatted: string; relative: string } => {
   try {
-    const date = new Date(parseInt(timestamp) * 1000);
+    const timestampNum = typeof timestamp === 'string' ? parseInt(timestamp) : timestamp;
+    // Handle both seconds and milliseconds timestamps
+    const date = new Date(timestampNum > 1e10 ? timestampNum : timestampNum * 1000);
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffMins = Math.floor(diffMs / 60000);
@@ -49,7 +51,7 @@ export const formatTimestamp = (timestamp: string): { formatted: string; relativ
     return {
       formatted: date.toLocaleString('en-US', {
         year: 'numeric',
-        month: '2-digit',
+        month: '2-digit', 
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
@@ -59,7 +61,53 @@ export const formatTimestamp = (timestamp: string): { formatted: string; relativ
       relative
     };
   } catch {
-    return { formatted: timestamp, relative: '' };
+    return { formatted: timestamp.toString(), relative: '' };
+  }
+};
+
+// Parse packed gas limits from accountGasLimits hex string
+export const parseAccountGasLimits = (accountGasLimits: string): {
+  verificationGasLimit: string;
+  callGasLimit: string;
+} => {
+  try {
+    if (!accountGasLimits || !accountGasLimits.startsWith('0x')) {
+      return { verificationGasLimit: '', callGasLimit: '' };
+    }
+    
+    // Remove 0x prefix and ensure even length
+    const hex = accountGasLimits.slice(2).padStart(64, '0');
+    
+    // Split into two 32-byte parts (64 hex chars each)
+    const verificationGasLimit = parseInt(hex.slice(0, 32), 16).toString();
+    const callGasLimit = parseInt(hex.slice(32, 64), 16).toString();
+    
+    return { verificationGasLimit, callGasLimit };
+  } catch {
+    return { verificationGasLimit: '', callGasLimit: '' };
+  }
+};
+
+// Parse packed gas fees from gasFees hex string  
+export const parseGasFees = (gasFees: string): {
+  maxPriorityFeePerGas: string;
+  maxFeePerGas: string;
+} => {
+  try {
+    if (!gasFees || !gasFees.startsWith('0x')) {
+      return { maxPriorityFeePerGas: '', maxFeePerGas: '' };
+    }
+    
+    // Remove 0x prefix and ensure even length
+    const hex = gasFees.slice(2).padStart(64, '0');
+    
+    // Split into two 32-byte parts
+    const maxPriorityFeePerGas = parseInt(hex.slice(0, 32), 16).toString();
+    const maxFeePerGas = parseInt(hex.slice(32, 64), 16).toString();
+    
+    return { maxPriorityFeePerGas, maxFeePerGas };
+  } catch {
+    return { maxPriorityFeePerGas: '', maxFeePerGas: '' };
   }
 };
 

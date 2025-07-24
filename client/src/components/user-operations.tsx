@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Copy, ChevronDown, Code, User, Hash, Fuel, Clock, Zap, Layers, Settings, AlertTriangle, CheckCircle } from "lucide-react";
 import { UserOp } from "@/types";
-import { formatHash, formatGas, formatTimestamp, getExecutionStatusColor } from "@/lib/format";
+import { formatHash, formatGas, formatTimestamp, getExecutionStatusColor, parseAccountGasLimits, parseGasFees } from "@/lib/format";
 import { useToast } from "@/hooks/use-toast";
 
 interface UserOperationsProps {
@@ -230,7 +230,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                       <DataField
                         icon={Fuel}
                         label="Call Gas Limit"
-                        value={userOp.userOp.callGasLimit ? formatGas(userOp.userOp.callGasLimit) : ''}
+                        value={parseAccountGasLimits(userOp.userOp.accountGasLimits).callGasLimit ? formatGas(parseAccountGasLimits(userOp.userOp.accountGasLimits).callGasLimit) : ''}
                         showCopy={false}
                         userOp={userOp}
                       />
@@ -238,7 +238,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                       <DataField
                         icon={Zap}
                         label="Verification Gas Limit"
-                        value={userOp.userOp.verificationGasLimit ? formatGas(userOp.userOp.verificationGasLimit) : ''}
+                        value={parseAccountGasLimits(userOp.userOp.accountGasLimits).verificationGasLimit ? formatGas(parseAccountGasLimits(userOp.userOp.accountGasLimits).verificationGasLimit) : ''}
                         showCopy={false}
                         userOp={userOp}
                       />
@@ -254,7 +254,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                       <DataField
                         icon={Fuel}
                         label="Max Fee Per Gas"
-                        value={userOp.userOp.maxFeePerGas}
+                        value={parseGasFees(userOp.userOp.gasFees).maxFeePerGas}
                         showCopy={false}
                         userOp={userOp}
                       />
@@ -262,7 +262,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                       <DataField
                         icon={Zap}
                         label="Max Priority Fee Per Gas"
-                        value={userOp.userOp.maxPriorityFeePerGas}
+                        value={parseGasFees(userOp.userOp.gasFees).maxPriorityFeePerGas}
                         showCopy={false}
                         userOp={userOp}
                       />
@@ -290,6 +290,20 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                         value={userOp.upperBoundTimestamp ? formatTimestamp(userOp.upperBoundTimestamp).formatted : ''}
                         showCopy={false}
                       />
+                      
+                      <DataField
+                        icon={Clock}
+                        label="Mining Timestamp"
+                        value={userOp.miningTimestamp ? formatTimestamp(userOp.miningTimestamp).formatted : ''}
+                        showCopy={false}
+                      />
+                      
+                      <DataField
+                        icon={Clock}
+                        label="Mined Timestamp"
+                        value={userOp.minedTimestamp ? formatTimestamp(userOp.minedTimestamp).formatted : ''}
+                        showCopy={false}
+                      />
                     </div>
                     
                     <div className="space-y-4">
@@ -309,6 +323,12 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                         icon={Code}
                         label="Paymaster and Data"
                         value={userOp.userOp.paymasterAndData}
+                      />
+                      
+                      <CodeField
+                        icon={Code}
+                        label="Signature"
+                        value={userOp.userOp.signature}
                       />
                       
                       <CodeField

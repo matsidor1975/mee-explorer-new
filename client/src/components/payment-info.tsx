@@ -124,14 +124,26 @@ export default function PaymentInfoComponent({ paymentInfo }: PaymentInfoProps) 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <DataField
             icon={Wallet}
-            label="Master Wallet"
-            value={paymentInfo.masterWallet}
+            label="Sender"
+            value={paymentInfo.sender}
           />
           
           <DataField
             icon={Key}
-            label="Salt"
-            value={paymentInfo.salt}
+            label="Chain ID"
+            value={paymentInfo.chainId}
+          />
+          
+          <DataField
+            icon={Hash}
+            label="Nonce"
+            value={paymentInfo.nonce}
+          />
+          
+          <DataField
+            icon={Fuel}
+            label="Call Gas Limit"  
+            value={paymentInfo.callGasLimit}
           />
         </div>
       </CardContent>

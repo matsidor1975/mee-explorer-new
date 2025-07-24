@@ -83,7 +83,7 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
           <DataField
             icon={Hash}
             label="Supertransaction Hash"
-            value={hashDetails.hash}
+            value={hashDetails.itxHash}
           />
           
           <DataField
