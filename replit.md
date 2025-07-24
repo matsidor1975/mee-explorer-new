@@ -78,9 +78,10 @@ Preferred communication style: Simple, everyday language.
 ## Deployment Strategy
 
 ### Build Process
-- **Frontend**: Vite builds client code to `dist/public/`
+- **Frontend**: Vite builds client code to `dist/public/` (development) / `dist/` (production)
 - **Backend**: ESBuild bundles server code to `dist/index.js`
 - **Database**: Drizzle migrations in `migrations/` directory
+- **Production Build**: Use `node build.js` to build with proper file organization for deployment
 
 ### Environment Variables
 - `DATABASE_URL`: PostgreSQL connection string
@@ -89,9 +90,11 @@ Preferred communication style: Simple, everyday language.
 
 ### Production Setup
 1. Install dependencies with `npm install`
-2. Build application with `npm run build`
+2. Build application with `node build.js` (ensures correct file placement)
 3. Run database migrations with `npm run db:push`
 4. Start production server with `npm start`
+
+**Note**: The custom build script (`build.js`) is required for deployment as it moves files from `dist/public/` to `dist/` to match deployment platform expectations.
 
 ### Development Workflow
 - Hot reload enabled through Vite middleware
@@ -118,3 +121,4 @@ The application is designed to be easily deployable on platforms like Replit, Ve
 - Fixed fee display formatting to show "Not available" instead of "$Not available"
 - Added Sonic chain support (64165) with proper native token detection and explorer links
 - Clarified token detection logic: native tokens use chain.nativeCurrency.name, ERC-20 tokens use contract calls
+- Fixed deployment build configuration by creating custom build script (build.js) that moves files from dist/public/ to dist/ for proper deployment structure
