@@ -315,7 +315,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                   className="text-xs pt-[14px] pb-[14px] pl-[16px] pr-[16px] flex items-center space-x-1 hover:bg-blue-500 hover:text-white"
                 >
                   <Play className="h-3 w-3" />
-                  <span>Simulate with Tenderly</span>
+                  <span>Debug with Tenderly</span>
                 </Button>
               )}
               <Button
@@ -365,7 +365,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                     className="text-xs pt-[14px] pb-[14px] pl-[16px] pr-[16px] flex items-center hover:bg-blue-500 hover:text-white"
                   >
                     <Play className="h-3 w-3 mr-1" />
-                    <span>Simulate with Tenderly</span>
+                    <span>Debug with Tenderly</span>
                   </Button>
                 )}
                 <Button
