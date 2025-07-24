@@ -178,8 +178,16 @@ export const getExecutionStatusColor = (status: string): string => {
   return 'bg-gray-100 text-gray-800';
 };
 
+// Check if we have an explorer for a specific chain
+export function hasExplorerSupport(chainId: string | number): boolean {
+  const chainIdNum = typeof chainId === 'string' ? parseInt(chainId) : chainId;
+  
+  const supportedChains = [1, 8453, 137, 42161, 10, 56];
+  return supportedChains.includes(chainIdNum);
+}
+
 // Get explorer URL for a transaction hash on a specific chain
-export function getExplorerUrl(chainId: string | number, txHash: string): string {
+export function getExplorerUrl(chainId: string | number, txHash: string): string | null {
   const chainIdNum = typeof chainId === 'string' ? parseInt(chainId) : chainId;
   
   switch (chainIdNum) {
@@ -196,12 +204,12 @@ export function getExplorerUrl(chainId: string | number, txHash: string): string
     case 56: // BSC
       return `https://bscscan.com/tx/${txHash}`;
     default:
-      return `https://etherscan.io/tx/${txHash}`; // Default to Etherscan
+      return null; // No explorer available for this chain
   }
 }
 
 // Get explorer name for a chain
-export function getExplorerName(chainId: string | number): string {
+export function getExplorerName(chainId: string | number): string | null {
   const chainIdNum = typeof chainId === 'string' ? parseInt(chainId) : chainId;
   
   switch (chainIdNum) {
@@ -218,6 +226,6 @@ export function getExplorerName(chainId: string | number): string {
     case 56: // BSC
       return 'BscScan';
     default:
-      return 'Etherscan';
+      return null; // No explorer available for this chain
   }
 }

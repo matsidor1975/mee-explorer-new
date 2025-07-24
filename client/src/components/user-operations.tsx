@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Copy, ChevronDown, Code, User, Hash, Fuel, Clock, Zap, Layers, Settings, AlertTriangle, CheckCircle, ExternalLink, Wallet, CreditCard } from "lucide-react";
 import { UserOp } from "@/types";
-import { formatHash, formatGas, formatTimestamp, getExecutionStatusColor, parseAccountGasLimits, parseGasFees, getExplorerUrl, getExplorerName } from "@/lib/format";
+import { formatHash, formatGas, formatTimestamp, getExecutionStatusColor, parseAccountGasLimits, parseGasFees, getExplorerUrl, getExplorerName, hasExplorerSupport } from "@/lib/format";
 import { useToast } from "@/hooks/use-toast";
 import { useChainInfo } from "@/hooks/use-chain-info";
 
@@ -90,6 +90,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
   const ExplorerLink = ({ txHash, chainId }: { txHash: string; chainId: string }) => {
     const explorerUrl = getExplorerUrl(chainId, txHash);
     const explorerName = getExplorerName(chainId);
+    const hasExplorer = hasExplorerSupport(chainId);
     
     return (
       <div className="p-3 bg-white border border-gray-100 rounded-lg">
@@ -110,18 +111,29 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
             >
               <Copy className="h-3 w-3" />
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => window.open(explorerUrl, '_blank')}
-              className="text-xs flex items-center space-x-1 hover:bg-[var(--biconomy-orange)] hover:text-white"
-            >
-              <ExternalLink className="h-3 w-3" />
-              <span>{explorerName}</span>
-            </Button>
+            {hasExplorer ? (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => window.open(explorerUrl!, '_blank')}
+                className="text-xs flex items-center space-x-1 hover:bg-[var(--biconomy-orange)] hover:text-white"
+              >
+                <ExternalLink className="h-3 w-3" />
+                <span>{explorerName}</span>
+              </Button>
+            ) : (
+              <span className="text-xs text-gray-500 px-2">
+                No explorer available
+              </span>
+            )}
           </div>
         </div>
-        <p className="text-xs text-gray-500 mt-1">View transaction details on blockchain explorer</p>
+        <p className="text-xs text-gray-500 mt-1">
+          {hasExplorer 
+            ? "View transaction details on blockchain explorer"
+            : "Copy the transaction hash above to view in your preferred explorer"
+          }
+        </p>
       </div>
     );
   };
@@ -226,15 +238,21 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                     >
                       <Copy className="h-3 w-3" />
                     </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => window.open(getExplorerUrl(userOp.chainId, userOp.executionData), '_blank')}
-                      className="text-xs h-6 px-2 flex items-center space-x-1 hover:bg-[var(--biconomy-orange)] hover:text-white"
-                    >
-                      <ExternalLink className="h-3 w-3" />
-                      <span>{getExplorerName(userOp.chainId)}</span>
-                    </Button>
+                    {hasExplorerSupport(userOp.chainId) ? (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => window.open(getExplorerUrl(userOp.chainId, userOp.executionData)!, '_blank')}
+                        className="text-xs h-6 px-2 flex items-center space-x-1 hover:bg-[var(--biconomy-orange)] hover:text-white"
+                      >
+                        <ExternalLink className="h-3 w-3" />
+                        <span>{getExplorerName(userOp.chainId)}</span>
+                      </Button>
+                    ) : (
+                      <span className="text-xs text-gray-500 px-2">
+                        No explorer available
+                      </span>
+                    )}
                   </div>
                 </div>
               ) : (
