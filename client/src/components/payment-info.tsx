@@ -370,85 +370,91 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
               {/* Fee payer user operation */}
               {feePayerUserOp && (
                 <div className="bg-white border border-gray-100 rounded p-4">
-                  <div className="flex items-center space-x-2 mb-2">
+                  <div className="flex items-center space-x-2 mb-3">
                     <Wallet className="h-4 w-4 text-[var(--biconomy-orange)]" />
                     <span className="text-sm font-medium text-gray-600">Fee Payer Operation</span>
                   </div>
                   
-                  {/* Transaction Hash with Explorer Link */}
-                  {feePayerUserOp.executionData && (
-                    <div className="mb-4 bg-white border border-gray-100 rounded-lg p-4">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <ExternalLink className="h-4 w-4 text-gray-500" />
-                        <span className="text-sm font-medium text-gray-600">Transaction</span>
-                      </div>
-                      <div className="flex items-center justify-between flex-wrap gap-2">
-                        <code className="text-sm font-mono text-gray-900 truncate flex-1">
-                          {feePayerUserOp.executionData}
-                        </code>
-                        <div className="flex items-center space-x-2 shrink-0">
+                  {/* Compact horizontal layout in three columns */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-2 text-xs">
+                    {/* Transaction Hash */}
+                    {feePayerUserOp.executionData && (
+                      <div className="flex items-center justify-between min-w-0">
+                        <div className="flex items-center space-x-2 flex-1 min-w-0">
+                          <ExternalLink className="h-3 w-3 text-gray-500 shrink-0" />
+                          <span className="text-xs text-gray-600 shrink-0">Tx:</span>
+                          <code className="text-xs font-mono text-gray-900 truncate">
+                            {feePayerUserOp.executionData.length > 12 
+                              ? `${feePayerUserOp.executionData.substring(0, 6)}...${feePayerUserOp.executionData.substring(feePayerUserOp.executionData.length - 6)}`
+                              : feePayerUserOp.executionData
+                            }
+                          </code>
+                        </div>
+                        <div className="flex items-center space-x-1 shrink-0 ml-1">
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => copyToClipboard(feePayerUserOp.executionData!, "Transaction Hash")}
-                            className="text-gray-400 hover:text-[var(--biconomy-orange)] h-6 w-6 p-0"
+                            className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0"
                           >
-                            <Copy className="h-3 w-3" />
+                            <Copy className="h-2.5 w-2.5" />
                           </Button>
                           {hasExplorerSupport(feePayerUserOp.chainId) && (
                             <Button
                               variant="outline"
                               size="sm"
                               onClick={() => window.open(getExplorerUrl(feePayerUserOp.chainId, feePayerUserOp.executionData!)!, '_blank')}
-                              className="text-xs flex items-center space-x-1 hover:bg-biconomy-orange hover:text-white"
+                              className="text-xs px-1 py-0.5 h-5 flex items-center hover:bg-biconomy-orange hover:text-white"
                             >
-                              <ExternalLink className="h-3 w-3" />
-                              <span>View on {getExplorerName(feePayerUserOp.chainId)}</span>
+                              <ExternalLink className="h-2.5 w-2.5" />
                             </Button>
                           )}
                         </div>
                       </div>
-                    </div>
-                  )}
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="bg-white border border-gray-100 rounded-lg p-4">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <Wallet className="h-4 w-4 text-gray-500" />
-                        <span className="text-sm font-medium text-gray-600">Sender</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <code className="text-sm font-mono text-gray-900 truncate flex-1">
-                          {feePayerUserOp.userOp.sender}
+                    )}
+                    
+                    {/* Sender */}
+                    <div className="flex items-center justify-between min-w-0">
+                      <div className="flex items-center space-x-2 flex-1 min-w-0">
+                        <Wallet className="h-3 w-3 text-gray-500 shrink-0" />
+                        <span className="text-xs text-gray-600 shrink-0">Sender:</span>
+                        <code className="text-xs font-mono text-gray-900 truncate">
+                          {feePayerUserOp.userOp.sender.length > 12 
+                            ? `${feePayerUserOp.userOp.sender.substring(0, 6)}...${feePayerUserOp.userOp.sender.substring(feePayerUserOp.userOp.sender.length - 6)}`
+                            : feePayerUserOp.userOp.sender
+                          }
                         </code>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => copyToClipboard(feePayerUserOp.userOp.sender, "Sender Address")}
-                          className="text-gray-400 hover:text-[var(--biconomy-orange)] shrink-0 ml-2"
-                        >
-                          <Copy className="h-3 w-3" />
-                        </Button>
                       </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => copyToClipboard(feePayerUserOp.userOp.sender, "Sender Address")}
+                        className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0 ml-1"
+                      >
+                        <Copy className="h-2.5 w-2.5" />
+                      </Button>
                     </div>
-                    <div className="bg-white border border-gray-100 rounded-lg p-4">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <Hash className="h-4 w-4 text-gray-500" />
-                        <span className="text-sm font-medium text-gray-600">User Op Hash</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <code className="text-sm font-mono text-gray-900 truncate flex-1">
-                          {feePayerUserOp.userOpHash}
+                    
+                    {/* User Op Hash */}
+                    <div className="flex items-center justify-between min-w-0">
+                      <div className="flex items-center space-x-2 flex-1 min-w-0">
+                        <Hash className="h-3 w-3 text-gray-500 shrink-0" />
+                        <span className="text-xs text-gray-600 shrink-0">Op Hash:</span>
+                        <code className="text-xs font-mono text-gray-900 truncate">
+                          {feePayerUserOp.userOpHash.length > 12 
+                            ? `${feePayerUserOp.userOpHash.substring(0, 6)}...${feePayerUserOp.userOpHash.substring(feePayerUserOp.userOpHash.length - 6)}`
+                            : feePayerUserOp.userOpHash
+                          }
                         </code>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => copyToClipboard(feePayerUserOp.userOpHash, "User Op Hash")}
-                          className="text-gray-400 hover:text-[var(--biconomy-orange)] shrink-0 ml-2"
-                        >
-                          <Copy className="h-3 w-3" />
-                        </Button>
                       </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => copyToClipboard(feePayerUserOp.userOpHash, "User Op Hash")}
+                        className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0 ml-1"
+                      >
+                        <Copy className="h-2.5 w-2.5" />
+                      </Button>
                     </div>
                   </div>
                 </div>
