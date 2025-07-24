@@ -294,76 +294,78 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
             <div className="space-y-4">
               {/* Token information */}
               <div className="bg-white border border-gray-100 rounded p-4">
-                <div className="flex items-center space-x-2 mb-2">
+                <div className="flex items-center space-x-2 mb-3">
                   <Circle className="h-4 w-4 text-blue-500" />
                   <span className="text-sm font-medium text-gray-600">Token Information</span>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <div>
-                    <p className="text-xs text-gray-500">Token Amount</p>
-                    <div className="flex items-center space-x-2">
-                      <p className="text-lg font-semibold text-gray-900">
-                        {paymentInfo.tokenAmount ? formatNumber(paymentInfo.tokenAmount) : 'Not available'}
-                      </p>
-                      <div className="flex items-center space-x-1">
+                
+                {/* Compact horizontal layout in three columns */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-2 text-xs">
+                  {/* Token Amount */}
+                  <div className="flex items-center justify-between min-w-0">
+                    <div className="flex items-center space-x-2 flex-1 min-w-0">
+                      <Circle className="h-3 w-3 text-gray-500 shrink-0" />
+                      <span className="text-xs text-gray-600 shrink-0">Amount:</span>
+                      <div className="flex items-center space-x-1 min-w-0">
+                        <code className="text-xs font-mono text-gray-900 truncate">
+                          {paymentInfo.tokenAmount ? formatNumber(paymentInfo.tokenAmount) : 'N/A'}
+                        </code>
                         {getTokenIcon(tokenInfo.symbol) && (
                           <img 
                             src={getTokenIcon(tokenInfo.symbol)!} 
                             alt={tokenInfo.symbol}
-                            className="w-4 h-4"
+                            className="w-3 h-3 shrink-0"
                           />
                         )}
-                        <span className="text-sm text-gray-500">{tokenInfo.symbol}</span>
+                        <span className="text-xs text-gray-500 shrink-0">{tokenInfo.symbol}</span>
                       </div>
                     </div>
-                    <p className="text-xs text-gray-500">{tokenInfo.name}</p>
                   </div>
-                  <div>
-                    <p className="text-xs text-gray-500">Token Value</p>
-                    <p className="text-lg font-semibold text-gray-900">
-                      {paymentInfo.tokenValue ? `$${paymentInfo.tokenValue}` : 'Not available'}
-                    </p>
-                  </div>
-                </div>
-                
-                {/* Token Address with Explorer Link */}
-                <div className="pt-4 border-t border-gray-100">
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs text-gray-500 mb-1">Token Address</p>
-                      <div className="flex items-center space-x-2">
-                        <code className="text-sm font-mono text-gray-900 truncate">
-                          {paymentInfo.token}
-                        </code>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => copyToClipboard(paymentInfo.token, "Token Address")}
-                          className="text-gray-400 hover:text-biconomy-orange shrink-0"
-                        >
-                          <Copy className="h-3 w-3" />
-                        </Button>
-                      </div>
+                  
+                  {/* Token Value */}
+                  <div className="flex items-center justify-between min-w-0">
+                    <div className="flex items-center space-x-2 flex-1 min-w-0">
+                      <DollarSign className="h-3 w-3 text-gray-500 shrink-0" />
+                      <span className="text-xs text-gray-600 shrink-0">Value:</span>
+                      <code className="text-xs font-mono text-gray-900 truncate">
+                        {paymentInfo.tokenValue ? `$${paymentInfo.tokenValue}` : 'N/A'}
+                      </code>
                     </div>
-                    
-                    {getTokenExplorerUrl(paymentInfo.chainId, paymentInfo.token) && (
+                  </div>
+                  
+                  {/* Token Address */}
+                  <div className="flex items-center justify-between min-w-0">
+                    <div className="flex items-center space-x-2 flex-1 min-w-0">
+                      <Hash className="h-3 w-3 text-gray-500 shrink-0" />
+                      <span className="text-xs text-gray-600 shrink-0">Address:</span>
+                      <code className="text-xs font-mono text-gray-900 truncate">
+                        {paymentInfo.token.length > 12 
+                          ? `${paymentInfo.token.substring(0, 6)}...${paymentInfo.token.substring(paymentInfo.token.length - 6)}`
+                          : paymentInfo.token
+                        }
+                      </code>
+                    </div>
+                    <div className="flex items-center space-x-1 shrink-0 ml-1">
                       <Button
-                        variant="outline"
+                        variant="ghost"
                         size="sm"
-                        onClick={() => window.open(getTokenExplorerUrl(paymentInfo.chainId, paymentInfo.token)!, '_blank')}
-                        className="ml-3 text-xs flex items-center space-x-1 hover:bg-biconomy-orange hover:text-white shrink-0"
+                        onClick={() => copyToClipboard(paymentInfo.token, "Token Address")}
+                        className="text-gray-400 hover:text-biconomy-orange h-4 w-4 p-0"
                       >
-                        <ExternalLink className="h-3 w-3" />
-                        <span>View on {getExplorerName(paymentInfo.chainId)}</span>
+                        <Copy className="h-2.5 w-2.5" />
                       </Button>
-                    )}
+                      {getTokenExplorerUrl(paymentInfo.chainId, paymentInfo.token) && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => window.open(getTokenExplorerUrl(paymentInfo.chainId, paymentInfo.token)!, '_blank')}
+                          className="text-xs px-1 py-0.5 h-5 flex items-center hover:bg-biconomy-orange hover:text-white"
+                        >
+                          <ExternalLink className="h-2.5 w-2.5" />
+                        </Button>
+                      )}
+                    </div>
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    {getTokenExplorerUrl(paymentInfo.chainId, paymentInfo.token) 
-                      ? "View token details on blockchain explorer"
-                      : "Copy the address above to view in your preferred explorer"
-                    }
-                  </p>
                 </div>
               </div>
               
