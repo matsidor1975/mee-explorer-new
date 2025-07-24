@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Copy, ChevronDown, Code, User, Hash, Fuel, Clock, Zap, Layers, Settings, AlertTriangle, CheckCircle, ExternalLink, Wallet, CreditCard, Play } from "lucide-react";
+import { Copy, ChevronDown, Code, User, Hash, Fuel, Clock, Zap, Layers, Settings, AlertTriangle, CheckCircle, ExternalLink, Wallet, CreditCard, Play, FileText, Key, Timer, Database, ShieldCheck, Signature } from "lucide-react";
 import { UserOp } from "@/types";
 import { formatHash, formatGas, formatTimestamp, getExecutionStatusColor, parseAccountGasLimits, parseGasFees, getExplorerUrl, getExplorerName, hasExplorerSupport, getNetworkIcon } from "@/lib/format";
 import { useToast } from "@/hooks/use-toast";
@@ -426,88 +426,110 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
         {isExpanded && (
           <div className="px-4 pb-3">
             <div className="space-y-4 pt-4 border-t border-gray-100">
-              {/* User Operation Details */}
+              {/* Core Operation Data */}
               <div>
                 <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-2">
-                  <Settings className="h-4 w-4" />
-                  <span>Operation Details</span>
+                  <Hash className="h-4 w-4" />
+                  <span>Core Operation Data</span>
                 </h5>
-                {/* Desktop: Compact 3-column layout */}
-                <div className="hidden md:grid md:grid-cols-3 gap-x-6 gap-y-1 text-xs">
-                  <CompactDataField icon={Hash} label="Op Hash" value={userOp.userOpHash} />
+                <div className="space-y-1">
+                  <CompactDataField icon={Hash} label="User Op Hash" value={userOp.userOpHash} />
+                  <CompactDataField icon={Key} label="MEE User Op Hash" value={userOp.meeUserOpHash} />
                   <CompactDataField icon={User} label="Sender" value={userOp.userOp.sender} />
                   <CompactDataField icon={Hash} label="Nonce" value={userOp.userOp.nonce} />
-                  <CompactDataField icon={CreditCard} label="Paymaster" value={userOp.userOp.paymasterAndData} />
-                  <CompactDataField icon={Fuel} label="Verify Gas" value={formatGas(verificationGasLimit)} showCopy={false} />
-                  <CompactDataField icon={Fuel} label="Call Gas" value={formatGas(callGasLimit)} showCopy={false} />
-                  <CompactDataField icon={Zap} label="Priority Fee" value={formatGas(maxPriorityFeePerGas)} showCopy={false} />
-                  <CompactDataField icon={Zap} label="Max Fee" value={formatGas(maxFeePerGas)} showCopy={false} />
-                </div>
-                {/* Mobile: Original card layout */}
-                <div className="md:hidden grid grid-cols-1 gap-4">
-                  <DataField icon={Hash} label="User Op Hash" value={userOp.userOpHash} />
-                  <DataField icon={User} label="Sender" value={userOp.userOp.sender} />
-                  <DataField icon={Hash} label="Nonce" value={userOp.userOp.nonce} />
-                  <DataField icon={CreditCard} label="Paymaster and Data" value={userOp.userOp.paymasterAndData} />
-                  <DataField icon={Fuel} label="Verification Gas Limit" value={formatGas(verificationGasLimit)} showCopy={false} />
-                  <DataField icon={Fuel} label="Call Gas Limit" value={formatGas(callGasLimit)} showCopy={false} />
-                  <DataField icon={Zap} label="Max Priority Fee Per Gas" value={formatGas(maxPriorityFeePerGas)} showCopy={false} />
-                  <DataField icon={Zap} label="Max Fee Per Gas" value={formatGas(maxFeePerGas)} showCopy={false} />
+                  <CompactDataField icon={Database} label="Chain ID" value={userOp.chainId} showCopy={false} />
+                  <CompactDataField icon={Settings} label="Short Encoding" value={userOp.shortEncoding ? 'Yes' : 'No'} showCopy={false} />
                 </div>
               </div>
 
-              {/* Transaction Hash with Explorer Integration */}
-              {userOp.executionData && (
-                <div className="flex items-center justify-between py-1">
-                  <div className="flex items-center space-x-2 flex-1 min-w-0">
-                    <ExternalLink className="h-3 w-3 text-gray-500 shrink-0" />
-                    <span className="text-xs text-gray-600 shrink-0">Transaction:</span>
-                    <code className="text-xs font-mono text-gray-900 truncate">
-                      {formatHash(userOp.executionData)}
-                    </code>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => copyToClipboard(userOp.executionData, "Transaction Hash")}
-                      className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0"
-                    >
-                      <Copy className="h-2.5 w-2.5" />
-                    </Button>
-                    {hasExplorerSupport(userOp.chainId) && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => window.open(getExplorerUrl(userOp.chainId, userOp.executionData)!, '_blank')}
-                        className="text-xs px-1 py-0.5 h-5 flex items-center hover:bg-[var(--biconomy-orange)] hover:text-white shrink-0"
-                      >
-                        <ExternalLink className="h-3 w-3" />
-                      </Button>
-                    )}
-                  </div>
+              {/* Gas & Fee Configuration */}
+              <div>
+                <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-2">
+                  <Fuel className="h-4 w-4" />
+                  <span>Gas & Fee Configuration</span>
+                </h5>
+                <div className="space-y-1">
+                  <CompactDataField icon={Fuel} label="Account Gas Limits" value={userOp.userOp.accountGasLimits} />
+                  <CompactDataField icon={Zap} label="Gas Fees" value={userOp.userOp.gasFees} />
+                  <CompactDataField icon={Fuel} label="Pre-Verification Gas" value={userOp.userOp.preVerificationGas} />
+                  <CompactDataField icon={Zap} label="Max Gas Limit" value={userOp.maxGasLimit} showCopy={false} />
+                  <CompactDataField icon={Zap} label="Max Fee Per Gas" value={userOp.maxFeePerGas} showCopy={false} />
                 </div>
-              )}
+              </div>
 
-              {/* Call Data */}
-              <div className="flex items-center justify-between py-1">
-                <div className="flex items-center space-x-2 flex-1 min-w-0">
-                  <Code className="h-3 w-3 text-gray-500 shrink-0" />
-                  <span className="text-xs text-gray-600 shrink-0">Call Data:</span>
-                  <code className="text-xs font-mono text-gray-900 truncate">
-                    {userOp.userOp.callData ? (userOp.userOp.callData.length > 24 ? `${userOp.userOp.callData.substring(0, 12)}...${userOp.userOp.callData.substring(userOp.userOp.callData.length - 12)}` : userOp.userOp.callData) : 'Not available'}
-                  </code>
+              {/* Paymaster & Security */}
+              <div>
+                <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-2">
+                  <ShieldCheck className="h-4 w-4" />
+                  <span>Paymaster & Security</span>
+                </h5>
+                <div className="space-y-1">
+                  <CompactDataField icon={CreditCard} label="Paymaster Data" value={userOp.userOp.paymasterAndData} />
+                  <CompactDataField icon={FileText} label="Init Code" value={userOp.userOp.initCode} />
+                  <CompactDataField icon={Signature} label="Signature" value={userOp.userOp.signature} />
                 </div>
-                {userOp.userOp.callData && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => copyToClipboard(userOp.userOp.callData, "Call Data")}
-                    className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0 ml-1"
-                  >
-                    <Copy className="h-2.5 w-2.5" />
-                  </Button>
-                )}
+              </div>
+
+              {/* Execution Data */}
+              <div>
+                <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-2">
+                  <Code className="h-4 w-4" />
+                  <span>Execution Data</span>
+                </h5>
+                <div className="space-y-1">
+                  <CompactDataField icon={Code} label="Call Data" value={userOp.userOp.callData} />
+                  <CompactDataField icon={CheckCircle} label="Execution Status" value={userOp.executionStatus} showCopy={false} />
+                  {userOp.executionData && (
+                    <div className="flex items-center justify-between py-1">
+                      <div className="flex items-center space-x-2 flex-1 min-w-0">
+                        <ExternalLink className="h-3 w-3 text-gray-500 shrink-0" />
+                        <span className="text-xs text-gray-600 shrink-0">Transaction Hash:</span>
+                        <code className="text-xs font-mono text-gray-900 truncate">
+                          {formatHash(userOp.executionData)}
+                        </code>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => copyToClipboard(userOp.executionData, "Transaction Hash")}
+                          className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0"
+                        >
+                          <Copy className="h-2.5 w-2.5" />
+                        </Button>
+                        {hasExplorerSupport(userOp.chainId) && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => window.open(getExplorerUrl(userOp.chainId, userOp.executionData)!, '_blank')}
+                            className="text-xs px-1 py-0.5 h-5 flex items-center hover:bg-[var(--biconomy-orange)] hover:text-white shrink-0"
+                          >
+                            <ExternalLink className="h-3 w-3" />
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Timing Information */}
+              <div>
+                <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-2">
+                  <Timer className="h-4 w-4" />
+                  <span>Timing Information</span>
+                </h5>
+                <div className="space-y-1">
+                  <CompactDataField icon={Clock} label="Lower Bound" value={formatTimestamp(userOp.lowerBoundTimestamp)} showCopy={false} />
+                  <CompactDataField icon={Clock} label="Upper Bound" value={formatTimestamp(userOp.upperBoundTimestamp)} showCopy={false} />
+                  <CompactDataField icon={Clock} label="Simulation Finished" value={formatTimestamp(userOp.simulationFinishedAt)} showCopy={false} />
+                  {userOp.miningTimestamp && (
+                    <CompactDataField icon={Clock} label="Mining Time" value={formatTimestamp(userOp.miningTimestamp)} showCopy={false} />
+                  )}
+                  {userOp.minedTimestamp && (
+                    <CompactDataField icon={Clock} label="Mined Time" value={formatTimestamp(userOp.minedTimestamp)} showCopy={false} />
+                  )}
+                </div>
               </div>
             </div>
           </div>
