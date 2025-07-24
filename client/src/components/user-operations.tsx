@@ -235,8 +235,8 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                 )}
               </div>
               
-              {/* Transaction Hash */}
-              {userOp.executionData && (
+              {/* Transaction Hash - only show if simulate button is not available */}
+              {userOp.executionData && userOp.executionStatus === "MINED_SUCCESS" && (
                 <div className="flex items-center space-x-2">
                   <span className="text-gray-400">•</span>
                   <ExternalLink className="h-3 w-3 text-gray-500" />
@@ -263,16 +263,18 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                 </div>
               )}
               
-              {/* Status and Time */}
-              <div className="flex items-center space-x-2">
-                <span className="text-gray-400">•</span>
-                <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge text-xs`}>
-                  {userOp.executionStatus}
-                </Badge>
-                <span className="text-gray-400">•</span>
-                <Clock className="h-3 w-3 text-gray-500" />
-                <span className="text-xs text-gray-600">{executionTime.formatted}</span>
-              </div>
+              {/* Status and Time - only show if simulate button is not available */}
+              {userOp.executionStatus === "MINED_SUCCESS" && (
+                <div className="flex items-center space-x-2">
+                  <span className="text-gray-400">•</span>
+                  <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge text-xs`}>
+                    {userOp.executionStatus}
+                  </Badge>
+                  <span className="text-gray-400">•</span>
+                  <Clock className="h-3 w-3 text-gray-500" />
+                  <span className="text-xs text-gray-600">{executionTime.formatted}</span>
+                </div>
+              )}
             </div>
             
             <div className="flex items-center space-x-2">
@@ -281,10 +283,10 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                   variant="outline"
                   size="sm"
                   onClick={() => handleTenderlySimulation(userOp)}
-                  className="text-xs px-2 py-1 h-6 flex items-center space-x-1 hover:bg-blue-500 hover:text-white"
+                  className="text-xs pt-[14px] pb-[14px] pl-[16px] pr-[16px] flex items-center space-x-1 hover:bg-blue-500 hover:text-white"
                 >
                   <Play className="h-3 w-3" />
-                  <span>Simulate</span>
+                  <span>Simulate with Tenderly</span>
                 </Button>
               )}
               <Button
@@ -331,9 +333,10 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                     variant="outline"
                     size="sm"
                     onClick={() => handleTenderlySimulation(userOp)}
-                    className="text-xs px-1 py-0.5 h-6 flex items-center hover:bg-blue-500 hover:text-white"
+                    className="text-xs pt-[14px] pb-[14px] pl-[16px] pr-[16px] flex items-center hover:bg-blue-500 hover:text-white"
                   >
-                    <Play className="h-3 w-3" />
+                    <Play className="h-3 w-3 mr-1" />
+                    <span>Simulate with Tenderly</span>
                   </Button>
                 )}
                 <Button
@@ -347,19 +350,21 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
               </div>
             </div>
 
-            {/* Status and Time Row */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge text-xs`}>
-                  {userOp.executionStatus}
-                </Badge>
-                <Clock className="h-3 w-3 text-gray-500" />
-                <span className="text-xs text-gray-600">{executionTime.formatted}</span>
+            {/* Status and Time Row - only show if simulate button is not available */}
+            {userOp.executionStatus === "MINED_SUCCESS" && (
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge text-xs`}>
+                    {userOp.executionStatus}
+                  </Badge>
+                  <Clock className="h-3 w-3 text-gray-500" />
+                  <span className="text-xs text-gray-600">{executionTime.formatted}</span>
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* Transaction Hash Row */}
-            {userOp.executionData && (
+            {/* Transaction Hash Row - only show if simulate button is not available */}
+            {userOp.executionData && userOp.executionStatus === "MINED_SUCCESS" && (
               <div className="flex items-center space-x-2 bg-white p-2 rounded border">
                 <ExternalLink className="h-3 w-3 text-gray-500" />
                 <span className="text-xs text-gray-600">Tx:</span>
