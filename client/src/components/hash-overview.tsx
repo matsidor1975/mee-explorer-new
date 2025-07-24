@@ -45,7 +45,7 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
     showCopy?: boolean;
     truncate?: boolean;
   }) => (
-    <div className="p-3 glass-card-subtle border border-white/20 rounded-lg">
+    <div className="glass-card-subtle border border-white/20 rounded-lg">
       <div className="flex items-center space-x-2 mb-1">
         <Icon className="h-4 w-4 text-gray-500" />
         <span className="text-sm font-medium text-slate-600">{label}</span>
@@ -70,7 +70,7 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
 
   return (
     <div className="glass-card rounded">
-      <div className="px-6 py-4 border-b border-white/20">
+      <div className="border-b border-white/20 pb-3 mb-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <Hash className="h-4 w-4 text-orange-500" />
@@ -82,10 +82,10 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
           </Badge>
         </div>
       </div>
-      <div className="p-6 pl-[12px] pr-[12px] pt-[12px] pb-[12px]">
+      <div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Supertx Hash */}
-          <div className="glass-card-subtle border border-white/20 p-3 rounded">
+          <div className="glass-card-subtle border border-white/20 rounded">
             <div className="flex items-center space-x-2 mb-1">
               <Hash className="h-4 w-4 text-gray-500" />
               <span className="text-sm font-medium text-slate-600">Supertransaction Hash</span>
@@ -106,7 +106,7 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
           </div>
 
           {/* Executing Relayer */}
-          <div className="glass-card-subtle border border-white/20 p-3 rounded">
+          <div className="glass-card-subtle border border-white/20 rounded">
             <div className="flex items-center space-x-2 mb-1">
               <Server className="h-4 w-4 text-gray-500" />
               <span className="text-sm font-medium text-slate-600">Executing Relayer</span>

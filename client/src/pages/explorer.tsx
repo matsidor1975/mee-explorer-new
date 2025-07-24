@@ -136,7 +136,7 @@ export default function Explorer() {
         {/* Search History */}
         {history.length > 0 && (
           <div className="mb-12">
-            <div className="glass-card rounded-lg p-6">
+            <div className="glass-card rounded-lg">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-2">
                   <Clock className="h-5 w-5 text-slate-500" />

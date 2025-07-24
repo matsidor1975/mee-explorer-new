@@ -91,7 +91,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
     value: string;
     showCopy?: boolean;
   }) => (
-    <div className="p-3 glass-card-subtle border border-white/20 rounded">
+    <div className="glass-card-subtle border border-white/20 rounded">
       <div className="flex items-center space-x-2 mb-2">
         <Icon className="h-4 w-4 text-gray-500" />
       </div>
@@ -152,7 +152,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
     const hasExplorer = hasExplorerSupport(chainId);
     
     return (
-      <div className="p-3 glass-card-subtle border border-white/20 rounded">
+      <div className="glass-card-subtle border border-white/20 rounded">
         <div className="flex items-center space-x-2 mb-2">
           <ExternalLink className="h-4 w-4 text-gray-500" />
           <span className="text-sm font-medium text-gray-600">On-Chain Transaction</span>
@@ -202,7 +202,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
     label: string;
     value: string;
   }) => (
-    <div className="p-3 glass-card-subtle border border-white/20 rounded">
+    <div className="glass-card-subtle border border-white/20 rounded">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center space-x-2">
           <Icon className="h-4 w-4 text-gray-500" />
@@ -430,7 +430,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
         </div>
         {/* Expandable Details */}
         {isExpanded && (
-          <div className="px-4 pb-3">
+          <div className="pt-3">
             <div className="space-y-6 pt-4 border-t border-gray-100">
               {/* Core Operation Data */}
               <div>
@@ -565,7 +565,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
       {/* Regular Operations Card */}
       {regularOperations.length > 0 && (
         <div className="glass-card rounded">
-          <div className="px-6 py-4 border-b border-white/20">
+          <div className="border-b border-white/20 pb-3 mb-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <Layers className="h-4 w-4 text-blue-500" />
@@ -576,7 +576,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
               </Badge>
             </div>
           </div>
-          <div className="p-6 pl-[16px] pr-[16px] pt-[8px] pb-[8px]">
+          <div>
             <div className="space-y-2">
               {regularOperations.map((userOp, index) => renderOperation(userOp, index, false))}
             </div>
@@ -586,7 +586,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
       {/* Cleanup Operations Toggle */}
       {cleanupOperations.length > 0 && (
         <div className="glass-card rounded">
-          <div className="px-6 py-4">
+          <div>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <Settings className="h-4 w-4 text-slate-500" />
