@@ -35,17 +35,23 @@ export default function SupertransactionDetails() {
                 </Button>
               </Link>
               <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-orange-500 rounded flex items-center justify-center">
-                  <div className="w-4 h-4 bg-white rounded transform rotate-45"></div>
-                </div>
+                <img 
+                  src={new URL('@/assets/biconomy-explorer.webp', import.meta.url).href} 
+                  alt="Biconomy Explorer"
+                  className="w-8 h-8"
+                />
                 <h1 className="text-lg font-semibold text-slate-900">Biconomy Explorer</h1>
               </div>
             </div>
             <nav className="hidden md:flex items-center space-x-1">
-              <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900">Dashboard</Button>
-              <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900">Transactions</Button>
-              <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900">Analytics</Button>
-              <Button variant="ghost" size="sm" className="text-slate-600 hover:text-slate-900">Documentation</Button>
+              <a 
+                href="https://docs.biconomy.io" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="px-3 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+              >
+                Documentation
+              </a>
             </nav>
           </div>
         </div>

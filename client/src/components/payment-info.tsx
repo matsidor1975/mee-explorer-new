@@ -124,13 +124,34 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
             color="text-emerald-500"
           />
           
-          <MetricCard
-            icon={Circle}
-            label="Payment Method"
-            value={`${tokenInfo.symbol} on ${chainInfo?.name || 'Unknown Network'}`}
-            subtitle={`Token: ${tokenInfo.name}`}
-            color="text-blue-500"
-          />
+          <div className="bg-white border border-slate-200 p-4">
+            <div className="flex items-start space-x-3">
+              <Circle className="h-4 w-4 text-blue-500" />
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">Payment Method</p>
+                <div className="flex items-center space-x-2 mb-1">
+                  {getTokenIcon(tokenInfo.symbol) && (
+                    <img 
+                      src={getTokenIcon(tokenInfo.symbol)!} 
+                      alt={tokenInfo.symbol}
+                      className="w-4 h-4"
+                    />
+                  )}
+                  <span className="text-lg font-semibold text-slate-900">{tokenInfo.symbol}</span>
+                  <span className="text-slate-500">on</span>
+                  {getNetworkIcon(paymentInfo.chainId) && (
+                    <img 
+                      src={getNetworkIcon(paymentInfo.chainId)!} 
+                      alt={chainInfo?.name || 'Unknown Network'}
+                      className="w-4 h-4"
+                    />
+                  )}
+                  <span className="text-lg font-semibold text-slate-900">{chainInfo?.name || 'Unknown Network'}</span>
+                </div>
+                <p className="text-xs text-slate-500">Token: {tokenInfo.name}</p>
+              </div>
+            </div>
+          </div>
         </div>
         
         {/* Expandable payment details */}
