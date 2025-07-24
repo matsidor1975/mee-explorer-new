@@ -487,7 +487,11 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                   <ShieldCheck className="h-4 w-4" />
                   <span>Paymaster & Security</span>
                 </h5>
-                <table className="w-full text-xs">
+                <table className="w-full text-sm">
+                  <colgroup>
+                    <col className="w-48" />
+                    <col className="w-auto" />
+                  </colgroup>
                   <tbody>
                     <TableDataField icon={CreditCard} label="Paymaster Data" value={userOp.userOp.paymasterAndData} />
                     <TableDataField icon={FileText} label="Init Code" value={userOp.userOp.initCode} />
@@ -502,7 +506,11 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                   <Code className="h-4 w-4" />
                   <span>Execution Data</span>
                 </h5>
-                <table className="w-full text-xs">
+                <table className="w-full text-sm">
+                  <colgroup>
+                    <col className="w-48" />
+                    <col className="w-auto" />
+                  </colgroup>
                   <tbody>
                     <TableDataField icon={Code} label="Call Data" value={userOp.userOp.callData} />
                     <TableDataField icon={CheckCircle} label="Execution Status" value={userOp.executionStatus} showCopy={false} />
@@ -510,15 +518,17 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                       <tr className="border-b border-gray-100">
                         <td className="py-2 pr-4">
                           <div className="flex items-center space-x-2">
-                            <ExternalLink className="h-3 w-3 text-gray-500 shrink-0" />
-                            <span className="text-xs text-gray-600 font-medium">Transaction Hash</span>
+                            <ExternalLink className="h-4 w-4 text-gray-500 shrink-0" />
+                            <span className="text-sm text-gray-600 font-medium">Transaction Hash</span>
                           </div>
                         </td>
                         <td className="py-2 pl-4">
                           <div className="flex items-center justify-between">
-                            <code className="text-xs font-mono text-gray-900">
-                              {formatHash(userOp.executionData)}
-                            </code>
+                            <div className="flex-1 text-right">
+                              <code className="text-sm font-mono text-gray-900">
+                                {formatHash(userOp.executionData)}
+                              </code>
+                            </div>
                             <div className="flex items-center space-x-1 ml-2">
                               <Button
                                 variant="ghost"
@@ -526,7 +536,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                                 onClick={() => copyToClipboard(userOp.executionData, "Transaction Hash")}
                                 className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0"
                               >
-                                <Copy className="h-2.5 w-2.5" />
+                                <Copy className="h-3 w-3" />
                               </Button>
                               {hasExplorerSupport(userOp.chainId) && (
                                 <Button
