@@ -69,85 +69,67 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
   );
 
   return (
-    <Card className="border-0 shadow-sm">
-      <CardContent className="p-6">
-        <div className="flex items-center justify-between mb-6">
+    <div className="bg-white rounded-2xl border border-gray-100/50 shadow-sm">
+      <div className="p-6 border-b border-gray-100/50">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          {/* Supertx Hash and Node Inline */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 flex-1">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
+                <Hash className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Supertransaction</p>
+                <div className="flex items-center space-x-2">
+                  <code className="text-sm font-mono text-gray-900 bg-gray-50 px-2 py-1 rounded-lg">
+                    {formatHash(hashDetails.itxHash)}
+                  </code>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => copyToClipboard(hashDetails.itxHash, "Supertransaction Hash")}
+                    className="text-gray-400 hover:text-orange-500 h-7 w-7 p-0"
+                  >
+                    <Copy className="h-3 w-3" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+            
+            <div className="hidden sm:block w-px h-8 bg-gray-200"></div>
+            
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                <Server className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Node</p>
+                <div className="flex items-center space-x-2">
+                  <code className="text-sm font-mono text-gray-900 bg-gray-50 px-2 py-1 rounded-lg">
+                    {formatHash(hashDetails.node)}
+                  </code>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => copyToClipboard(hashDetails.node, "Node")}
+                    className="text-gray-400 hover:text-orange-500 h-7 w-7 p-0"
+                  >
+                    <Copy className="h-3 w-3" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Status Badge */}
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-[var(--biconomy-orange)]/10 rounded-lg flex items-center justify-center">
-              <Hash className="h-5 w-5 text-[var(--biconomy-orange)]" />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900">Supertransaction Details</h3>
-          </div>
-          <Badge className={`${statusColorClass} px-3 py-1 border-0`}>
-            <CheckCircle className="w-4 h-4 mr-2" />
-            {overallStatus || 'Unknown'}
-          </Badge>
-        </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <DataField
-            icon={Hash}
-            label="Supertransaction Hash"
-            value={hashDetails.itxHash}
-          />
-          
-          <DataField
-            icon={Server}
-            label="Node"
-            value={hashDetails.node}
-          />
-          
-          <DataField
-            icon={Link}
-            label="Commitment"
-            value={hashDetails.commitment}
-          />
-          
-          <div className="p-4 bg-white border border-gray-100 rounded-lg">
-            <div className="flex items-center space-x-2 mb-2">
-              <Network className="h-4 w-4 text-gray-500" />
-              <span className="text-sm font-medium text-gray-600">Chain</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className={`w-3 h-3 rounded-full ${
-                chainInfo?.healthCheck?.status === 'healthy' ? 'bg-green-500' : 'bg-gray-400'
-              }`}></div>
-              <code className="text-sm font-mono text-gray-900">
-                {chainInfo?.name || `Chain ${hashDetails.paymentInfo.chainId}`}
-              </code>
-            </div>
-            <p className="text-xs text-gray-500 mt-1">
-              ID: {hashDetails.paymentInfo.chainId}
-              {chainInfo?.healthCheck && (
-                <span className="ml-2">
-                  • {chainInfo.healthCheck.status}
-                </span>
-              )}
-            </p>
-          </div>
-          
-          <DataField
-            icon={Clock}
-            label="Timestamp"
-            value={hashDetails.userOps[0] ? formatTimestamp(hashDetails.userOps[0].lowerBoundTimestamp).formatted : ''}
-            showCopy={false}
-            truncate={false}
-          />
-          
-          <div className="p-4 bg-white border border-gray-100 rounded-lg">
-            <div className="flex items-center space-x-2 mb-2">
-              <CheckCircle className="h-4 w-4 text-gray-500" />
-              <span className="text-sm font-medium text-gray-600">Status</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className={`w-2 h-2 rounded-full ${overallStatus.toLowerCase().includes('success') ? 'bg-green-500' : overallStatus.toLowerCase().includes('pending') ? 'bg-yellow-500' : 'bg-red-500'}`}></div>
-              <span className={`text-sm font-medium ${overallStatus.toLowerCase().includes('success') ? 'text-green-700' : overallStatus.toLowerCase().includes('pending') ? 'text-yellow-700' : 'text-red-700'}`}>
-                {overallStatus || 'Unknown'}
-              </span>
-            </div>
+            <Badge className={`${statusColorClass} font-medium px-3 py-1 rounded-full`}>
+              <CheckCircle className="h-3 w-3 mr-1" />
+              {overallStatus}
+            </Badge>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

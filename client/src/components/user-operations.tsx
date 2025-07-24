@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Copy, ChevronDown, Code, User, Hash, Fuel, Clock, Zap, Layers, Settings, AlertTriangle, CheckCircle, ExternalLink, Wallet, CreditCard } from "lucide-react";
@@ -339,39 +339,44 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
     <div className="space-y-6">
       {/* Regular Operations Card */}
       {regularOperations.length > 0 && (
-        <Card className="border-0 shadow-sm">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-6">
+        <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-sm">
+          <div className="p-6 border-b border-slate-200/50">
+            <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-[var(--biconomy-orange)]/10 rounded-lg flex items-center justify-center">
-                  <Layers className="h-5 w-5 text-[var(--biconomy-orange)]" />
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+                  <Layers className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900">User Operations</h3>
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900">User Operations</h3>
+                  <p className="text-sm text-slate-500">Detailed execution information</p>
+                </div>
               </div>
-              <Badge variant="secondary" className="bg-[var(--biconomy-orange)]/10 text-[var(--biconomy-orange)] border-0">
+              <Badge className="px-3 py-1 text-xs bg-blue-100 text-blue-800 border-blue-200 rounded-full">
                 {regularOperations.length} operation{regularOperations.length !== 1 ? 's' : ''}
               </Badge>
             </div>
+          </div>
+          <div className="p-6">
 
             <div className="space-y-4">
               {regularOperations.map((userOp, index) => renderOperation(userOp, index, false))}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
       {/* Cleanup Operations Toggle */}
       {cleanupOperations.length > 0 && (
-        <Card className="border-0 shadow-sm">
-          <CardContent className="p-6">
+        <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-sm">
+          <div className="p-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <Settings className="h-5 w-5 text-blue-600" />
+                <div className="w-12 h-12 bg-gradient-to-br from-slate-500 to-slate-600 rounded-2xl flex items-center justify-center shadow-lg">
+                  <Settings className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Cleanup Operations</h3>
-                  <p className="text-sm text-gray-600">
+                  <h3 className="text-xl font-bold text-slate-900">Cleanup Operations</h3>
+                  <p className="text-sm text-slate-500">
                     {cleanupOperations.length} cleanup operation{cleanupOperations.length !== 1 ? 's' : ''} available
                   </p>
                 </div>
@@ -380,20 +385,20 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowCleanupOperations(!showCleanupOperations)}
-                className="flex items-center space-x-2 hover:bg-blue-50"
+                className="flex items-center space-x-2 hover:bg-slate-50 border-slate-200 rounded-xl"
               >
                 <span>{showCleanupOperations ? 'Hide' : 'Show'} Cleanup Operations</span>
                 <ChevronDown className={`h-4 w-4 transition-transform ${showCleanupOperations ? 'rotate-180' : ''}`} />
               </Button>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
       {/* Expanded Cleanup Operations Card */}
       {cleanupOperations.length > 0 && showCleanupOperations && (
-        <Card className="border-0 shadow-sm bg-blue-50/30">
-          <CardContent className="p-6">
+        <div className="bg-blue-50/50 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-sm">
+          <div className="p-6">
             {/* Cleanup Explanation */}
             <div className="p-4 bg-blue-100 border border-blue-200 rounded-lg mb-6">
               <div className="flex items-start space-x-3">
@@ -412,23 +417,25 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
             <div className="space-y-4">
               {cleanupOperations.map((userOp, index) => renderOperation(userOp, index, true))}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
       {/* No Operations Message */}
       {regularOperations.length === 0 && cleanupOperations.length === 0 && (
-        <Card className="border-0 shadow-sm">
-          <CardContent className="p-6">
+        <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-sm">
+          <div className="p-6">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-[var(--biconomy-orange)]/10 rounded-lg flex items-center justify-center">
-                <Layers className="h-5 w-5 text-[var(--biconomy-orange)]" />
+              <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <Layers className="h-6 w-6 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900">User Operations</h3>
+              <div>
+                <h3 className="text-xl font-bold text-slate-900">User Operations</h3>
+                <p className="text-sm text-slate-500">No operations found</p>
+              </div>
             </div>
-            <p className="text-gray-500">No user operations found.</p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
     </div>
   );

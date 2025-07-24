@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+
 import { Button } from "@/components/ui/button";
 import { Copy, DollarSign, CreditCard, Wallet, Hash, Key, Circle, ChevronDown, Receipt, Users } from "lucide-react";
 import { PaymentInfo, UserOp } from "@/types";
@@ -49,15 +49,17 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
     subtitle: string;
     color: string;
   }) => (
-    <div className="bg-white border border-gray-100 rounded-lg p-4">
+    <div className="bg-white/70 backdrop-blur-sm border border-slate-200/50 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200">
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <div className="flex items-center space-x-2 mb-1">
-            <Icon className={`h-4 w-4 ${color}`} />
-            <p className="text-sm font-medium text-gray-600">{label}</p>
+          <div className="flex items-center space-x-3 mb-2">
+            <div className={`w-10 h-10 ${color} rounded-xl flex items-center justify-center shadow-sm`}>
+              <Icon className="h-5 w-5 text-white" />
+            </div>
+            <p className="text-sm font-medium text-slate-600 uppercase tracking-wide">{label}</p>
           </div>
-          <p className="text-xl font-semibold text-gray-900">{value || 'Not available'}</p>
-          {subtitle && <p className="text-xs text-gray-500 mt-1">{subtitle}</p>}
+          <p className="text-2xl font-bold text-slate-900">{value || 'Not available'}</p>
+          {subtitle && <p className="text-sm text-slate-500 mt-1">{subtitle}</p>}
         </div>
       </div>
     </div>
@@ -92,48 +94,44 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
   );
 
   return (
-    <Card className="border-0 shadow-sm">
-      <CardContent className="p-6">
-        <div className="flex items-center space-x-3 mb-6">
-          <div className="w-10 h-10 bg-[var(--biconomy-orange)]/10 rounded-lg flex items-center justify-center">
-            <CreditCard className="h-5 w-5 text-[var(--biconomy-orange)]" />
+    <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-slate-200/50 shadow-sm">
+      <div className="p-6 border-b border-slate-200/50">
+        <div className="flex items-center space-x-3">
+          <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
+            <CreditCard className="h-6 w-6 text-white" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900">Payment Information</h3>
+          <div>
+            <h3 className="text-xl font-bold text-slate-900">Payment Information</h3>
+            <p className="text-sm text-slate-500">Transaction fees and payment details</p>
+          </div>
         </div>
+      </div>
+      <div className="p-6">
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="bg-white border border-gray-100 rounded-lg p-4">
-            <div className="flex items-center space-x-2 mb-1">
-              <Receipt className="h-4 w-4 text-purple-500" />
-              <p className="text-sm font-medium text-gray-600">Gas Fee</p>
-            </div>
-            <p className="text-xl font-semibold text-gray-900">
-              ${paymentInfo.gasFee || 'Not available'}
-            </p>
-            <p className="text-xs text-gray-500 mt-1">Paid to blockchain validators</p>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <MetricCard
+            icon={Receipt}
+            label="Gas Fee"
+            value={`$${paymentInfo.gasFee || 'Not available'}`}
+            subtitle="Paid to blockchain validators"
+            color="bg-gradient-to-br from-purple-500 to-purple-600"
+          />
           
-          <div className="bg-white border border-gray-100 rounded-lg p-4">
-            <div className="flex items-center space-x-2 mb-1">
-              <Users className="h-4 w-4 text-[var(--biconomy-orange)]" />
-              <p className="text-sm font-medium text-gray-600">Orchestration Fee</p>
-            </div>
-            <p className="text-xl font-semibold text-gray-900">
-              ${paymentInfo.orchestrationFee || 'Not available'}
-            </p>
-            <p className="text-xs text-gray-500 mt-1">Paid to Biconomy network relayers</p>
-          </div>
+          <MetricCard
+            icon={Users}
+            label="Orchestration Fee"
+            value={`$${paymentInfo.orchestrationFee || 'Not available'}`}
+            subtitle="Paid to Biconomy network relayers"
+            color="bg-gradient-to-br from-orange-500 to-orange-600"
+          />
           
-          <div className="bg-white border border-gray-100 rounded-lg p-4">
-            <div className="flex items-center space-x-2 mb-1">
-              <DollarSign className="h-4 w-4 text-green-600" />
-              <p className="text-sm font-medium text-gray-600">Total Fees</p>
-            </div>
-            <p className="text-xl font-semibold text-gray-900">
-              ${totalFees.toFixed(6)}
-            </p>
-            <p className="text-xs text-gray-500 mt-1">Gas + Orchestration fees</p>
-          </div>
+          <MetricCard
+            icon={DollarSign}
+            label="Total Fees"
+            value={`$${totalFees.toFixed(6)}`}
+            subtitle="Gas + Orchestration fees"
+            color="bg-gradient-to-br from-emerald-500 to-emerald-600"
+          />
         </div>
         
         {/* Expandable payment details */}
@@ -266,7 +264,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
             </div>
           )}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

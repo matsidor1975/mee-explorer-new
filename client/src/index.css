@@ -10,29 +10,41 @@
 }
 
 :root {
-  --background: hsl(0, 0%, 100%);
-  --foreground: hsl(20, 14.3%, 4.1%);
-  --muted: hsl(60, 4.8%, 95.9%);
-  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --background: hsl(210, 40%, 98%);
+  --foreground: hsl(222, 84%, 5%);
+  --muted: hsl(210, 40%, 96%);
+  --muted-foreground: hsl(215, 16%, 47%);
   --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --popover-foreground: hsl(222, 84%, 5%);
   --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(20, 14.3%, 4.1%);
-  --border: hsl(20, 5.9%, 90%);
-  --input: hsl(20, 5.9%, 90%);
-  --primary: hsl(15, 100%, 60%);
-  --primary-foreground: hsl(0, 0%, 100%);
-  --secondary: hsl(60, 4.8%, 95.9%);
-  --secondary-foreground: hsl(24, 9.8%, 10%);
-  --accent: hsl(60, 4.8%, 95.9%);
-  --accent-foreground: hsl(24, 9.8%, 10%);
-  --destructive: hsl(0, 84.2%, 60.2%);
-  --destructive-foreground: hsl(60, 9.1%, 97.8%);
-  --ring: hsl(15, 100%, 60%);
-  --radius: 0.5rem;
-  --biconomy-orange: hsl(15, 100%, 60%);
-  --biconomy-orange-light: hsl(15, 100%, 65%);
-  --biconomy-orange-dark: hsl(15, 95%, 50%);
+  --card-foreground: hsl(222, 84%, 5%);
+  --border: hsl(214, 32%, 91%);
+  --input: hsl(214, 32%, 91%);  
+  --primary: hsl(222, 47%, 11%);
+  --primary-foreground: hsl(210, 40%, 98%);
+  --secondary: hsl(210, 40%, 96%);
+  --secondary-foreground: hsl(222, 84%, 5%);
+  --accent: hsl(217, 91%, 60%);
+  --accent-foreground: hsl(210, 40%, 98%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --ring: hsl(217, 91%, 60%);
+  --radius: 0.75rem;
+  --biconomy-orange: hsl(24, 100%, 50%);
+  --biconomy-orange-light: hsl(24, 100%, 60%);
+  --biconomy-orange-dark: hsl(24, 95%, 45%);
+  
+  /* Modern Fintech Palette */
+  --fintech-slate-50: hsl(210, 40%, 98%);
+  --fintech-slate-100: hsl(210, 40%, 96%);
+  --fintech-slate-200: hsl(214, 32%, 91%);
+  --fintech-slate-300: hsl(213, 27%, 84%);
+  --fintech-slate-400: hsl(215, 20%, 65%);
+  --fintech-slate-500: hsl(215, 16%, 47%);
+  --fintech-slate-600: hsl(215, 19%, 35%);
+  --fintech-slate-700: hsl(215, 25%, 27%);
+  --fintech-slate-800: hsl(217, 33%, 17%);
+  --fintech-slate-900: hsl(222, 47%, 11%);
 }
 
 .dark {
@@ -68,6 +80,8 @@
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
+    background: linear-gradient(135deg, hsl(210, 40%, 98%) 0%, hsl(214, 32%, 96%) 100%);
+    min-height: 100vh;
   }
 }
 
