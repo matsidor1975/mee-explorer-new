@@ -2,11 +2,12 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Copy, ChevronDown, Code, User, Hash, Fuel, Clock, Zap, Layers, Settings, AlertTriangle, CheckCircle, ExternalLink, Wallet, CreditCard } from "lucide-react";
+import { Copy, ChevronDown, Code, User, Hash, Fuel, Clock, Zap, Layers, Settings, AlertTriangle, CheckCircle, ExternalLink, Wallet, CreditCard, Play } from "lucide-react";
 import { UserOp } from "@/types";
 import { formatHash, formatGas, formatTimestamp, getExecutionStatusColor, parseAccountGasLimits, parseGasFees, getExplorerUrl, getExplorerName, hasExplorerSupport, getNetworkIcon } from "@/lib/format";
 import { useToast } from "@/hooks/use-toast";
 import { useChainInfo } from "@/hooks/use-chain-info";
+import { simulateUserOperation } from "@/lib/tenderly";
 
 interface UserOperationsProps {
   userOps: UserOp[];
@@ -53,6 +54,32 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
       toast({
         title: "Failed to copy",
         description: "Could not copy to clipboard.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleTenderlySimulation = async (userOp: UserOp) => {
+    try {
+      toast({
+        title: "Starting simulation...",
+        description: "Creating Tenderly simulation for this operation.",
+      });
+      
+      const simulationUrl = await simulateUserOperation(userOp);
+      
+      // Open the simulation in a new tab
+      window.open(simulationUrl, '_blank');
+      
+      toast({
+        title: "Simulation created!",
+        description: "Tenderly simulation opened in new tab.",
+      });
+    } catch (error) {
+      console.error('Tenderly simulation error:', error);
+      toast({
+        title: "Simulation failed",
+        description: error instanceof Error ? error.message : "Failed to create Tenderly simulation",
         variant: "destructive",
       });
     }
@@ -211,6 +238,15 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
               <Badge className={getExecutionStatusColor(userOp.executionStatus)}>
                 {userOp.executionStatus}
               </Badge>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleTenderlySimulation(userOp)}
+                className="text-xs flex items-center space-x-1 hover:bg-blue-500 hover:text-white"
+              >
+                <Play className="h-3 w-3" />
+                <span>Simulate with Tenderly</span>
+              </Button>
               <Button
                 variant="ghost"
                 size="sm"

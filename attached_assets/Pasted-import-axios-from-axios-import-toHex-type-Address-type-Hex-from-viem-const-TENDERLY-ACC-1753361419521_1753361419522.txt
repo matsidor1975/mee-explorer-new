@@ -1,0 +1,115 @@
+import axios from "axios";
+import { toHex, type Address, type Hex } from "viem";
+
+const TENDERLY_ACCESS_KEY = "YOUR_ACCESS_KEY";
+const TENDERLY_ACCOUNT_SLUG = "YOUR_ACCOUNT_SLUG";
+const TENDERLY_PROJECT_SLUG = "YOUR_PROJECT_SLUG";
+
+// For meescan integration, must use meescan API key
+const MEE_API_KEY = "YOUR_MEE_API_KEY";
+
+const TENDERLY_BASE_URL = "https://api.tenderly.co/api";
+const TENDERLY_SHARED_SIMULATION_BASE_URL =
+  "https://www.tdly.co/shared/simulation";
+
+export type SimulationTransactionData = {
+  from: Address;
+  to: Address;
+  data: Hex;
+  value: bigint;
+  timestamp: number;
+  blockNumber: bigint;
+};
+
+const simulateTransaction = async (
+  simulationTransactionData: SimulationTransactionData,
+  timestampToOverride: number,
+  chainId: string
+) => {
+  const { from, to, value, data, blockNumber } = simulationTransactionData;
+
+  // Trigger a simulation for known calldata
+  const simulationResponse = await axios.post(
+    `${TENDERLY_BASE_URL}/v1/account/${TENDERLY_ACCOUNT_SLUG}/project/${TENDERLY_PROJECT_SLUG}/simulate`,
+    {
+      network_id: chainId,
+      block_number: Number(blockNumber),
+      from,
+      to,
+      gas: 8000000, // Default gas applied for every transaction
+      block_header: {
+        timestamp: toHex(timestampToOverride),
+      },
+      value: String(value),
+      source: "meescan",
+      input: data,
+      simulation_type: "full",
+      save: true, // Save the simulations in your account which is persistent
+      save_if_fails: true, // Save the simulations in your account which is persistent even if it fails. It is important for debugging failed ones
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "X-Access-Key": TENDERLY_ACCESS_KEY,
+      },
+    }
+  );
+
+  if (!simulationResponse) {
+    throw new Error("Failed to create simulation, try again");
+  }
+
+  const simulationId = simulationResponse.data.simulation.id;
+
+  // Convert the simulation into a public simulation which can be shared with anyone for debugging
+  await axios.post(
+    `${TENDERLY_BASE_URL}/v1/account/${TENDERLY_ACCOUNT_SLUG}/project/${TENDERLY_PROJECT_SLUG}/simulations/${simulationId}/share`,
+    undefined,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "X-Access-Key": TENDERLY_ACCESS_KEY,
+      },
+    }
+  );
+
+  // Display this data in MEEScan
+  console.log(`${TENDERLY_SHARED_SIMULATION_BASE_URL}/${simulationId}`);
+};
+
+const provideSimulationData = async (supertransactionUrl: string) => {
+  // I haven't inferred the type here because the MEEscan already might have the types and etc...
+  // So it can be reused and I don't want this script to be big
+  const explorerData = await axios.get(supertransactionUrl, {
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": MEE_API_KEY,
+    },
+  });
+
+  await Promise.all(
+    explorerData.data.userOps.map(async (userOp) => {
+      // Tenderly link will be manually generated for the failure ones now.
+      // For successful ones, it is already there in MEEScan
+      if (
+        userOp.executionStatus === "FAILED" &&
+        userOp.simulationTransactionData
+      ) {
+        await simulateTransaction(
+          userOp.simulationTransactionData,
+          // Trick to overcome the deadline expiration by overriding the block timestamp along with block number
+          userOp.upperBoundTimestamp - 5,
+          userOp.chainId
+        );
+      }
+    })
+  );
+};
+
+// Example super transaction has which has both mined failed and failed userOps + deadline expiration case as well
+// Replace with your actual supertransaction hash
+const supertransactionHash =
+  "0x6e127b2140263c0271c2a9ff84aff42e71d45efdddbd9c3822909f1c66e3dc3a";
+const supertransactionUrl = `http://network.biconomy.io/v1/explorer/${supertransactionHash}`;
+
+provideSimulationData(supertransactionUrl);
