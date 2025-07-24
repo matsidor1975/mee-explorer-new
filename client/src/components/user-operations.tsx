@@ -162,7 +162,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
             const { verificationGasLimit, callGasLimit } = parseAccountGasLimits(userOp.userOp.accountGasLimits);
             const { maxPriorityFeePerGas, maxFeePerGas } = parseGasFees(userOp.userOp.gasFees);
             const executionTime = formatTimestamp(userOp.minedTimestamp || userOp.miningTimestamp);
-            const chainInfo = chains.find(c => c.chainId === parseInt(userOp.chainId));
+            const chainInfo = chains.find(c => c.chainId.toString() === userOp.chainId);
 
             return (
               <div key={index} className="border border-gray-200 rounded-lg overflow-hidden">
@@ -194,33 +194,61 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                   </div>
                 </div>
 
-                {/* Operation Details */}
-                <div className="p-4">
-                  {/* Always visible: Essential info only */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-                    {/* Execution Data - Transaction Hash with Explorer Link */}
-                    {userOp.executionData ? (
-                      <ExplorerLink txHash={userOp.executionData} chainId={userOp.chainId} />
-                    ) : (
-                      <div className="p-3 bg-white border border-gray-100 rounded-lg">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <ExternalLink className="h-4 w-4 text-gray-500" />
-                          <span className="text-sm font-medium text-gray-600">On-Chain Transaction</span>
+                {/* Operation Details - Always visible inline */}
+                <div className="p-4 bg-white">
+                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                    {/* Transaction Hash with Explorer Link */}
+                    <div className="flex-1">
+                      {userOp.executionData ? (
+                        <div className="flex items-center space-x-3">
+                          <div className="flex items-center space-x-2">
+                            <ExternalLink className="h-4 w-4 text-gray-500" />
+                            <span className="text-sm font-medium text-gray-600">Transaction:</span>
+                          </div>
+                          <code className="text-sm font-mono text-gray-900">
+                            {formatHash(userOp.executionData)}
+                          </code>
+                          <div className="flex items-center space-x-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => copyToClipboard(userOp.executionData, "Transaction Hash")}
+                              className="text-gray-400 hover:text-[var(--biconomy-orange)] h-6 w-6 p-0"
+                            >
+                              <Copy className="h-3 w-3" />
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => window.open(getExplorerUrl(userOp.chainId, userOp.executionData), '_blank')}
+                              className="text-xs h-6 px-2 flex items-center space-x-1 hover:bg-[var(--biconomy-orange)] hover:text-white"
+                            >
+                              <ExternalLink className="h-3 w-3" />
+                              <span>{getExplorerName(userOp.chainId)}</span>
+                            </Button>
+                          </div>
                         </div>
-                        <p className="text-xs text-gray-400">No execution data available</p>
-                      </div>
-                    )}
-                    
-                    <DataField
-                      icon={Clock}
-                      label="Mined Time"
-                      value={executionTime.formatted}
-                      showCopy={false}
-                    />
-                  </div>
+                      ) : (
+                        <div className="flex items-center space-x-2 text-gray-400">
+                          <ExternalLink className="h-4 w-4" />
+                          <span className="text-sm">No transaction data available</span>
+                        </div>
+                      )}
+                    </div>
 
-                  {/* Expandable Details */}
-                  {isExpanded && (
+                    {/* Mined Time */}
+                    <div className="flex items-center space-x-2 text-sm text-gray-600">
+                      <Clock className="h-4 w-4" />
+                      <span className="font-medium">Mined:</span>
+                      <span>{executionTime.relative}</span>
+                      <span className="text-gray-400">({executionTime.formatted})</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Expandable Details */}
+                {isExpanded && (
+                  <div className="px-4 pb-4">
                     <div className="space-y-4 pt-4 border-t border-gray-100">
                       {/* User Operation Details */}
                       <div>
@@ -316,8 +344,8 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                         </div>
                       )}
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             );
           })}
