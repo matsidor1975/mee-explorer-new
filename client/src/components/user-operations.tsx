@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Copy, ChevronDown, Code, User, Hash, Fuel, Clock, Zap, Layers, Settings } from "lucide-react";
+import { Copy, ChevronDown, Code, User, Hash, Fuel, Clock, Zap, Layers, Settings, AlertTriangle, CheckCircle } from "lucide-react";
 import { UserOp } from "@/types";
 import { formatHash, formatGas, formatTimestamp, getExecutionStatusColor } from "@/lib/format";
 import { useToast } from "@/hooks/use-toast";
@@ -41,64 +41,126 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
     }
   };
 
-  const DataField = ({ icon: Icon, label, value, showCopy = true }: {
+  const DataField = ({ icon: Icon, label, value, showCopy = true, userOp }: {
     icon: React.ComponentType<any>;
     label: string;
     value: string;
     showCopy?: boolean;
-  }) => (
-    <div className="p-3 bg-white border border-gray-100 rounded-lg">
-      <div className="flex items-center space-x-2 mb-2">
-        <Icon className="h-4 w-4 text-gray-500" />
-        <span className="text-sm font-medium text-gray-600">{label}</span>
-      </div>
-      <div className="flex items-center justify-between">
-        <code className={`text-xs font-mono text-gray-900 truncate flex-1 ${!value ? 'text-gray-400' : ''}`}>
-          {value || 'Not available'}
-        </code>
-        {showCopy && value && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => copyToClipboard(value, label)}
-            className="text-gray-400 hover:text-[var(--biconomy-orange)] shrink-0 ml-2"
-          >
-            <Copy className="h-3 w-3" />
-          </Button>
+    userOp?: UserOp;
+  }) => {
+    // Check if this is a gas-related field and if it's a first-time deployment
+    const isGasField = label.toLowerCase().includes('gas');
+    const isFirstTimeDeployment = userOp?.userOp.initCode && userOp.userOp.initCode !== "0x";
+    
+    return (
+      <div className="p-3 bg-white border border-gray-100 rounded-lg">
+        <div className="flex items-center space-x-2 mb-2">
+          <Icon className="h-4 w-4 text-gray-500" />
+          <span className="text-sm font-medium text-gray-600">{label}</span>
+          {isGasField && isFirstTimeDeployment && (
+            <div className="flex items-center space-x-1 px-2 py-1 bg-yellow-50 border border-yellow-200 rounded-full">
+              <AlertTriangle className="h-3 w-3 text-yellow-600" />
+              <span className="text-xs font-medium text-yellow-700">Higher Gas</span>
+            </div>
+          )}
+        </div>
+        
+        {isGasField && isFirstTimeDeployment && (
+          <div className="mb-2 p-2 bg-yellow-50 border border-yellow-200 rounded text-xs text-yellow-800">
+            <span className="font-medium">Note:</span> Gas costs are higher due to smart account deployment.
+          </div>
         )}
+        
+        <div className="flex items-center justify-between">
+          <code className={`text-xs font-mono text-gray-900 truncate flex-1 ${!value ? 'text-gray-400' : ''}`}>
+            {value || 'Not available'}
+          </code>
+          {showCopy && value && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => copyToClipboard(value, label)}
+              className="text-gray-400 hover:text-[var(--biconomy-orange)] shrink-0 ml-2"
+            >
+              <Copy className="h-3 w-3" />
+            </Button>
+          )}
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const CodeField = ({ icon: Icon, label, value }: {
     icon: React.ComponentType<any>;
     label: string;
     value: string;
-  }) => (
-    <div className="p-3 bg-white border border-gray-100 rounded-lg">
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center space-x-2">
-          <Icon className="h-4 w-4 text-gray-500" />
-          <span className="text-sm font-medium text-gray-600">{label}</span>
+  }) => {
+    // Check if this is Init Code and determine deployment status
+    const isInitCode = label === "Init Code";
+    const isFirstTimeDeployment = isInitCode && value && value !== "0x";
+    const hasExistingAccount = isInitCode && value === "0x";
+    
+    return (
+      <div className="p-3 bg-white border border-gray-100 rounded-lg">
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center space-x-2">
+            <Icon className="h-4 w-4 text-gray-500" />
+            <span className="text-sm font-medium text-gray-600">{label}</span>
+            {isInitCode && (
+              <div className="flex items-center space-x-1">
+                {isFirstTimeDeployment ? (
+                  <div className="flex items-center space-x-1 px-2 py-1 bg-orange-50 border border-orange-200 rounded-full">
+                    <AlertTriangle className="h-3 w-3 text-orange-600" />
+                    <span className="text-xs font-medium text-orange-700">First Deployment</span>
+                  </div>
+                ) : hasExistingAccount ? (
+                  <div className="flex items-center space-x-1 px-2 py-1 bg-green-50 border border-green-200 rounded-full">
+                    <CheckCircle className="h-3 w-3 text-green-600" />
+                    <span className="text-xs font-medium text-green-700">Existing Account</span>
+                  </div>
+                ) : null}
+              </div>
+            )}
+          </div>
+          {value && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => copyToClipboard(value, label)}
+              className="text-gray-400 hover:text-[var(--biconomy-orange)]"
+            >
+              <Copy className="h-3 w-3" />
+            </Button>
+          )}
         </div>
-        {value && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => copyToClipboard(value, label)}
-            className="text-gray-400 hover:text-[var(--biconomy-orange)]"
-          >
-            <Copy className="h-3 w-3" />
-          </Button>
+        
+        {/* Deployment explanation for Init Code */}
+        {isInitCode && (
+          <div className="mb-2 p-2 bg-blue-50 border border-blue-200 rounded text-xs">
+            {isFirstTimeDeployment ? (
+              <div className="text-blue-800">
+                <span className="font-medium">First-time deployment:</span> This smart account is being deployed for the first time, which requires additional gas for contract creation.
+              </div>
+            ) : hasExistingAccount ? (
+              <div className="text-blue-800">
+                <span className="font-medium">Existing account:</span> This smart account was already deployed, so no additional deployment gas is required.
+              </div>
+            ) : (
+              <div className="text-blue-800">
+                <span className="font-medium">Init Code:</span> Contains the bytecode for smart account initialization and deployment logic.
+              </div>
+            )}
+          </div>
         )}
+        
+        <div className="bg-gray-50 p-2 rounded border max-h-32 overflow-y-auto">
+          <code className={`text-xs font-mono text-gray-900 break-all block ${!value ? 'text-gray-400' : ''}`}>
+            {value || 'Not available'}
+          </code>
+        </div>
       </div>
-      <div className="bg-gray-50 p-2 rounded border max-h-32 overflow-y-auto">
-        <code className={`text-xs font-mono text-gray-900 break-all block ${!value ? 'text-gray-400' : ''}`}>
-          {value || 'Not available'}
-        </code>
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <Card className="border-0 shadow-sm">
@@ -170,6 +232,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                         label="Call Gas Limit"
                         value={userOp.userOp.callGasLimit ? formatGas(userOp.userOp.callGasLimit) : ''}
                         showCopy={false}
+                        userOp={userOp}
                       />
                       
                       <DataField
@@ -177,6 +240,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                         label="Verification Gas Limit"
                         value={userOp.userOp.verificationGasLimit ? formatGas(userOp.userOp.verificationGasLimit) : ''}
                         showCopy={false}
+                        userOp={userOp}
                       />
                       
                       <DataField
@@ -184,6 +248,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                         label="Pre-verification Gas"
                         value={userOp.userOp.preVerificationGas ? formatGas(userOp.userOp.preVerificationGas) : ''}
                         showCopy={false}
+                        userOp={userOp}
                       />
                       
                       <DataField
@@ -191,6 +256,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                         label="Max Fee Per Gas"
                         value={userOp.userOp.maxFeePerGas}
                         showCopy={false}
+                        userOp={userOp}
                       />
                       
                       <DataField
@@ -198,6 +264,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                         label="Max Priority Fee Per Gas"
                         value={userOp.userOp.maxPriorityFeePerGas}
                         showCopy={false}
+                        userOp={userOp}
                       />
                       
                       <DataField
@@ -205,6 +272,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                         label="Max Gas Limit"
                         value={userOp.maxGasLimit ? formatGas(userOp.maxGasLimit) : ''}
                         showCopy={false}
+                        userOp={userOp}
                       />
                     </div>
                     
