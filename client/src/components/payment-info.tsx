@@ -306,7 +306,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
               </h5>
               <table className="w-full text-sm">
                 <colgroup>
-                  <col className="w-40" />
+                  <col className="w-48" />
                   <col className="w-auto" />
                 </colgroup>
                 <tbody>
@@ -381,7 +381,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
               </h5>
               <table className="w-full text-sm">
                 <colgroup>
-                  <col className="w-40" />
+                  <col className="w-48" />
                   <col className="w-auto" />
                 </colgroup>
                 <tbody>
