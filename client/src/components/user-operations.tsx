@@ -15,6 +15,7 @@ interface UserOperationsProps {
 export default function UserOperations({ userOps }: UserOperationsProps) {
   const [expandedOps, setExpandedOps] = useState<Set<number>>(new Set());
   const [expandedCleanupOps, setExpandedCleanupOps] = useState<Set<number>>(new Set());
+  const [showCleanupOperations, setShowCleanupOperations] = useState<boolean>(false);
   const { toast } = useToast();
   const { chains } = useChainInfo();
 
@@ -332,27 +333,40 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
         </Card>
       )}
 
-      {/* Cleanup Operations Card */}
+      {/* Cleanup Operations Toggle */}
       {cleanupOperations.length > 0 && (
-        <Card className="border-0 shadow-sm bg-blue-50/30">
+        <Card className="border-0 shadow-sm">
           <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                   <Settings className="h-5 w-5 text-blue-600" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900">Cleanup Operations</h3>
-                  <p className="text-sm text-blue-700 mt-1">
-                    These operations execute after regular operations to clean up remaining tokens
+                  <h3 className="text-lg font-semibold text-gray-900">Cleanup Operations</h3>
+                  <p className="text-sm text-gray-600">
+                    {cleanupOperations.length} cleanup operation{cleanupOperations.length !== 1 ? 's' : ''} available
                   </p>
                 </div>
               </div>
-              <Badge variant="secondary" className="bg-blue-100 text-blue-700 border-0">
-                {cleanupOperations.length} cleanup{cleanupOperations.length !== 1 ? 's' : ''}
-              </Badge>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowCleanupOperations(!showCleanupOperations)}
+                className="flex items-center space-x-2 hover:bg-blue-50"
+              >
+                <span>{showCleanupOperations ? 'Hide' : 'Show'} Cleanup Operations</span>
+                <ChevronDown className={`h-4 w-4 transition-transform ${showCleanupOperations ? 'rotate-180' : ''}`} />
+              </Button>
             </div>
+          </CardContent>
+        </Card>
+      )}
 
+      {/* Expanded Cleanup Operations Card */}
+      {cleanupOperations.length > 0 && showCleanupOperations && (
+        <Card className="border-0 shadow-sm bg-blue-50/30">
+          <CardContent className="p-6">
             {/* Cleanup Explanation */}
             <div className="p-4 bg-blue-100 border border-blue-200 rounded-lg mb-6">
               <div className="flex items-start space-x-3">
