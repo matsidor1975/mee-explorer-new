@@ -106,7 +106,7 @@ export default function NetworkInfo() {
                 <img 
                   src={new URL('@/assets/biconomy-explorer.webp', import.meta.url).href} 
                   alt="Biconomy Explorer"
-                  className="h-8"
+                  className="h-6"
                 />
               </div>
               <nav className="flex items-center space-x-1">
@@ -180,7 +180,7 @@ export default function NetworkInfo() {
               <img 
                 src={new URL('@/assets/biconomy-explorer.webp', import.meta.url).href} 
                 alt="Biconomy Explorer"
-                className="h-8"
+                className="h-6"
               />
             </div>
             <nav className="flex items-center space-x-1">
