@@ -424,11 +424,11 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
         </div>
         {/* Expandable Details */}
         {isExpanded && (
-          <div className="px-4 pb-4">
-            <div className="space-y-4 pt-4 border-t border-gray-100">
+          <div className="px-4 pb-3">
+            <div className="space-y-3 pt-3 border-t border-gray-100">
               {/* User Operation Details */}
               <div>
-                <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-2">
+                <h5 className="text-sm font-medium text-gray-700 mb-2 flex items-center space-x-2">
                   <Settings className="h-4 w-4" />
                   <span>Operation Details</span>
                 </h5>
@@ -465,7 +465,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
 
               {/* Call Data */}
               <div>
-                <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-2">
+                <h5 className="text-sm font-medium text-gray-700 mb-2 flex items-center space-x-2">
                   <Code className="h-4 w-4" />
                   <span>Call Data</span>
                 </h5>
@@ -495,7 +495,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
             </div>
           </div>
           <div className="p-6 pl-[16px] pr-[16px] pt-[8px] pb-[8px]">
-            <div className="space-y-4">
+            <div className="space-y-2">
               {regularOperations.map((userOp, index) => renderOperation(userOp, index, false))}
             </div>
           </div>
@@ -547,7 +547,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-2">
               {cleanupOperations.map((userOp, index) => renderOperation(userOp, index, true))}
             </div>
           </div>
