@@ -122,7 +122,8 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
   return (
     <div className="bg-white border border-slate-200 rounded">
       <div className="px-4 py-3 border-b border-slate-200">
-        <div className="flex items-center justify-between">
+        {/* Desktop Layout */}
+        <div className="hidden md:flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-3">
               <CreditCard className="h-4 w-4 text-emerald-500" />
@@ -174,6 +175,52 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
               <ChevronDown className={`h-3 w-3 text-slate-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
             </Button>
           </div>
+        </div>
+
+        {/* Mobile Layout - Stacked */}
+        <div className="md:hidden space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <CreditCard className="h-4 w-4 text-emerald-500" />
+              <h3 className="text-base font-semibold text-slate-900">Fees</h3>
+            </div>
+            <Button
+              variant="outline"
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="flex items-center space-x-2 px-3 py-1 h-7 text-xs hover:bg-slate-50 hover:text-slate-900 border border-slate-200 rounded"
+            >
+              <span className="text-xs font-medium text-slate-600">
+                {isExpanded ? 'Hide' : 'Show'} details
+              </span>
+              <ChevronDown className={`h-3 w-3 text-slate-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+            </Button>
+          </div>
+          
+          {/* Payment Transaction Link - Separate Row on Mobile */}
+          {feePayerUserOp?.executionData && (
+            <div className="flex items-center space-x-2 bg-slate-50 p-2 rounded">
+              <span className="text-xs text-slate-500">Payment Transaction:</span>
+              <code className="text-xs font-mono text-slate-700 flex-1 truncate">{formatAddress(feePayerUserOp.executionData)}</code>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => copyToClipboard(feePayerUserOp.executionData!, "Transaction Hash")}
+                className="text-gray-400 hover:text-[var(--biconomy-orange)] h-6 w-6 p-0 shrink-0"
+              >
+                <Copy className="h-3 w-3" />
+              </Button>
+              {hasExplorerSupport(feePayerUserOp.chainId) && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => window.open(getExplorerUrl(feePayerUserOp.chainId, feePayerUserOp.executionData!)!, '_blank')}
+                  className="text-xs px-2 py-1 h-6 flex items-center hover:bg-biconomy-orange hover:text-white shrink-0"
+                >
+                  <ExternalLink className="h-3 w-3" />
+                </Button>
+              )}
+            </div>
+          )}
         </div>
       </div>
       <div className="px-3 py-3">

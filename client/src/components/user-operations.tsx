@@ -204,9 +204,10 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
 
     return (
       <div key={index} className="border border-gray-200 rounded overflow-hidden">
-        {/* Compact Operation Header - Everything Inline */}
-        <div className="p-2 bg-gray-50/50 pl-[12px] pr-[12px] pt-[12px] pb-[12px]">
-          <div className="flex items-center justify-between">
+        {/* Compact Operation Header */}
+        <div className="p-2 bg-gray-50/50">
+          {/* Desktop Layout - Everything Inline */}
+          <div className="hidden md:flex items-center justify-between">
             <div className="flex items-center space-x-4 flex-1">
               {/* Operation number and chain */}
               <div className="flex items-center space-x-2">
@@ -295,6 +296,94 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                 <ChevronDown className={`h-4 w-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
               </Button>
             </div>
+          </div>
+
+          {/* Mobile Layout - Stacked */}
+          <div className="md:hidden space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <User className="h-4 w-4 text-[var(--biconomy-orange)]" />
+                <h4 className="font-medium text-gray-900 text-sm">
+                  {isCleanup ? 'Cleanup Operation' : `#${index + 1}`}
+                </h4>
+                {!isCleanup && (
+                  <>
+                    {getNetworkIcon(userOp.chainId) && (
+                      <img 
+                        src={getNetworkIcon(userOp.chainId)!} 
+                        alt={chainInfo?.name || `Chain ${userOp.chainId}`}
+                        className="w-4 h-4"
+                      />
+                    )}
+                    <span className="font-medium text-gray-900 text-sm">{chainInfo?.name || `Chain ${userOp.chainId}`}</span>
+                  </>
+                )}
+                {isCleanup && (
+                  <Badge variant="outline" className="text-xs badge">
+                    Cleanup
+                  </Badge>
+                )}
+              </div>
+              
+              <div className="flex items-center space-x-2">
+                {userOp.executionStatus !== "MINED_SUCCESS" && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleTenderlySimulation(userOp)}
+                    className="text-xs px-1 py-0.5 h-6 flex items-center hover:bg-blue-500 hover:text-white"
+                  >
+                    <Play className="h-3 w-3" />
+                  </Button>
+                )}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => toggleFunction(index)}
+                  className="text-gray-500 hover:text-[var(--biconomy-orange)] h-6 w-6 p-0"
+                >
+                  <ChevronDown className={`h-4 w-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+                </Button>
+              </div>
+            </div>
+
+            {/* Status and Time Row */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge text-xs`}>
+                  {userOp.executionStatus}
+                </Badge>
+                <Clock className="h-3 w-3 text-gray-500" />
+                <span className="text-xs text-gray-600">{executionTime.formatted}</span>
+              </div>
+            </div>
+
+            {/* Transaction Hash Row */}
+            {userOp.executionData && (
+              <div className="flex items-center space-x-2 bg-white p-2 rounded border">
+                <ExternalLink className="h-3 w-3 text-gray-500" />
+                <span className="text-xs text-gray-600">Tx:</span>
+                <code className="text-xs font-mono text-gray-900 flex-1 truncate">{formatHash(userOp.executionData)}</code>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => copyToClipboard(userOp.executionData, "Transaction Hash")}
+                  className="text-gray-400 hover:text-[var(--biconomy-orange)] h-5 w-5 p-0 shrink-0"
+                >
+                  <Copy className="h-3 w-3" />
+                </Button>
+                {hasExplorerSupport(userOp.chainId) && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => window.open(getExplorerUrl(userOp.chainId, userOp.executionData)!, '_blank')}
+                    className="text-xs px-1 py-0.5 h-5 flex items-center hover:bg-[var(--biconomy-orange)] hover:text-white shrink-0"
+                  >
+                    <ExternalLink className="h-3 w-3" />
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
         </div>
         {/* Expandable Details */}
