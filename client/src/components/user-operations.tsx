@@ -6,6 +6,7 @@ import { Copy, ChevronDown, Code, User, Hash, Fuel, Clock, Zap, Layers, Settings
 import { UserOp } from "@/types";
 import { formatHash, formatGas, formatTimestamp, getExecutionStatusColor, parseAccountGasLimits, parseGasFees, getExplorerUrl, getExplorerName } from "@/lib/format";
 import { useToast } from "@/hooks/use-toast";
+import { useChainInfo } from "@/hooks/use-chain-info";
 
 interface UserOperationsProps {
   userOps: UserOp[];
@@ -14,6 +15,7 @@ interface UserOperationsProps {
 export default function UserOperations({ userOps }: UserOperationsProps) {
   const [expandedOps, setExpandedOps] = useState<Set<number>>(new Set());
   const { toast } = useToast();
+  const { chains } = useChainInfo();
 
   const toggleExpanded = (index: number) => {
     const newExpanded = new Set(expandedOps);
@@ -160,6 +162,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
             const { verificationGasLimit, callGasLimit } = parseAccountGasLimits(userOp.userOp.accountGasLimits);
             const { maxPriorityFeePerGas, maxFeePerGas } = parseGasFees(userOp.userOp.gasFees);
             const executionTime = formatTimestamp(userOp.minedTimestamp || userOp.miningTimestamp);
+            const chainInfo = chains.find(c => c.chainId === parseInt(userOp.chainId));
 
             return (
               <div key={index} className="border border-gray-200 rounded-lg overflow-hidden">
@@ -172,7 +175,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                       </div>
                       <div>
                         <h4 className="font-medium text-gray-900">Operation #{index + 1}</h4>
-                        <p className="text-sm text-gray-500">{formatHash(userOp.userOp.sender)}</p>
+                        <p className="text-sm text-gray-500">{chainInfo?.name || `Chain ${userOp.chainId}`}</p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -193,32 +196,28 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
 
                 {/* Operation Details */}
                 <div className="p-4">
-                  {/* Always visible: Key info */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
-                    <DataField
-                      icon={Hash}
-                      label="User Op Hash"
-                      value={userOp.userOpHash}
-                    />
-                    <DataField
-                      icon={Hash}
-                      label="MEE User Op Hash"
-                      value={userOp.meeUserOpHash}
-                    />
+                  {/* Always visible: Essential info only */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                    {/* Execution Data - Transaction Hash with Explorer Link */}
+                    {userOp.executionData ? (
+                      <ExplorerLink txHash={userOp.executionData} chainId={userOp.chainId} />
+                    ) : (
+                      <div className="p-3 bg-white border border-gray-100 rounded-lg">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <ExternalLink className="h-4 w-4 text-gray-500" />
+                          <span className="text-sm font-medium text-gray-600">On-Chain Transaction</span>
+                        </div>
+                        <p className="text-xs text-gray-400">No execution data available</p>
+                      </div>
+                    )}
+                    
                     <DataField
                       icon={Clock}
-                      label="Execution Time"
+                      label="Mined Time"
                       value={executionTime.formatted}
                       showCopy={false}
                     />
                   </div>
-
-                  {/* Execution Data - Transaction Hash with Explorer Link */}
-                  {userOp.executionData && (
-                    <div className="mb-4">
-                      <ExplorerLink txHash={userOp.executionData} chainId={userOp.chainId} />
-                    </div>
-                  )}
 
                   {/* Expandable Details */}
                   {isExpanded && (
