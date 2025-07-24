@@ -425,10 +425,10 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
         {/* Expandable Details */}
         {isExpanded && (
           <div className="px-4 pb-3">
-            <div className="space-y-3 pt-3 border-t border-gray-100">
+            <div className="space-y-4 pt-4 border-t border-gray-100">
               {/* User Operation Details */}
               <div>
-                <h5 className="text-sm font-medium text-gray-700 mb-2 flex items-center space-x-2">
+                <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-2">
                   <Settings className="h-4 w-4" />
                   <span>Operation Details</span>
                 </h5>
@@ -458,18 +458,56 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
 
               {/* Transaction Hash with Explorer Integration */}
               {userOp.executionData && (
-                <div>
-                  <ExplorerLink txHash={userOp.executionData} chainId={userOp.chainId} />
+                <div className="flex items-center justify-between py-1">
+                  <div className="flex items-center space-x-2 flex-1 min-w-0">
+                    <ExternalLink className="h-3 w-3 text-gray-500 shrink-0" />
+                    <span className="text-xs text-gray-600 shrink-0">Transaction:</span>
+                    <code className="text-xs font-mono text-gray-900 truncate">
+                      {formatHash(userOp.executionData)}
+                    </code>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => copyToClipboard(userOp.executionData, "Transaction Hash")}
+                      className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0"
+                    >
+                      <Copy className="h-2.5 w-2.5" />
+                    </Button>
+                    {hasExplorerSupport(userOp.chainId) && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => window.open(getExplorerUrl(userOp.chainId, userOp.executionData)!, '_blank')}
+                        className="text-xs px-1 py-0.5 h-5 flex items-center hover:bg-[var(--biconomy-orange)] hover:text-white shrink-0"
+                      >
+                        <ExternalLink className="h-3 w-3" />
+                      </Button>
+                    )}
+                  </div>
                 </div>
               )}
 
               {/* Call Data */}
-              <div>
-                <h5 className="text-sm font-medium text-gray-700 mb-2 flex items-center space-x-2">
-                  <Code className="h-4 w-4" />
-                  <span>Call Data</span>
-                </h5>
-                <CodeField icon={Code} label="Call Data" value={userOp.userOp.callData} />
+              <div className="flex items-center justify-between py-1">
+                <div className="flex items-center space-x-2 flex-1 min-w-0">
+                  <Code className="h-3 w-3 text-gray-500 shrink-0" />
+                  <span className="text-xs text-gray-600 shrink-0">Call Data:</span>
+                  <code className="text-xs font-mono text-gray-900 truncate">
+                    {userOp.userOp.callData ? (userOp.userOp.callData.length > 24 ? `${userOp.userOp.callData.substring(0, 12)}...${userOp.userOp.callData.substring(userOp.userOp.callData.length - 12)}` : userOp.userOp.callData) : 'Not available'}
+                  </code>
+                </div>
+                {userOp.userOp.callData && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => copyToClipboard(userOp.userOp.callData, "Call Data")}
+                    className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0 ml-1"
+                  >
+                    <Copy className="h-2.5 w-2.5" />
+                  </Button>
+                )}
               </div>
             </div>
           </div>
