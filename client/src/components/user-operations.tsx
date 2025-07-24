@@ -443,8 +443,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
             </div>
           </div>
           <div className="p-6 pl-[16px] pr-[16px] pt-[8px] pb-[8px]">
-
-            <div className="space-y-4"></div>
+            <div className="space-y-4">
               {regularOperations.map((userOp, index) => renderOperation(userOp, index, false))}
             </div>
           </div>
