@@ -106,7 +106,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
       </td>
       <td className="py-2 pl-4">
         <div className="flex items-center justify-between">
-          <div className="flex-1 text-left">
+          <div className="flex-1 text-right">
             <code className="text-sm font-mono text-gray-900">
               {value.length > 50 ? `${value.substring(0, 24)}...${value.substring(value.length - 24)}` : value}
             </code>
@@ -321,7 +321,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                       </div>
                     </td>
                     <td className="py-2 pl-4">
-                      <div className="text-left">
+                      <div className="text-right">
                         <code className="text-sm font-mono text-gray-900">{paymentInfo.shortEncoding ? 'Yes' : 'No'}</code>
                       </div>
                     </td>
@@ -334,7 +334,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                       </div>
                     </td>
                     <td className="py-2 pl-4">
-                      <div className="text-left">
+                      <div className="text-right">
                         <code className="text-sm font-mono text-gray-900">{paymentInfo.sponsored ? 'Yes' : 'No'}</code>
                       </div>
                     </td>
@@ -351,7 +351,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                     </td>
                     <td className="py-2 pl-4">
                       <div className="flex items-center justify-between">
-                        <div className="flex-1 text-left">
+                        <div className="flex-1 text-right">
                           <code className="text-sm font-mono text-gray-900">
                             {paymentInfo.initCode ? (paymentInfo.initCode.length > 50 ? `${paymentInfo.initCode.substring(0, 24)}...${paymentInfo.initCode.substring(paymentInfo.initCode.length - 24)}` : paymentInfo.initCode) : 'N/A'}
                           </code>
@@ -394,7 +394,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                     </td>
                     <td className="py-2 pl-4">
                       <div className="flex items-center justify-between">
-                        <div className="flex-1 text-left">
+                        <div className="flex-1 text-right">
                           <code className="text-sm font-mono text-gray-900">
                             {paymentInfo.token.length > 50 ? `${paymentInfo.token.substring(0, 24)}...${paymentInfo.token.substring(paymentInfo.token.length - 24)}` : paymentInfo.token}
                           </code>
@@ -430,7 +430,8 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                       </div>
                     </td>
                     <td className="py-2 pl-4">
-                      <div className="flex items-center space-x-2 text-left">
+                      <div className="flex items-center justify-end space-x-2 text-right">
+                        <code className="text-sm font-mono text-gray-900">{tokenInfo?.symbol || 'Unknown'}</code>
                         {getTokenIcon(tokenInfo.symbol) && (
                           <img 
                             src={getTokenIcon(tokenInfo.symbol)!} 
@@ -438,7 +439,6 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                             className="w-4 h-4 shrink-0"
                           />
                         )}
-                        <code className="text-sm font-mono text-gray-900">{tokenInfo?.symbol || 'Unknown'}</code>
                       </div>
                     </td>
                   </tr>
