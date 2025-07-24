@@ -299,13 +299,43 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                     <span className="text-sm font-medium text-gray-600">Fee Payer Operation</span>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-xs text-gray-500">Sender</p>
-                      <p className="text-sm font-mono text-gray-900">{formatAddress(feePayerUserOp.userOp.sender)}</p>
+                    <div className="bg-white border border-gray-100 rounded-lg p-4">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <Wallet className="h-4 w-4 text-gray-500" />
+                        <span className="text-sm font-medium text-gray-600">Sender</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <code className="text-sm font-mono text-gray-900 truncate flex-1">
+                          {feePayerUserOp.userOp.sender}
+                        </code>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => copyToClipboard(feePayerUserOp.userOp.sender, "Sender Address")}
+                          className="text-gray-400 hover:text-[var(--biconomy-orange)] shrink-0 ml-2"
+                        >
+                          <Copy className="h-3 w-3" />
+                        </Button>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-xs text-gray-500">User Op Hash</p>
-                      <p className="text-sm font-mono text-gray-900">{formatAddress(feePayerUserOp.userOpHash)}</p>
+                    <div className="bg-white border border-gray-100 rounded-lg p-4">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <Hash className="h-4 w-4 text-gray-500" />
+                        <span className="text-sm font-medium text-gray-600">User Op Hash</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <code className="text-sm font-mono text-gray-900 truncate flex-1">
+                          {feePayerUserOp.userOpHash}
+                        </code>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => copyToClipboard(feePayerUserOp.userOpHash, "User Op Hash")}
+                          className="text-gray-400 hover:text-[var(--biconomy-orange)] shrink-0 ml-2"
+                        >
+                          <Copy className="h-3 w-3" />
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
