@@ -64,32 +64,7 @@ export default function Explorer() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-px mb-12 bg-slate-200">
-          <div className="bg-white p-6 text-center">
-            <div className="w-12 h-12 bg-blue-500 flex items-center justify-center mx-auto mb-4">
-              <Search className="h-6 w-6 text-white" />
-            </div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">Real-time Search</h3>
-            <p className="text-slate-600 text-sm">Instantly search and explore Supertransaction details with comprehensive blockchain data</p>
-          </div>
-          
-          <div className="bg-white p-6 text-center">
-            <div className="w-12 h-12 bg-emerald-500 flex items-center justify-center mx-auto mb-4">
-              <div className="w-6 h-6 border-2 border-white"></div>
-            </div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">Multi-chain Support</h3>
-            <p className="text-slate-600 text-sm">Support for Ethereum, Polygon, Base, Arbitrum, and other major blockchain networks</p>
-          </div>
-          
-          <div className="bg-white p-6 text-center">
-            <div className="w-12 h-12 bg-orange-500 flex items-center justify-center mx-auto mb-4">
-              <div className="w-6 h-6 bg-white transform rotate-45"></div>
-            </div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">Detailed Analytics</h3>
-            <p className="text-slate-600 text-sm">In-depth transaction analysis with gas fees, user operations, and execution data</p>
-          </div>
-        </div>
+
 
         {/* How to Use */}
         <div className="bg-white border border-slate-200 p-8">
