@@ -122,3 +122,6 @@ The application is designed to be easily deployable on platforms like Replit, Ve
 - Added Sonic chain support (64165) with proper native token detection and explorer links
 - Clarified token detection logic: native tokens use chain.nativeCurrency.name, ERC-20 tokens use contract calls
 - Fixed deployment build configuration by creating custom build script (build.js) that moves files from dist/public/ to dist/ for proper deployment structure
+- Unified navbar design across all pages (Explorer, Network Status, Details) with consistent glass-card styling, compact layout, and uppercase navigation text
+- Standardized table layouts in expanded views with consistent column widths (w-48 for labels) and right-aligned values across all sections
+- Fixed Transaction Hash field formatting to match other table rows with proper typography and alignment
