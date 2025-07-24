@@ -113,31 +113,37 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
     </div>
   );
 
-  const CompactDataField = ({ icon: Icon, label, value, showCopy = true }: {
+  const TableDataField = ({ icon: Icon, label, value, showCopy = true }: {
     icon: React.ComponentType<any>;
     label: string;
     value: string;
     showCopy?: boolean;
   }) => (
-    <div className="flex items-center justify-between py-1">
-      <div className="flex items-center space-x-2 flex-1 min-w-0">
-        <Icon className="h-3 w-3 text-gray-500 shrink-0" />
-        <span className="text-xs text-gray-600 shrink-0">{label}:</span>
-        <code className={`text-xs font-mono text-gray-900 truncate ${!value ? 'text-gray-400' : ''}`}>
-          {value ? (value.length > 12 ? `${value.substring(0, 6)}...${value.substring(value.length - 6)}` : value) : 'N/A'}
-        </code>
-      </div>
-      {showCopy && value && (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => copyToClipboard(value, label)}
-          className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0 ml-1"
-        >
-          <Copy className="h-2.5 w-2.5" />
-        </Button>
-      )}
-    </div>
+    <tr className="border-b border-gray-100">
+      <td className="py-2 pr-4">
+        <div className="flex items-center space-x-2">
+          <Icon className="h-3 w-3 text-gray-500 shrink-0" />
+          <span className="text-xs text-gray-600 font-medium">{label}</span>
+        </div>
+      </td>
+      <td className="py-2 pl-4">
+        <div className="flex items-center justify-between">
+          <code className={`text-xs font-mono text-gray-900 ${!value ? 'text-gray-400' : ''}`}>
+            {value ? (value.length > 50 ? `${value.substring(0, 24)}...${value.substring(value.length - 24)}` : value) : 'N/A'}
+          </code>
+          {showCopy && value && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => copyToClipboard(value, label)}
+              className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0 ml-2"
+            >
+              <Copy className="h-2.5 w-2.5" />
+            </Button>
+          )}
+        </div>
+      </td>
+    </tr>
   );
 
   const ExplorerLink = ({ txHash, chainId }: { txHash: string; chainId: string }) => {
@@ -425,21 +431,23 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
         {/* Expandable Details */}
         {isExpanded && (
           <div className="px-4 pb-3">
-            <div className="space-y-4 pt-4 border-t border-gray-100">
+            <div className="space-y-6 pt-4 border-t border-gray-100">
               {/* Core Operation Data */}
               <div>
                 <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-2">
                   <Hash className="h-4 w-4" />
                   <span>Core Operation Data</span>
                 </h5>
-                <div className="space-y-1">
-                  <CompactDataField icon={Hash} label="User Op Hash" value={userOp.userOpHash} />
-                  <CompactDataField icon={Key} label="MEE User Op Hash" value={userOp.meeUserOpHash} />
-                  <CompactDataField icon={User} label="Sender" value={userOp.userOp.sender} />
-                  <CompactDataField icon={Hash} label="Nonce" value={userOp.userOp.nonce} />
-                  <CompactDataField icon={Database} label="Chain ID" value={userOp.chainId} showCopy={false} />
-                  <CompactDataField icon={Settings} label="Short Encoding" value={userOp.shortEncoding ? 'Yes' : 'No'} showCopy={false} />
-                </div>
+                <table className="w-full text-xs">
+                  <tbody>
+                    <TableDataField icon={Hash} label="User Op Hash" value={userOp.userOpHash} />
+                    <TableDataField icon={Key} label="MEE User Op Hash" value={userOp.meeUserOpHash} />
+                    <TableDataField icon={User} label="Sender" value={userOp.userOp.sender} />
+                    <TableDataField icon={Hash} label="Nonce" value={userOp.userOp.nonce} />
+                    <TableDataField icon={Database} label="Chain ID" value={userOp.chainId} showCopy={false} />
+                    <TableDataField icon={Settings} label="Short Encoding" value={userOp.shortEncoding ? 'Yes' : 'No'} showCopy={false} />
+                  </tbody>
+                </table>
               </div>
 
               {/* Gas & Fee Configuration */}
@@ -448,13 +456,15 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                   <Fuel className="h-4 w-4" />
                   <span>Gas & Fee Configuration</span>
                 </h5>
-                <div className="space-y-1">
-                  <CompactDataField icon={Fuel} label="Account Gas Limits" value={userOp.userOp.accountGasLimits} />
-                  <CompactDataField icon={Zap} label="Gas Fees" value={userOp.userOp.gasFees} />
-                  <CompactDataField icon={Fuel} label="Pre-Verification Gas" value={userOp.userOp.preVerificationGas} />
-                  <CompactDataField icon={Zap} label="Max Gas Limit" value={userOp.maxGasLimit} showCopy={false} />
-                  <CompactDataField icon={Zap} label="Max Fee Per Gas" value={userOp.maxFeePerGas} showCopy={false} />
-                </div>
+                <table className="w-full text-xs">
+                  <tbody>
+                    <TableDataField icon={Fuel} label="Account Gas Limits" value={userOp.userOp.accountGasLimits} />
+                    <TableDataField icon={Zap} label="Gas Fees" value={userOp.userOp.gasFees} />
+                    <TableDataField icon={Fuel} label="Pre-Verification Gas" value={userOp.userOp.preVerificationGas} />
+                    <TableDataField icon={Zap} label="Max Gas Limit" value={userOp.maxGasLimit} showCopy={false} />
+                    <TableDataField icon={Zap} label="Max Fee Per Gas" value={userOp.maxFeePerGas} showCopy={false} />
+                  </tbody>
+                </table>
               </div>
 
               {/* Paymaster & Security */}
@@ -463,11 +473,13 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                   <ShieldCheck className="h-4 w-4" />
                   <span>Paymaster & Security</span>
                 </h5>
-                <div className="space-y-1">
-                  <CompactDataField icon={CreditCard} label="Paymaster Data" value={userOp.userOp.paymasterAndData} />
-                  <CompactDataField icon={FileText} label="Init Code" value={userOp.userOp.initCode} />
-                  <CompactDataField icon={Signature} label="Signature" value={userOp.userOp.signature} />
-                </div>
+                <table className="w-full text-xs">
+                  <tbody>
+                    <TableDataField icon={CreditCard} label="Paymaster Data" value={userOp.userOp.paymasterAndData} />
+                    <TableDataField icon={FileText} label="Init Code" value={userOp.userOp.initCode} />
+                    <TableDataField icon={Signature} label="Signature" value={userOp.userOp.signature} />
+                  </tbody>
+                </table>
               </div>
 
               {/* Execution Data */}
@@ -476,41 +488,49 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                   <Code className="h-4 w-4" />
                   <span>Execution Data</span>
                 </h5>
-                <div className="space-y-1">
-                  <CompactDataField icon={Code} label="Call Data" value={userOp.userOp.callData} />
-                  <CompactDataField icon={CheckCircle} label="Execution Status" value={userOp.executionStatus} showCopy={false} />
-                  {userOp.executionData && (
-                    <div className="flex items-center justify-between py-1">
-                      <div className="flex items-center space-x-2 flex-1 min-w-0">
-                        <ExternalLink className="h-3 w-3 text-gray-500 shrink-0" />
-                        <span className="text-xs text-gray-600 shrink-0">Transaction Hash:</span>
-                        <code className="text-xs font-mono text-gray-900 truncate">
-                          {formatHash(userOp.executionData)}
-                        </code>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => copyToClipboard(userOp.executionData, "Transaction Hash")}
-                          className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0"
-                        >
-                          <Copy className="h-2.5 w-2.5" />
-                        </Button>
-                        {hasExplorerSupport(userOp.chainId) && (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => window.open(getExplorerUrl(userOp.chainId, userOp.executionData)!, '_blank')}
-                            className="text-xs px-1 py-0.5 h-5 flex items-center hover:bg-[var(--biconomy-orange)] hover:text-white shrink-0"
-                          >
-                            <ExternalLink className="h-3 w-3" />
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <table className="w-full text-xs">
+                  <tbody>
+                    <TableDataField icon={Code} label="Call Data" value={userOp.userOp.callData} />
+                    <TableDataField icon={CheckCircle} label="Execution Status" value={userOp.executionStatus} showCopy={false} />
+                    {userOp.executionData && (
+                      <tr className="border-b border-gray-100">
+                        <td className="py-2 pr-4">
+                          <div className="flex items-center space-x-2">
+                            <ExternalLink className="h-3 w-3 text-gray-500 shrink-0" />
+                            <span className="text-xs text-gray-600 font-medium">Transaction Hash</span>
+                          </div>
+                        </td>
+                        <td className="py-2 pl-4">
+                          <div className="flex items-center justify-between">
+                            <code className="text-xs font-mono text-gray-900">
+                              {formatHash(userOp.executionData)}
+                            </code>
+                            <div className="flex items-center space-x-1 ml-2">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => copyToClipboard(userOp.executionData, "Transaction Hash")}
+                                className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0"
+                              >
+                                <Copy className="h-2.5 w-2.5" />
+                              </Button>
+                              {hasExplorerSupport(userOp.chainId) && (
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => window.open(getExplorerUrl(userOp.chainId, userOp.executionData)!, '_blank')}
+                                  className="text-xs px-1 py-0.5 h-5 flex items-center hover:bg-[var(--biconomy-orange)] hover:text-white shrink-0"
+                                >
+                                  <ExternalLink className="h-3 w-3" />
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
               </div>
 
               {/* Timing Information */}
@@ -519,17 +539,19 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                   <Timer className="h-4 w-4" />
                   <span>Timing Information</span>
                 </h5>
-                <div className="space-y-1">
-                  <CompactDataField icon={Clock} label="Lower Bound" value={formatTimestamp(userOp.lowerBoundTimestamp).formatted} showCopy={false} />
-                  <CompactDataField icon={Clock} label="Upper Bound" value={formatTimestamp(userOp.upperBoundTimestamp).formatted} showCopy={false} />
-                  <CompactDataField icon={Clock} label="Simulation Finished" value={formatTimestamp(userOp.simulationFinishedAt).formatted} showCopy={false} />
-                  {userOp.miningTimestamp && (
-                    <CompactDataField icon={Clock} label="Mining Time" value={formatTimestamp(userOp.miningTimestamp).formatted} showCopy={false} />
-                  )}
-                  {userOp.minedTimestamp && (
-                    <CompactDataField icon={Clock} label="Mined Time" value={formatTimestamp(userOp.minedTimestamp).formatted} showCopy={false} />
-                  )}
-                </div>
+                <table className="w-full text-xs">
+                  <tbody>
+                    <TableDataField icon={Clock} label="Lower Bound" value={formatTimestamp(userOp.lowerBoundTimestamp).formatted} showCopy={false} />
+                    <TableDataField icon={Clock} label="Upper Bound" value={formatTimestamp(userOp.upperBoundTimestamp).formatted} showCopy={false} />
+                    <TableDataField icon={Clock} label="Simulation Finished" value={formatTimestamp(userOp.simulationFinishedAt).formatted} showCopy={false} />
+                    {userOp.miningTimestamp && (
+                      <TableDataField icon={Clock} label="Mining Time" value={formatTimestamp(userOp.miningTimestamp).formatted} showCopy={false} />
+                    )}
+                    {userOp.minedTimestamp && (
+                      <TableDataField icon={Clock} label="Mined Time" value={formatTimestamp(userOp.minedTimestamp).formatted} showCopy={false} />
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
