@@ -27,6 +27,15 @@ if (fs.existsSync(publicDir)) {
     const sourcePath = path.join(publicDir, item);
     const targetPath = path.join(distDir, item);
     
+    // Remove target if it exists
+    if (fs.existsSync(targetPath)) {
+      if (fs.statSync(targetPath).isDirectory()) {
+        fs.rmSync(targetPath, { recursive: true, force: true });
+      } else {
+        fs.unlinkSync(targetPath);
+      }
+    }
+    
     // Move each item to the dist root
     fs.renameSync(sourcePath, targetPath);
     console.log(`  ✅ Moved ${item} to dist root`);
