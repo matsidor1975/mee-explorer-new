@@ -166,7 +166,9 @@ export const getNetworkIcon = (chainId: string | number): string | null => {
 };
 
 // Get token icon path  
-export const getTokenIcon = (symbol: string): string | null => {
+export const getTokenIcon = (symbol: string | undefined): string | null => {
+  if (!symbol) return null;
+  
   const tokenIconsMap: Record<string, string> = {
     'USDC': 'usd coin.png',
     'ETH': 'eth.png',

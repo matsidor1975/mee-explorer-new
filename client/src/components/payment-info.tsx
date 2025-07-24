@@ -143,14 +143,14 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">Payment Method</p>
                 <div className="flex items-center space-x-2 mb-1">
-                  {getTokenIcon(tokenInfo.symbol) && (
+                  {tokenInfo?.symbol && getTokenIcon(tokenInfo.symbol) && (
                     <img 
                       src={getTokenIcon(tokenInfo.symbol)!} 
                       alt={tokenInfo.symbol}
                       className="w-4 h-4"
                     />
                   )}
-                  <span className="text-lg font-semibold text-slate-900">{tokenInfo.symbol}</span>
+                  <span className="text-lg font-semibold text-slate-900">{tokenInfo?.symbol || 'Unknown Token'}</span>
                   <span className="text-slate-500">on</span>
                   {getNetworkIcon(paymentInfo.chainId) && (
                     <img 
@@ -161,7 +161,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                   )}
                   <span className="text-lg font-semibold text-slate-900">{chainInfo?.name || 'Unknown Network'}</span>
                 </div>
-                <p className="text-xs text-slate-500">Token: {tokenInfo.name}</p>
+                <p className="text-xs text-slate-500">Token: {tokenInfo?.name || 'Loading...'}</p>
               </div>
             </div>
           </div>
