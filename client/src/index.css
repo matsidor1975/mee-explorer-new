@@ -73,6 +73,189 @@
   --biconomy-orange-dark: hsl(15, 95%, 50%);
 }
 
+/* Gradient Background with Floating Circles */
+.gradient-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: linear-gradient(135deg, 
+    hsl(24, 100%, 95%) 0%, 
+    hsl(210, 100%, 98%) 25%, 
+    hsl(200, 100%, 95%) 50%, 
+    hsl(24, 100%, 96%) 75%, 
+    hsl(210, 100%, 97%) 100%
+  );
+  overflow: hidden;
+}
+
+.gradient-background::before {
+  content: '';
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 40%;
+  height: 40%;
+  background: radial-gradient(circle, 
+    hsla(24, 100%, 70%, 0.1) 0%, 
+    hsla(24, 100%, 50%, 0.05) 30%, 
+    transparent 70%
+  );
+  border-radius: 50%;
+  animation: float-orange 20s ease-in-out infinite;
+}
+
+.gradient-background::after {
+  content: '';
+  position: absolute;
+  bottom: -15%;
+  right: -15%;
+  width: 50%;
+  height: 50%;
+  background: radial-gradient(circle, 
+    hsla(210, 100%, 70%, 0.08) 0%, 
+    hsla(200, 100%, 60%, 0.04) 40%, 
+    transparent 70%
+  );
+  border-radius: 50%;
+  animation: float-blue 25s ease-in-out infinite reverse;
+}
+
+.floating-circle-1 {
+  position: absolute;
+  top: 20%;
+  right: 15%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, 
+    hsla(24, 100%, 65%, 0.06) 0%, 
+    hsla(24, 80%, 55%, 0.03) 50%, 
+    transparent 80%
+  );
+  border-radius: 50%;
+  animation: float-orange-small 15s ease-in-out infinite;
+}
+
+.floating-circle-2 {
+  position: absolute;
+  bottom: 30%;
+  left: 10%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, 
+    hsla(200, 100%, 65%, 0.05) 0%, 
+    hsla(210, 90%, 60%, 0.025) 60%, 
+    transparent 80%
+  );
+  border-radius: 50%;
+  animation: float-blue-small 18s ease-in-out infinite reverse;
+}
+
+.floating-circle-3 {
+  position: absolute;
+  top: 60%;
+  right: 40%;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, 
+    hsla(24, 100%, 75%, 0.04) 0%, 
+    hsla(30, 80%, 65%, 0.02) 70%, 
+    transparent 90%
+  );
+  border-radius: 50%;
+  animation: float-orange-tiny 12s ease-in-out infinite;
+}
+
+@keyframes float-orange {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.1;
+  }
+  25% {
+    transform: translate(10px, -20px) rotate(90deg);
+    opacity: 0.08;
+  }
+  50% {
+    transform: translate(-15px, -10px) rotate(180deg);
+    opacity: 0.12;
+  }
+  75% {
+    transform: translate(5px, 15px) rotate(270deg);
+    opacity: 0.06;
+  }
+}
+
+@keyframes float-blue {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.08;
+  }
+  33% {
+    transform: translate(-20px, -15px) rotate(120deg);
+    opacity: 0.05;
+  }
+  66% {
+    transform: translate(15px, 20px) rotate(240deg);
+    opacity: 0.1;
+  }
+}
+
+@keyframes float-orange-small {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.06;
+  }
+  50% {
+    transform: translate(-10px, 15px) scale(1.1);
+    opacity: 0.04;
+  }
+}
+
+@keyframes float-blue-small {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.05;
+  }
+  50% {
+    transform: translate(20px, -10px) scale(0.9);
+    opacity: 0.08;
+  }
+}
+
+@keyframes float-orange-tiny {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    opacity: 0.04;
+  }
+  33% {
+    transform: translate(8px, -12px) rotate(120deg) scale(1.2);
+    opacity: 0.02;
+  }
+  66% {
+    transform: translate(-5px, 8px) rotate(240deg) scale(0.8);
+    opacity: 0.06;
+  }
+}
+
+/* Glassy Card Effect */
+.glass-card {
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.glass-card-subtle {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
 /* Badge component customization */
 .badge {
   border-radius: 0.25rem !important;

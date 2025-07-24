@@ -56,9 +56,9 @@ export default function Explorer() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200">
+      <header className="glass-card border-b border-white/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-14">
             <div className="flex items-center space-x-4">
@@ -136,7 +136,7 @@ export default function Explorer() {
         {/* Search History */}
         {history.length > 0 && (
           <div className="mb-12">
-            <div className="bg-white border border-slate-200 rounded-lg p-6">
+            <div className="glass-card rounded-lg p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-2">
                   <Clock className="h-5 w-5 text-slate-500" />

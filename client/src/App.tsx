@@ -29,6 +29,12 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
+        {/* Gradient Background with Floating Circles */}
+        <div className="gradient-background">
+          <div className="floating-circle-1"></div>
+          <div className="floating-circle-2"></div>
+          <div className="floating-circle-3"></div>
+        </div>
         <Toaster />
         <Router />
       </TooltipProvider>
