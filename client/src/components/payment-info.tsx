@@ -123,37 +123,51 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
     <div className="bg-white border border-slate-200 rounded">
       <div className="px-4 py-3 border-b border-slate-200">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <CreditCard className="h-4 w-4 text-emerald-500" />
-            <h3 className="text-base font-semibold text-slate-900">Fees</h3>
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3">
+              <CreditCard className="h-4 w-4 text-emerald-500" />
+              <h3 className="text-base font-semibold text-slate-900">Fees</h3>
+            </div>
+            
+            {/* Payment UserOp Transaction Link - Inline */}
+            {feePayerUserOp?.executionData && (
+              <div className="flex items-center space-x-2">
+                <span className="text-xs text-slate-500">Payment Transaction:</span>
+                <code className="text-xs font-mono text-slate-700">{formatAddress(feePayerUserOp.executionData)}</code>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => copyToClipboard(feePayerUserOp.executionData!, "Transaction Hash")}
+                  className="text-gray-400 hover:text-[var(--biconomy-orange)] h-6 w-6 p-0"
+                >
+                  <Copy className="h-3 w-3" />
+                </Button>
+                {hasExplorerSupport(feePayerUserOp.chainId) && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => window.open(getExplorerUrl(feePayerUserOp.chainId, feePayerUserOp.executionData!)!, '_blank')}
+                    className="text-xs px-2 py-1 h-6 flex items-center space-x-1 hover:bg-biconomy-orange hover:text-white"
+                  >
+                    <ExternalLink className="h-3 w-3" />
+                    <span>{getExplorerName(feePayerUserOp.chainId)}</span>
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
           
-          {/* Payment UserOp Transaction Link - Always visible */}
-          {feePayerUserOp?.executionData && (
-            <div className="flex items-center space-x-2">
-              <span className="text-xs text-slate-500">Payment Transaction:</span>
-              <code className="text-xs font-mono text-slate-700">{formatAddress(feePayerUserOp.executionData)}</code>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => copyToClipboard(feePayerUserOp.executionData!, "Transaction Hash")}
-                className="text-gray-400 hover:text-[var(--biconomy-orange)] h-6 w-6 p-0"
-              >
-                <Copy className="h-3 w-3" />
-              </Button>
-              {hasExplorerSupport(feePayerUserOp.chainId) && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => window.open(getExplorerUrl(feePayerUserOp.chainId, feePayerUserOp.executionData!)!, '_blank')}
-                  className="text-xs px-2 py-1 h-6 flex items-center space-x-1 hover:bg-biconomy-orange hover:text-white"
-                >
-                  <ExternalLink className="h-3 w-3" />
-                  <span>{getExplorerName(feePayerUserOp.chainId)}</span>
-                </Button>
-              )}
-            </div>
-          )}
+          {/* Detailed Payment Information Button - Inline in Header */}
+          <Button
+            variant="outline"
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="flex items-center space-x-2 px-3 py-1 h-7 text-xs hover:bg-slate-50 hover:text-slate-900 border border-slate-200 rounded"
+          >
+            <span className="text-xs font-medium text-slate-600">
+              {isExpanded ? 'Hide' : 'Show'} details
+            </span>
+            <ChevronDown className={`h-3 w-3 text-slate-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+          </Button>
         </div>
       </div>
       <div className="p-4">
@@ -222,20 +236,9 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
         </div>
         
         {/* Expandable payment details */}
-        <div className="mt-2">
-          <Button
-            variant="outline"
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="w-full flex items-center justify-between p-2 text-left hover:bg-slate-50 hover:text-slate-900 border border-slate-200 rounded text-sm"
-          >
-            <span className="text-sm font-medium text-slate-600">
-              {isExpanded ? 'Hide' : 'Show'} detailed payment information
-            </span>
-            <ChevronDown className={`h-4 w-4 text-slate-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
-          </Button>
-          
-          {isExpanded && (
-            <div className="mt-4 space-y-4">
+        {isExpanded && (
+          <div className="mt-4 space-y-4 border-t border-slate-100 pt-4">
+            <div className="space-y-4">
               {/* Token information */}
               <div className="bg-white border border-gray-100 rounded p-4">
                 <div className="flex items-center space-x-2 mb-2">
@@ -456,8 +459,8 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                 </div>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
