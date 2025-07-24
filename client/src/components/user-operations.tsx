@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Copy, ChevronDown, Code } from "lucide-react";
+import { Copy, ChevronDown, Code, User, Hash, Fuel, Clock, Zap, Layers, Settings } from "lucide-react";
 import { UserOp } from "@/types";
 import { formatHash, formatGas, formatTimestamp, getExecutionStatusColor } from "@/lib/format";
 import { useToast } from "@/hooks/use-toast";
@@ -41,12 +41,76 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
     }
   };
 
+  const DataField = ({ icon: Icon, label, value, showCopy = true }: {
+    icon: React.ComponentType<any>;
+    label: string;
+    value: string;
+    showCopy?: boolean;
+  }) => (
+    <div className="p-3 bg-white border border-gray-100 rounded-lg">
+      <div className="flex items-center space-x-2 mb-2">
+        <Icon className="h-4 w-4 text-gray-500" />
+        <span className="text-sm font-medium text-gray-600">{label}</span>
+      </div>
+      <div className="flex items-center justify-between">
+        <code className={`text-xs font-mono text-gray-900 truncate flex-1 ${!value ? 'text-gray-400' : ''}`}>
+          {value || 'Not available'}
+        </code>
+        {showCopy && value && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => copyToClipboard(value, label)}
+            className="text-gray-400 hover:text-[var(--biconomy-orange)] shrink-0 ml-2"
+          >
+            <Copy className="h-3 w-3" />
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+
+  const CodeField = ({ icon: Icon, label, value }: {
+    icon: React.ComponentType<any>;
+    label: string;
+    value: string;
+  }) => (
+    <div className="p-3 bg-white border border-gray-100 rounded-lg">
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center space-x-2">
+          <Icon className="h-4 w-4 text-gray-500" />
+          <span className="text-sm font-medium text-gray-600">{label}</span>
+        </div>
+        {value && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => copyToClipboard(value, label)}
+            className="text-gray-400 hover:text-[var(--biconomy-orange)]"
+          >
+            <Copy className="h-3 w-3" />
+          </Button>
+        )}
+      </div>
+      <div className="bg-gray-50 p-2 rounded border max-h-32 overflow-y-auto">
+        <code className={`text-xs font-mono text-gray-900 break-all block ${!value ? 'text-gray-400' : ''}`}>
+          {value || 'Not available'}
+        </code>
+      </div>
+    </div>
+  );
+
   return (
-    <Card className="shadow-lg">
+    <Card className="border-0 shadow-sm">
       <CardContent className="p-6">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl font-bold text-gray-900">User Operations</h3>
-          <Badge variant="secondary" className="bg-[var(--biconomy-orange)]/10 text-[var(--biconomy-orange)]">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-[var(--biconomy-orange)]/10 rounded-lg flex items-center justify-center">
+              <Layers className="h-5 w-5 text-[var(--biconomy-orange)]" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900">User Operations</h3>
+          </div>
+          <Badge variant="secondary" className="bg-[var(--biconomy-orange)]/10 text-[var(--biconomy-orange)] border-0">
             {userOps.length} operations
           </Badge>
         </div>
@@ -57,9 +121,9 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
             const statusColorClass = getExecutionStatusColor(userOp.executionStatus);
             
             return (
-              <div key={index} className="border border-gray-200 rounded-lg">
+              <div key={index} className="border border-gray-100 rounded-lg bg-white">
                 <div 
-                  className="p-4 bg-gray-50 rounded-t-lg cursor-pointer hover:bg-gray-100 transition-colors"
+                  className="p-4 cursor-pointer hover:bg-gray-50 transition-colors rounded-t-lg"
                   onClick={() => toggleExpanded(index)}
                 >
                   <div className="flex items-center justify-between">
@@ -70,13 +134,13 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                       <div>
                         <h4 className="font-medium text-gray-900">User Operation #{index + 1}</h4>
                         <p className="text-sm text-gray-500">
-                          Hash: <code className="font-mono">{formatHash(userOp.userOpHash)}</code>
+                          Hash: <code className="font-mono">{formatHash(userOp.userOpHash || '')}</code>
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <Badge className={statusColorClass}>
-                        {userOp.executionStatus}
+                      <Badge className={`${statusColorClass} border-0`}>
+                        {userOp.executionStatus || 'Unknown'}
                       </Badge>
                       <ChevronDown 
                         className={`h-4 w-4 text-gray-400 transform transition-transform ${isExpanded ? 'rotate-180' : ''}`} 
@@ -86,103 +150,104 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                 </div>
                 
                 {isExpanded && (
-                  <div className="p-4 border-t border-gray-200">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-500 mb-1">Sender</label>
-                          <div className="flex items-center space-x-2 p-2 bg-gray-50 rounded">
-                            <code className="text-xs font-mono text-gray-900 flex-1 break-all">
-                              {userOp.userOp.sender}
-                            </code>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => copyToClipboard(userOp.userOp.sender, "Sender address")}
-                              className="text-gray-400 hover:text-[var(--biconomy-orange)] text-xs shrink-0"
-                            >
-                              <Copy className="h-3 w-3" />
-                            </Button>
-                          </div>
-                        </div>
-                        
-                        <div>
-                          <label className="block text-sm font-medium text-gray-500 mb-1">Nonce</label>
-                          <div className="p-2 bg-gray-50 rounded">
-                            <span className="text-sm font-mono">{userOp.userOp.nonce}</span>
-                          </div>
-                        </div>
-                        
-                        <div>
-                          <label className="block text-sm font-medium text-gray-500 mb-1">Gas Limits</label>
-                          <div className="space-y-2">
-                            <div className="flex justify-between text-sm">
-                              <span className="text-gray-600">Call Gas:</span>
-                              <span className="font-mono">{formatGas(userOp.userOp.callGasLimit)}</span>
-                            </div>
-                            <div className="flex justify-between text-sm">
-                              <span className="text-gray-600">Verification Gas:</span>
-                              <span className="font-mono">{formatGas(userOp.userOp.verificationGasLimit)}</span>
-                            </div>
-                            <div className="flex justify-between text-sm">
-                              <span className="text-gray-600">Pre-verification Gas:</span>
-                              <span className="font-mono">{formatGas(userOp.userOp.preVerificationGas)}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                  <div className="p-4 border-t border-gray-100 bg-gray-50/50">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+                      <DataField
+                        icon={User}
+                        label="Sender"
+                        value={userOp.userOp.sender}
+                      />
                       
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-500 mb-1">Max Fee Per Gas</label>
-                          <div className="p-2 bg-gray-50 rounded">
-                            <span className="text-sm font-mono">{userOp.userOp.maxFeePerGas}</span>
-                          </div>
-                        </div>
-                        
-                        <div>
-                          <label className="block text-sm font-medium text-gray-500 mb-1">Max Priority Fee</label>
-                          <div className="p-2 bg-gray-50 rounded">
-                            <span className="text-sm font-mono">{userOp.userOp.maxPriorityFeePerGas}</span>
-                          </div>
-                        </div>
-                        
-                        <div>
-                          <label className="block text-sm font-medium text-gray-500 mb-1">Timestamp Range</label>
-                          <div className="space-y-1 text-sm">
-                            <div className="flex justify-between">
-                              <span className="text-gray-600">Lower Bound:</span>
-                              <span className="font-mono">{formatTimestamp(userOp.lowerBoundTimestamp).formatted}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-gray-600">Upper Bound:</span>
-                              <span className="font-mono">{formatTimestamp(userOp.upperBoundTimestamp).formatted}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <DataField
+                        icon={Hash}
+                        label="Nonce"
+                        value={userOp.userOp.nonce}
+                        showCopy={false}
+                      />
+                      
+                      <DataField
+                        icon={Fuel}
+                        label="Call Gas Limit"
+                        value={userOp.userOp.callGasLimit ? formatGas(userOp.userOp.callGasLimit) : ''}
+                        showCopy={false}
+                      />
+                      
+                      <DataField
+                        icon={Zap}
+                        label="Verification Gas Limit"
+                        value={userOp.userOp.verificationGasLimit ? formatGas(userOp.userOp.verificationGasLimit) : ''}
+                        showCopy={false}
+                      />
+                      
+                      <DataField
+                        icon={Settings}
+                        label="Pre-verification Gas"
+                        value={userOp.userOp.preVerificationGas ? formatGas(userOp.userOp.preVerificationGas) : ''}
+                        showCopy={false}
+                      />
+                      
+                      <DataField
+                        icon={Fuel}
+                        label="Max Fee Per Gas"
+                        value={userOp.userOp.maxFeePerGas}
+                        showCopy={false}
+                      />
+                      
+                      <DataField
+                        icon={Zap}
+                        label="Max Priority Fee Per Gas"
+                        value={userOp.userOp.maxPriorityFeePerGas}
+                        showCopy={false}
+                      />
+                      
+                      <DataField
+                        icon={Clock}
+                        label="Max Gas Limit"
+                        value={userOp.maxGasLimit ? formatGas(userOp.maxGasLimit) : ''}
+                        showCopy={false}
+                      />
                     </div>
                     
-                    <div className="mt-4 pt-4 border-t border-gray-200">
-                      <div className="space-y-3">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-500 mb-1">Call Data</label>
-                          <div className="p-3 bg-gray-50 rounded-lg">
-                            <code className="text-xs font-mono text-gray-900 break-all block">
-                              {userOp.userOp.callData}
-                            </code>
-                          </div>
-                        </div>
-                        
-                        <div>
-                          <label className="block text-sm font-medium text-gray-500 mb-1">Paymaster Data</label>
-                          <div className="p-3 bg-gray-50 rounded-lg">
-                            <code className="text-xs font-mono text-gray-900 break-all block">
-                              {userOp.userOp.paymasterAndData}
-                            </code>
-                          </div>
-                        </div>
-                      </div>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+                      <DataField
+                        icon={Clock}
+                        label="Lower Bound Timestamp"
+                        value={userOp.lowerBoundTimestamp ? formatTimestamp(userOp.lowerBoundTimestamp).formatted : ''}
+                        showCopy={false}
+                      />
+                      
+                      <DataField
+                        icon={Clock}
+                        label="Upper Bound Timestamp"
+                        value={userOp.upperBoundTimestamp ? formatTimestamp(userOp.upperBoundTimestamp).formatted : ''}
+                        showCopy={false}
+                      />
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <CodeField
+                        icon={Code}
+                        label="Init Code"
+                        value={userOp.userOp.initCode}
+                      />
+                      
+                      <CodeField
+                        icon={Code}
+                        label="Call Data"
+                        value={userOp.userOp.callData}
+                      />
+                      
+                      <CodeField
+                        icon={Code}
+                        label="Paymaster and Data"
+                        value={userOp.userOp.paymasterAndData}
+                      />
+                      
+                      <CodeField
+                        icon={Code}
+                        label="Execution Data"
+                        value={userOp.executionData}
+                      />
                     </div>
                   </div>
                 )}
