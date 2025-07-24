@@ -272,6 +272,8 @@ export function getExplorerName(chainId: string | number): string | null {
       return 'Optimistic Etherscan';
     case 56: // BSC
       return 'BscScan';
+    case 64165: // Sonic
+      return 'Sonic Explorer';
     default:
       return null; // No explorer available for this chain
   }
@@ -294,6 +296,8 @@ export function getTokenExplorerUrl(chainId: string | number, tokenAddress: stri
       return `https://optimistic.etherscan.io/token/${tokenAddress}`;
     case 56: // BSC
       return `https://bscscan.com/token/${tokenAddress}`;
+    case 64165: // Sonic
+      return `https://explorer.soniclabs.com/token/${tokenAddress}`;
     default:
       return null; // No explorer available for this chain
   }

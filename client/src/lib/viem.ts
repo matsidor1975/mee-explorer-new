@@ -1,7 +1,7 @@
 import { createPublicClient, http, erc20Abi, type Address, type PublicClient } from 'viem';
 import { mainnet, base, polygon, arbitrum, optimism, bsc } from 'viem/chains';
 
-// Chain configuration mapping
+// Chain configuration mapping - including Sonic (Fantasy)
 const chainConfigs = {
   '1': { chain: mainnet, rpcUrl: 'https://ethereum.publicnode.com' },
   '8453': { chain: base, rpcUrl: 'https://base.publicnode.com' },
@@ -9,6 +9,7 @@ const chainConfigs = {
   '42161': { chain: arbitrum, rpcUrl: 'https://arbitrum.publicnode.com' },
   '10': { chain: optimism, rpcUrl: 'https://optimism.publicnode.com' },
   '56': { chain: bsc, rpcUrl: 'https://bsc.publicnode.com' },
+  '64165': { chain: { id: 64165, name: 'Sonic', network: 'sonic', nativeCurrency: { name: 'Sonic', symbol: 'S', decimals: 18 }, rpcUrls: { default: { http: ['https://rpc.soniclabs.com'] }, public: { http: ['https://rpc.soniclabs.com'] } }, blockExplorers: { default: { name: 'Sonic Explorer', url: 'https://explorer.soniclabs.com' } } }, rpcUrl: 'https://rpc.soniclabs.com' },
 };
 
 // Cache for public clients
@@ -116,6 +117,7 @@ async function fetchNativeTokenInfo(client: PublicClient, chainId: string, token
       '42161': { name: 'Ethereum', symbol: 'ETH', decimals: 18 },
       '10': { name: 'Ethereum', symbol: 'ETH', decimals: 18 },
       '56': { name: 'Binance Coin', symbol: 'BNB', decimals: 18 },
+      '64165': { name: 'Sonic', symbol: 'S', decimals: 18 },
     };
 
     const fallback = nativeTokens[chainId];
