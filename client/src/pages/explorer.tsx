@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "wouter";
 import HashSearch from "@/components/hash-search";
-import { Search, Activity, Clock, X, Trash2 } from "lucide-react";
+import { Search, Activity, Clock, X, Trash2, FileText } from "lucide-react";
 import { getSearchHistory, removeFromSearchHistory, clearSearchHistory, type HistoryItem } from "@/lib/storage";
 import { Button } from "@/components/ui/button";
 
@@ -97,9 +97,10 @@ export default function Explorer() {
                 href="https://docs.biconomy.io" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="px-3 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors rounded-lg"
+                className="flex items-center space-x-2 px-3 py-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors rounded-lg"
               >
-                Documentation
+                <FileText className="h-4 w-4" />
+                <span className="font-medium">Docs</span>
               </a>
             </nav>
           </div>
