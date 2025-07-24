@@ -238,15 +238,17 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
               <Badge className={getExecutionStatusColor(userOp.executionStatus)}>
                 {userOp.executionStatus}
               </Badge>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleTenderlySimulation(userOp)}
-                className="text-xs flex items-center space-x-1 hover:bg-blue-500 hover:text-white"
-              >
-                <Play className="h-3 w-3" />
-                <span>Simulate with Tenderly</span>
-              </Button>
+              {userOp.executionStatus !== "MINED_SUCCESS" && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleTenderlySimulation(userOp)}
+                  className="text-xs flex items-center space-x-1 hover:bg-blue-500 hover:text-white"
+                >
+                  <Play className="h-3 w-3" />
+                  <span>Simulate with Tenderly</span>
+                </Button>
+              )}
               <Button
                 variant="ghost"
                 size="sm"
