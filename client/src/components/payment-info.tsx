@@ -100,13 +100,13 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
     <tr className="border-b border-gray-100">
       <td className="py-2 pr-4">
         <div className="flex items-center space-x-2">
-          <Icon className="h-3 w-3 text-gray-500 shrink-0" />
-          <span className="text-xs text-gray-600 font-medium">{label}</span>
+          <Icon className="h-4 w-4 text-gray-500 shrink-0" />
+          <span className="text-sm text-gray-600 font-medium">{label}</span>
         </div>
       </td>
       <td className="py-2 pl-4">
         <div className="flex items-center justify-between">
-          <code className="text-xs font-mono text-gray-900">
+          <code className="text-sm font-mono text-gray-900">
             {value.length > 50 ? `${value.substring(0, 24)}...${value.substring(value.length - 24)}` : value}
           </code>
           {showCopy && (
@@ -116,7 +116,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
               onClick={() => copyToClipboard(value, label)}
               className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0 ml-2"
             >
-              <Copy className="h-2.5 w-2.5" />
+              <Copy className="h-3 w-3" />
             </Button>
           )}
         </div>
@@ -302,7 +302,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                 <DollarSign className="h-4 w-4" />
                 <span>Payment Details</span>
               </h5>
-              <table className="w-full text-xs">
+              <table className="w-full text-sm">
                 <tbody>
                   <TableDataField icon={User} label="Sender" value={paymentInfo.sender} />
                   <TableDataField icon={Hash} label="Nonce" value={paymentInfo.nonce} showCopy={false} />
@@ -310,23 +310,23 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                   <tr className="border-b border-gray-100">
                     <td className="py-2 pr-4">
                       <div className="flex items-center space-x-2">
-                        <Settings className="h-3 w-3 text-gray-500 shrink-0" />
-                        <span className="text-xs text-gray-600 font-medium">Short Encoding</span>
+                        <Settings className="h-4 w-4 text-gray-500 shrink-0" />
+                        <span className="text-sm text-gray-600 font-medium">Short Encoding</span>
                       </div>
                     </td>
                     <td className="py-2 pl-4">
-                      <code className="text-xs font-mono text-gray-900">{paymentInfo.shortEncoding ? 'Yes' : 'No'}</code>
+                      <code className="text-sm font-mono text-gray-900">{paymentInfo.shortEncoding ? 'Yes' : 'No'}</code>
                     </td>
                   </tr>
                   <tr className="border-b border-gray-100">
                     <td className="py-2 pr-4">
                       <div className="flex items-center space-x-2">
-                        <CreditCard className="h-3 w-3 text-gray-500 shrink-0" />
-                        <span className="text-xs text-gray-600 font-medium">Sponsored</span>
+                        <CreditCard className="h-4 w-4 text-gray-500 shrink-0" />
+                        <span className="text-sm text-gray-600 font-medium">Sponsored</span>
                       </div>
                     </td>
                     <td className="py-2 pl-4">
-                      <code className="text-xs font-mono text-gray-900">{paymentInfo.sponsored ? 'Yes' : 'No'}</code>
+                      <code className="text-sm font-mono text-gray-900">{paymentInfo.sponsored ? 'Yes' : 'No'}</code>
                     </td>
                   </tr>
                   {paymentInfo.sponsorshipUrl && (
@@ -335,13 +335,13 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                   <tr className="border-b border-gray-100">
                     <td className="py-2 pr-4">
                       <div className="flex items-center space-x-2">
-                        <Key className="h-3 w-3 text-gray-500 shrink-0" />
-                        <span className="text-xs text-gray-600 font-medium">Init Code</span>
+                        <Key className="h-4 w-4 text-gray-500 shrink-0" />
+                        <span className="text-sm text-gray-600 font-medium">Init Code</span>
                       </div>
                     </td>
                     <td className="py-2 pl-4">
                       <div className="flex items-center justify-between">
-                        <code className="text-xs font-mono text-gray-900">
+                        <code className="text-sm font-mono text-gray-900">
                           {paymentInfo.initCode ? (paymentInfo.initCode.length > 50 ? `${paymentInfo.initCode.substring(0, 24)}...${paymentInfo.initCode.substring(paymentInfo.initCode.length - 24)}` : paymentInfo.initCode) : 'N/A'}
                         </code>
                         {paymentInfo.initCode && (
@@ -351,7 +351,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                             onClick={() => copyToClipboard(paymentInfo.initCode, "Init Code")}
                             className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0 ml-2"
                           >
-                            <Copy className="h-2.5 w-2.5" />
+                            <Copy className="h-3 w-3" />
                           </Button>
                         )}
                       </div>
@@ -367,18 +367,18 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                 <Circle className="h-4 w-4" />
                 <span>Token Information</span>
               </h5>
-              <table className="w-full text-xs">
+              <table className="w-full text-sm">
                 <tbody>
                   <tr className="border-b border-gray-100">
                     <td className="py-2 pr-4">
                       <div className="flex items-center space-x-2">
-                        <Hash className="h-3 w-3 text-gray-500 shrink-0" />
-                        <span className="text-xs text-gray-600 font-medium">Token Address</span>
+                        <Hash className="h-4 w-4 text-gray-500 shrink-0" />
+                        <span className="text-sm text-gray-600 font-medium">Token Address</span>
                       </div>
                     </td>
                     <td className="py-2 pl-4">
                       <div className="flex items-center justify-between">
-                        <code className="text-xs font-mono text-gray-900">
+                        <code className="text-sm font-mono text-gray-900">
                           {paymentInfo.token.length > 50 ? `${paymentInfo.token.substring(0, 24)}...${paymentInfo.token.substring(paymentInfo.token.length - 24)}` : paymentInfo.token}
                         </code>
                         <div className="flex items-center space-x-1 ml-2">
@@ -388,16 +388,16 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                             onClick={() => copyToClipboard(paymentInfo.token, "Token Address")}
                             className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0"
                           >
-                            <Copy className="h-2.5 w-2.5" />
+                            <Copy className="h-3 w-3" />
                           </Button>
                           {getTokenExplorerUrl(paymentInfo.chainId, paymentInfo.token) && (
                             <Button
                               variant="outline"
                               size="sm"
                               onClick={() => window.open(getTokenExplorerUrl(paymentInfo.chainId, paymentInfo.token)!, '_blank')}
-                              className="text-xs px-1 py-0.5 h-5 flex items-center hover:bg-biconomy-orange hover:text-white"
+                              className="text-sm px-1 py-0.5 h-5 flex items-center hover:bg-biconomy-orange hover:text-white"
                             >
-                              <ExternalLink className="h-2.5 w-2.5" />
+                              <ExternalLink className="h-3 w-3" />
                             </Button>
                           )}
                         </div>
@@ -407,8 +407,8 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                   <tr className="border-b border-gray-100">
                     <td className="py-2 pr-4">
                       <div className="flex items-center space-x-2">
-                        <Circle className="h-3 w-3 text-gray-500 shrink-0" />
-                        <span className="text-xs text-gray-600 font-medium">Token Symbol</span>
+                        <Circle className="h-4 w-4 text-gray-500 shrink-0" />
+                        <span className="text-sm text-gray-600 font-medium">Token Symbol</span>
                       </div>
                     </td>
                     <td className="py-2 pl-4">
@@ -417,10 +417,10 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                           <img 
                             src={getTokenIcon(tokenInfo.symbol)!} 
                             alt={tokenInfo.symbol}
-                            className="w-3 h-3 shrink-0"
+                            className="w-4 h-4 shrink-0"
                           />
                         )}
-                        <code className="text-xs font-mono text-gray-900">{tokenInfo?.symbol || 'Unknown'}</code>
+                        <code className="text-sm font-mono text-gray-900">{tokenInfo?.symbol || 'Unknown'}</code>
                       </div>
                     </td>
                   </tr>

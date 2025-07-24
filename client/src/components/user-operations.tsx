@@ -96,7 +96,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
         <Icon className="h-4 w-4 text-gray-500" />
       </div>
       <div className="flex items-center justify-between">
-        <code className={`text-xs font-mono text-gray-900 truncate flex-1 ${!value ? 'text-gray-400' : ''}`}>
+        <code className={`text-sm font-mono text-gray-900 truncate flex-1 ${!value ? 'text-gray-400' : ''}`}>
           {value || 'Not available'}
         </code>
         {showCopy && value && (
@@ -106,7 +106,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
             onClick={() => copyToClipboard(value, label)}
             className="text-gray-400 hover:text-[var(--biconomy-orange)] shrink-0 ml-2"
           >
-            <Copy className="h-3 w-3" />
+            <Copy className="h-4 w-4" />
           </Button>
         )}
       </div>
@@ -122,13 +122,13 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
     <tr className="border-b border-gray-100">
       <td className="py-2 pr-4">
         <div className="flex items-center space-x-2">
-          <Icon className="h-3 w-3 text-gray-500 shrink-0" />
-          <span className="text-xs text-gray-600 font-medium">{label}</span>
+          <Icon className="h-4 w-4 text-gray-500 shrink-0" />
+          <span className="text-sm text-gray-600 font-medium">{label}</span>
         </div>
       </td>
       <td className="py-2 pl-4">
         <div className="flex items-center justify-between">
-          <code className={`text-xs font-mono text-gray-900 ${!value ? 'text-gray-400' : ''}`}>
+          <code className={`text-sm font-mono text-gray-900 ${!value ? 'text-gray-400' : ''}`}>
             {value ? (value.length > 50 ? `${value.substring(0, 24)}...${value.substring(value.length - 24)}` : value) : 'N/A'}
           </code>
           {showCopy && value && (
@@ -138,7 +138,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
               onClick={() => copyToClipboard(value, label)}
               className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0 ml-2"
             >
-              <Copy className="h-2.5 w-2.5" />
+              <Copy className="h-3 w-3" />
             </Button>
           )}
         </div>
@@ -158,7 +158,7 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
           <span className="text-sm font-medium text-gray-600">On-Chain Transaction</span>
         </div>
         <div className="flex items-center justify-between">
-          <code className="text-xs font-mono text-gray-900 truncate flex-1">
+          <code className="text-sm font-mono text-gray-900 truncate flex-1">
             {formatHash(txHash)}
           </code>
           <div className="flex items-center space-x-2">
