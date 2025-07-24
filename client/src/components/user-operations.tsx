@@ -465,6 +465,10 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
 
               {/* Call Data */}
               <div>
+                <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-2">
+                  <Code className="h-4 w-4" />
+                  <span>Call Data</span>
+                </h5>
                 <CodeField icon={Code} label="Call Data" value={userOp.userOp.callData} />
               </div>
             </div>
