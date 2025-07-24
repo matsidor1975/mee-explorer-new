@@ -183,27 +183,28 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <User className="h-4 w-4 text-[var(--biconomy-orange)]" />
-              <div>
-                <div className="flex items-center space-x-2">
-                  <h4 className="font-medium text-gray-900">
-                    {isCleanup ? 'Cleanup Operation' : `Operation #${index + 1}`}
-                  </h4>
-                  {isCleanup && (
-                    <Badge variant="outline" className="text-xs">
-                      Cleanup
-                    </Badge>
-                  )}
-                </div>
-                <div className="flex items-center space-x-1">
-                  {getNetworkIcon(userOp.chainId) && (
-                    <img 
-                      src={getNetworkIcon(userOp.chainId)!} 
-                      alt={chainInfo?.name || `Chain ${userOp.chainId}`}
-                      className="w-4 h-4"
-                    />
-                  )}
-                  <p className="text-sm text-gray-500">{chainInfo?.name || `Chain ${userOp.chainId}`}</p>
-                </div>
+              <div className="flex items-center space-x-2">
+                <h4 className="font-medium text-gray-900">
+                  {isCleanup ? 'Cleanup Operation' : `#${index + 1}`}
+                </h4>
+                {!isCleanup && (
+                  <>
+                    <span className="text-gray-400">-</span>
+                    {getNetworkIcon(userOp.chainId) && (
+                      <img 
+                        src={getNetworkIcon(userOp.chainId)!} 
+                        alt={chainInfo?.name || `Chain ${userOp.chainId}`}
+                        className="w-4 h-4"
+                      />
+                    )}
+                    <span className="font-medium text-gray-900">{chainInfo?.name || `Chain ${userOp.chainId}`}</span>
+                  </>
+                )}
+                {isCleanup && (
+                  <Badge variant="outline" className="text-xs">
+                    Cleanup
+                  </Badge>
+                )}
               </div>
             </div>
             <div className="flex items-center space-x-2">
