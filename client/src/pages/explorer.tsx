@@ -63,7 +63,7 @@ export default function Explorer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center">
             <h2 className="text-3xl font-bold text-white mb-4">Explore Biconomy Network</h2>
-            <p className="text-white/80 text-lg mb-8">Search for transaction hashes, addresses, and user operations</p>
+            <p className="text-white/80 text-lg mb-8">Search for Supertransaction hashes on the Biconomy Network</p>
             
             <div className="max-w-2xl mx-auto">
               <HashSearch 
@@ -85,7 +85,7 @@ export default function Explorer() {
           <div className="text-center py-12">
             <div className="inline-flex items-center space-x-3 text-[var(--biconomy-orange)]">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--biconomy-orange)]"></div>
-              <span className="text-lg font-medium">Loading hash details...</span>
+              <span className="text-lg font-medium">Loading Supertransaction details...</span>
             </div>
           </div>
         )}
@@ -106,11 +106,11 @@ export default function Explorer() {
               <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Search className="h-12 w-12 text-gray-400" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Search for a Transaction</h3>
-              <p className="text-gray-600 mb-6">Enter a transaction hash, address, or user operation hash to explore the Biconomy Network.</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Search for a Supertransaction</h3>
+              <p className="text-gray-600 mb-6">Enter a Supertransaction hash to explore transactions on the Biconomy Network.</p>
               <div className="flex flex-wrap justify-center gap-2 text-sm">
-                <span className="px-3 py-1 bg-gray-100 rounded-full text-gray-600">Example hash formats:</span>
-                <code className="px-2 py-1 bg-[var(--biconomy-orange)]/10 text-[var(--biconomy-orange)] rounded">0x1a2b3c...</code>
+                <span className="px-3 py-1 bg-gray-100 rounded-full text-gray-600">Supertransaction hash format:</span>
+                <code className="px-2 py-1 bg-[var(--biconomy-orange)]/10 text-[var(--biconomy-orange)] rounded">0x1a2b3c... (64 hex chars)</code>
               </div>
             </div>
           </div>
@@ -123,9 +123,9 @@ export default function Explorer() {
               <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <TriangleAlert className="h-12 w-12 text-red-500" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Hash Not Found</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Supertransaction Not Found</h3>
               <p className="text-gray-600 mb-6">
-                {error instanceof Error ? error.message : 'The hash you searched for could not be found on the Biconomy Network. Please check the hash and try again.'}
+                {error instanceof Error ? error.message : 'The Supertransaction hash you searched for could not be found on the Biconomy Network. Please check the hash and try again.'}
               </p>
               <Button 
                 onClick={clearSearch}

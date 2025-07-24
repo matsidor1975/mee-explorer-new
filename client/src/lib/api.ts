@@ -19,8 +19,8 @@ export const getHashDetails = async (hash: string): Promise<HashDetails> => {
   return await response.json();
 };
 
-export const isValidHash = (hash: string): boolean => {
-  // Basic validation for blockchain hash format
+export const isValidSupertransactionHash = (hash: string): boolean => {
+  // Validation specifically for Biconomy Supertransaction hash format
   const hashRegex = /^0x[a-fA-F0-9]{64}$/;
   return hashRegex.test(hash);
 };

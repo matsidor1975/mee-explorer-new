@@ -37,7 +37,7 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
     <Card className="shadow-lg">
       <CardContent className="p-6">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-2xl font-bold text-gray-900">Hash Details</h3>
+          <h3 className="text-2xl font-bold text-gray-900">Supertransaction Details</h3>
           <div className="flex items-center space-x-2">
             <Badge className={`${statusColorClass} px-3 py-1`}>
               <CheckCircle className="w-4 h-4 mr-2" />
@@ -49,7 +49,7 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-500 mb-1">Transaction Hash</label>
+              <label className="block text-sm font-medium text-gray-500 mb-1">Supertransaction Hash</label>
               <div className="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg">
                 <code className="text-sm font-mono text-gray-900 flex-1 break-all">
                   {hashDetails.hash}
@@ -57,7 +57,7 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => copyToClipboard(hashDetails.hash, "Transaction hash")}
+                  onClick={() => copyToClipboard(hashDetails.hash, "Supertransaction hash")}
                   className="text-gray-400 hover:text-[var(--biconomy-orange)] shrink-0"
                 >
                   <Copy className="h-4 w-4" />

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { isValidHash } from "@/lib/api";
+import { isValidSupertransactionHash } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 
 interface HashSearchProps {
@@ -22,16 +22,16 @@ export default function HashSearch({ value, onChange, onSearch, isLoading }: Has
     if (!trimmedValue) {
       toast({
         title: "Empty search",
-        description: "Please enter a transaction hash to search.",
+        description: "Please enter a Supertransaction hash to search.",
         variant: "destructive",
       });
       return;
     }
 
-    if (!isValidHash(trimmedValue)) {
+    if (!isValidSupertransactionHash(trimmedValue)) {
       toast({
-        title: "Invalid hash format",
-        description: "Please enter a valid transaction hash (0x followed by 64 hexadecimal characters).",
+        title: "Invalid Supertransaction hash",
+        description: "Please enter a valid Biconomy Supertransaction hash (0x followed by 64 hexadecimal characters).",
         variant: "destructive",
       });
       return;
@@ -45,7 +45,7 @@ export default function HashSearch({ value, onChange, onSearch, isLoading }: Has
       <div className="relative">
         <Input
           type="text"
-          placeholder="Enter transaction hash, address, or user operation hash..."
+          placeholder="Enter Biconomy Supertransaction hash..."
           value={value}
           onChange={(e) => onChange(e.target.value)}
           className="w-full px-4 py-4 pl-12 pr-20 text-lg border-0 rounded-xl shadow-lg focus:ring-4 focus:ring-white focus:ring-opacity-50 outline-none"
