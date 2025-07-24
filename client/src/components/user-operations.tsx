@@ -520,14 +520,14 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                   <span>Timing Information</span>
                 </h5>
                 <div className="space-y-1">
-                  <CompactDataField icon={Clock} label="Lower Bound" value={formatTimestamp(userOp.lowerBoundTimestamp)} showCopy={false} />
-                  <CompactDataField icon={Clock} label="Upper Bound" value={formatTimestamp(userOp.upperBoundTimestamp)} showCopy={false} />
-                  <CompactDataField icon={Clock} label="Simulation Finished" value={formatTimestamp(userOp.simulationFinishedAt)} showCopy={false} />
+                  <CompactDataField icon={Clock} label="Lower Bound" value={formatTimestamp(userOp.lowerBoundTimestamp).formatted} showCopy={false} />
+                  <CompactDataField icon={Clock} label="Upper Bound" value={formatTimestamp(userOp.upperBoundTimestamp).formatted} showCopy={false} />
+                  <CompactDataField icon={Clock} label="Simulation Finished" value={formatTimestamp(userOp.simulationFinishedAt).formatted} showCopy={false} />
                   {userOp.miningTimestamp && (
-                    <CompactDataField icon={Clock} label="Mining Time" value={formatTimestamp(userOp.miningTimestamp)} showCopy={false} />
+                    <CompactDataField icon={Clock} label="Mining Time" value={formatTimestamp(userOp.miningTimestamp).formatted} showCopy={false} />
                   )}
                   {userOp.minedTimestamp && (
-                    <CompactDataField icon={Clock} label="Mined Time" value={formatTimestamp(userOp.minedTimestamp)} showCopy={false} />
+                    <CompactDataField icon={Clock} label="Mined Time" value={formatTimestamp(userOp.minedTimestamp).formatted} showCopy={false} />
                   )}
                 </div>
               </div>
