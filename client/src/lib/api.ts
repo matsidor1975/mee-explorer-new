@@ -61,7 +61,7 @@ export const isValidSupertransactionHash = (hash: string): boolean => {
 
 export const fetchTokenInfo = async (tokenAddress: string, chainId: string): Promise<{ name: string; symbol: string; decimals: number } | null> => {
   try {
-    const response = await fetch(`${NODE_URL}/v1/info?tokenAddress=${tokenAddress}&chainId=${chainId}`, {
+    const response = await fetch(`${NODE_URL}/info?tokenAddress=${tokenAddress}&chainId=${chainId}`, {
       headers: {
         'X-API-KEY': API_KEY,
         'Content-Type': 'application/json'
