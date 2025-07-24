@@ -113,3 +113,5 @@ The application is designed to be easily deployable on platforms like Replit, Ve
 - Enhanced payment token display with viem integration for accurate blockchain data
 - Added token address display with blockchain explorer links in expandable fees section
 - Integrated viem for dynamic token name fetching from supported chains (Ethereum, Base, Polygon, Arbitrum, Optimism, BSC)
+- Added native token support using viem to fetch chain-specific native currency information
+- Enhanced UI to distinguish between native tokens (0x0 address) and ERC-20 tokens

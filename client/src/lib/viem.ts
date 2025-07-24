@@ -53,10 +53,9 @@ export async function fetchTokenInfoViem(tokenAddress: string, chainId: string):
       return null;
     }
 
-    // Handle native token (0x0 address)
+    // Handle native token (0x0 address) - fetch from blockchain
     if (tokenAddress === '0x0000000000000000000000000000000000000000' || !tokenAddress) {
-      const nativeTokenInfo = getNativeTokenInfo(chainId);
-      return nativeTokenInfo ? { ...nativeTokenInfo, address: tokenAddress } : null;
+      return await fetchNativeTokenInfo(client, chainId, tokenAddress || '0x0000000000000000000000000000000000000000');
     }
 
     // Fetch token data sequentially to avoid type issues
@@ -90,18 +89,35 @@ export async function fetchTokenInfoViem(tokenAddress: string, chainId: string):
   }
 }
 
-// Get native token information for supported chains
-function getNativeTokenInfo(chainId: string): Omit<TokenInfo, 'address'> | null {
-  const nativeTokens: Record<string, Omit<TokenInfo, 'address'>> = {
-    '1': { name: 'Ethereum', symbol: 'ETH', decimals: 18 },
-    '8453': { name: 'Ethereum', symbol: 'ETH', decimals: 18 },
-    '137': { name: 'Polygon', symbol: 'MATIC', decimals: 18 },
-    '42161': { name: 'Ethereum', symbol: 'ETH', decimals: 18 },
-    '10': { name: 'Ethereum', symbol: 'ETH', decimals: 18 },
-    '56': { name: 'Binance Coin', symbol: 'BNB', decimals: 18 },
-  };
+// Fetch native token information from blockchain
+async function fetchNativeTokenInfo(client: PublicClient, chainId: string, tokenAddress: string): Promise<TokenInfo | null> {
+  try {
+    // Get chain information from viem client
+    const chain = client.chain;
+    if (!chain) return null;
 
-  return nativeTokens[chainId] || null;
+    return {
+      name: chain.nativeCurrency.name,
+      symbol: chain.nativeCurrency.symbol,
+      decimals: chain.nativeCurrency.decimals,
+      address: tokenAddress,
+    };
+  } catch (error) {
+    console.warn(`Failed to fetch native token info for chain ${chainId}:`, error);
+    
+    // Fallback to hardcoded native token info
+    const nativeTokens: Record<string, Omit<TokenInfo, 'address'>> = {
+      '1': { name: 'Ethereum', symbol: 'ETH', decimals: 18 },
+      '8453': { name: 'Ethereum', symbol: 'ETH', decimals: 18 },
+      '137': { name: 'Polygon', symbol: 'MATIC', decimals: 18 },
+      '42161': { name: 'Ethereum', symbol: 'ETH', decimals: 18 },
+      '10': { name: 'Ethereum', symbol: 'ETH', decimals: 18 },
+      '56': { name: 'Binance Coin', symbol: 'BNB', decimals: 18 },
+    };
+
+    const fallback = nativeTokens[chainId];
+    return fallback ? { ...fallback, address: tokenAddress } : null;
+  }
 }
 
 // Check if viem support is available for a chain

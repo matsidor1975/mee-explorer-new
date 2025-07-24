@@ -189,7 +189,8 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                 </div>
                 <div className="flex items-center space-x-1">
                   <p className="text-xs text-slate-500">
-                    Token: {tokenInfo?.name || 'Loading...'}
+                    {paymentInfo.token === '0x0000000000000000000000000000000000000000' ? 'Native Token: ' : 'Token: '}
+                    {tokenInfo?.name || 'Loading...'}
                   </p>
                   {isLoadingViem && hasViemSupport(paymentInfo.chainId) && (
                     <div className="w-2 h-2 border border-biconomy-orange border-t-transparent rounded-full animate-spin"></div>
