@@ -444,7 +444,11 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                   <Hash className="h-4 w-4" />
                   <span>Core Operation Data</span>
                 </h5>
-                <table className="w-full text-xs">
+                <table className="w-full text-sm">
+                  <colgroup>
+                    <col className="w-40" />
+                    <col className="w-auto" />
+                  </colgroup>
                   <tbody>
                     <TableDataField icon={Hash} label="User Op Hash" value={userOp.userOpHash} />
                     <TableDataField icon={Key} label="MEE User Op Hash" value={userOp.meeUserOpHash} />
@@ -462,7 +466,11 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                   <Fuel className="h-4 w-4" />
                   <span>Gas & Fee Configuration</span>
                 </h5>
-                <table className="w-full text-xs">
+                <table className="w-full text-sm">
+                  <colgroup>
+                    <col className="w-40" />
+                    <col className="w-auto" />
+                  </colgroup>
                   <tbody>
                     <TableDataField icon={Fuel} label="Account Gas Limits" value={userOp.userOp.accountGasLimits} />
                     <TableDataField icon={Zap} label="Gas Fees" value={userOp.userOp.gasFees} />
@@ -545,7 +553,11 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
                   <Timer className="h-4 w-4" />
                   <span>Timing Information</span>
                 </h5>
-                <table className="w-full text-xs">
+                <table className="w-full text-sm">
+                  <colgroup>
+                    <col className="w-40" />
+                    <col className="w-auto" />
+                  </colgroup>
                   <tbody>
                     <TableDataField icon={Clock} label="Lower Bound" value={formatTimestamp(userOp.lowerBoundTimestamp).formatted} showCopy={false} />
                     <TableDataField icon={Clock} label="Upper Bound" value={formatTimestamp(userOp.upperBoundTimestamp).formatted} showCopy={false} />

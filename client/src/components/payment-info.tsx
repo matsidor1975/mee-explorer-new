@@ -305,6 +305,10 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                 <span>Payment Details</span>
               </h5>
               <table className="w-full text-sm">
+                <colgroup>
+                  <col className="w-40" />
+                  <col className="w-auto" />
+                </colgroup>
                 <tbody>
                   <TableDataField icon={User} label="Sender" value={paymentInfo.sender} />
                   <TableDataField icon={Hash} label="Nonce" value={paymentInfo.nonce} showCopy={false} />
@@ -376,6 +380,10 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                 <span>Token Information</span>
               </h5>
               <table className="w-full text-sm">
+                <colgroup>
+                  <col className="w-40" />
+                  <col className="w-auto" />
+                </colgroup>
                 <tbody>
                   <tr className="border-b border-gray-100">
                     <td className="py-2 pr-4">
