@@ -611,7 +611,7 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <Layers className="h-4 w-4 text-blue-500" />
-                <h3 className="text-lg sm:text-xl root-card-title">Transaction Operations</h3>
+                <h3 className="root-card-title">User Operations</h3>
                 {isPolling && (
                   <div className="flex items-center space-x-1.5 text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded-full border border-blue-200">
                     <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
@@ -652,7 +652,7 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
               <div className="flex items-center space-x-3">
                 <Settings className="h-4 w-4 text-slate-500" />
                 <div>
-                  <h3 className="text-lg sm:text-xl root-card-title">Cleanup Operations</h3>
+                  <h3 className="root-card-title">Cleanup Operations</h3>
                   <p className="text-sm text-slate-500">
                     {cleanupOperations.length} cleanup operation{cleanupOperations.length !== 1 ? 's' : ''} available
                   </p>
@@ -702,7 +702,7 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
             <div className="flex items-center space-x-3 mb-4">
               <Layers className="h-4 w-4 text-orange-500" />
               <div>
-                <h3 className="text-lg root-card-title">Transaction Operations</h3>
+                <h3 className="root-card-title">User Operations</h3>
                 <p className="text-sm text-slate-500">No operations found</p>
               </div>
             </div>

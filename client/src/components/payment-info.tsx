@@ -134,7 +134,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-3">
               <CreditCard className="h-4 w-4 text-emerald-500" />
-              <h3 className="text-lg sm:text-xl root-card-title">Payment & Fees</h3>
+              <h3 className="root-card-title">Payment Information</h3>
             </div>
             
             {/* Payment UserOp Transaction Link - Inline with Separator */}
@@ -189,7 +189,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <CreditCard className="h-4 w-4 text-emerald-500" />
-              <h3 className="text-lg root-card-title">Payment & Fees</h3>
+              <h3 className="root-card-title">Payment Information</h3>
             </div>
             <Button
               variant="outline"
