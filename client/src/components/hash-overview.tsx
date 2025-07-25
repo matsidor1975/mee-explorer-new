@@ -86,9 +86,9 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
         </div>
       </div>
       <div>
-        <div className="grid grid-cols-1 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {/* Supertx Hash */}
-          <div className="gradient-card-subtle rounded-lg p-3 sm:p-4">
+          <div className="gradient-card-subtle rounded-lg p-3 sm:p-4 border border-black/5">
             <div className="flex items-center space-x-2 mb-2">
               <Hash className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 flex-shrink-0" />
               <span className="text-xs sm:text-sm font-medium text-slate-600">Supertransaction Hash</span>
@@ -109,7 +109,7 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
           </div>
 
           {/* Executing Relayer */}
-          <div className="gradient-card-subtle rounded-lg p-3 sm:p-4">
+          <div className="gradient-card-subtle rounded-lg p-3 sm:p-4 border border-black/5">
             <div className="flex items-center space-x-2 mb-2">
               <Server className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 flex-shrink-0" />
               <span className="text-xs sm:text-sm font-medium text-slate-600">Executing Relayer</span>
