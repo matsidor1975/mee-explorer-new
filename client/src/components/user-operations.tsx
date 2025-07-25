@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Copy, ChevronDown, Code, User, Hash, Fuel, Clock, Zap, Layers, Settings, AlertTriangle, CheckCircle, ExternalLink, Wallet, CreditCard, Play, FileText, Key, Timer, Database, ShieldCheck, Signature } from "lucide-react";
+import { Copy, ChevronDown, Code, User, Hash, Fuel, Clock, Zap, Layers, Settings, AlertTriangle, CheckCircle, ExternalLink, Wallet, CreditCard, Play, FileText, Key, Timer, Database, ShieldCheck, Signature, Loader2 } from "lucide-react";
 import { UserOp } from "@/types";
 import { formatHash, formatGas, formatTimestamp, getExecutionStatusColor, parseAccountGasLimits, parseGasFees, getExplorerUrl, getExplorerName, hasExplorerSupport, getNetworkIcon } from "@/lib/format";
 import { useToast } from "@/hooks/use-toast";
@@ -241,9 +241,14 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
     const { maxPriorityFeePerGas, maxFeePerGas } = parseGasFees(userOp.userOp.gasFees);
     const executionTime = formatTimestamp(userOp.minedTimestamp || userOp.miningTimestamp);
     const chainInfo = chains.find(c => c.chainId.toString() === userOp.chainId);
+    
+    // Check if operation is pending
+    const isPending = userOp.executionStatus.toLowerCase().includes('pending') || 
+                     userOp.executionStatus.toLowerCase().includes('processing') || 
+                     userOp.executionStatus.toLowerCase().includes('submitted');
 
     return (
-      <div key={index} className="border border-gray-200 rounded overflow-hidden">
+      <div key={index} className={`border border-gray-200 rounded overflow-hidden ${isPending ? 'animate-pulse' : ''}`}>
         {/* Compact Operation Header */}
         <div className="p-2 bg-gray-50/50">
           {/* Desktop Layout - Everything Inline */}
@@ -251,7 +256,11 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
             <div className="flex items-center space-x-4 flex-1">
               {/* Operation number and chain */}
               <div className="flex items-center space-x-2">
-                <User className="h-4 w-4 text-[var(--biconomy-orange)]" />
+                {isPending ? (
+                  <Loader2 className="h-4 w-4 text-[var(--biconomy-orange)] animate-spin" />
+                ) : (
+                  <User className="h-4 w-4 text-[var(--biconomy-orange)]" />
+                )}
                 <h4 className="font-medium text-gray-900 text-sm">
                   {isCleanup ? 'Cleanup Operation' : `#${index + 1}`}
                 </h4>
@@ -346,7 +355,11 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
           <div className="md:hidden space-y-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <User className="h-4 w-4 text-[var(--biconomy-orange)]" />
+                {isPending ? (
+                  <Loader2 className="h-4 w-4 text-[var(--biconomy-orange)] animate-spin" />
+                ) : (
+                  <User className="h-4 w-4 text-[var(--biconomy-orange)]" />
+                )}
                 <h4 className="font-medium text-gray-900 text-sm">
                   {isCleanup ? 'Cleanup Operation' : `#${index + 1}`}
                 </h4>

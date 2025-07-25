@@ -132,3 +132,6 @@ The application is designed to be easily deployable on platforms like Replit, Ve
 - Fixed SPA routing for static hosting by adding _redirects and 404.html files to handle direct links
 - Updated build script to automatically create SPA routing files during deployment builds
 - Project is ready for static build and publishing with proper routing support
+- Implemented auto-refresh functionality for pending UserOperations with 300ms polling interval
+- Added visual feedback for pending operations: animate-pulse effect on entire operation cards and spinning loader icons
+- Enhanced user experience with real-time status updates and clear visual indicators during operation processing
