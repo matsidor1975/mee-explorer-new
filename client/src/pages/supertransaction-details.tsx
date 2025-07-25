@@ -67,8 +67,8 @@ export default function SupertransactionDetails() {
                 href="/" 
                 className={`flex items-center space-x-1.5 px-2 py-1 rounded-md transition-all duration-200 ${
                   isActive("/") 
-                    ? "bg-biconomy-orange/90 text-white shadow-sm" 
-                    : "text-slate-600 hover:text-biconomy-orange hover:bg-white/60"
+                    ? "bg-biconomy-orange text-white shadow-sm" 
+                    : "text-slate-700 hover:text-white hover:bg-biconomy-orange/80"
                 }`}
               >
                 <Search className="h-3 w-3" />
@@ -79,8 +79,8 @@ export default function SupertransactionDetails() {
                 href="/network-info" 
                 className={`flex items-center space-x-1.5 px-2 py-1 rounded-md transition-all duration-200 ${
                   isActive("/network-info") 
-                    ? "bg-biconomy-orange/90 text-white shadow-sm" 
-                    : "text-slate-600 hover:text-biconomy-orange hover:bg-white/60"
+                    ? "bg-biconomy-orange text-white shadow-sm" 
+                    : "text-slate-700 hover:text-white hover:bg-biconomy-orange/80"
                 }`}
               >
                 <Activity className="h-3 w-3" />
@@ -91,7 +91,7 @@ export default function SupertransactionDetails() {
                 href="https://docs.biconomy.io" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="flex items-center space-x-1.5 px-2 py-1 text-slate-600 hover:text-biconomy-orange hover:bg-white/60 transition-all duration-200 rounded-md"
+                className="flex items-center space-x-1.5 px-2 py-1 text-slate-700 hover:text-white hover:bg-biconomy-orange/80 transition-all duration-200 rounded-md"
               >
                 <FileText className="h-3 w-3" />
                 <span className="text-xs font-semibold uppercase tracking-wider">Docs</span>
