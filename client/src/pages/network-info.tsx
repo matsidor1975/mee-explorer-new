@@ -313,21 +313,21 @@ export default function NetworkInfo() {
               <div key={chain.chainId} className="bg-white border border-slate-200 rounded-lg hover:shadow-md transition-shadow">
                 {/* Chain Card Content */}
                 <div 
-                  className="p-4 cursor-pointer hover:bg-slate-50 transition-colors"
+                  className="p-3 cursor-pointer hover:bg-slate-50 transition-colors"
                   onClick={() => toggleChain(chain.chainId)}
                 >
                   <div className="text-center">
                     {/* Chain Icon */}
-                    <div className="mb-3">
+                    <div className="mb-2">
                       {getNetworkIcon(chain.chainId) ? (
                         <img 
                           src={getNetworkIcon(chain.chainId)!} 
                           alt={chain.name}
-                          className="w-12 h-12 mx-auto"
+                          className="w-8 h-8 mx-auto"
                         />
                       ) : (
-                        <div className="w-12 h-12 mx-auto rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                          <span className="text-lg font-bold text-white">
+                        <div className="w-8 h-8 mx-auto rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                          <span className="text-sm font-bold text-white">
                             {chain.name.charAt(0)}
                           </span>
                         </div>
@@ -335,41 +335,34 @@ export default function NetworkInfo() {
                     </div>
                     
                     {/* Chain Name */}
-                    <h3 className="text-base font-semibold text-slate-900 mb-1">{chain.name}</h3>
-                    <p className="text-xs text-slate-600 mb-3">Chain ID: {chain.chainId}</p>
+                    <h3 className="text-sm font-semibold text-slate-900 mb-1 truncate">{chain.name}</h3>
                     
                     {/* Status Badge */}
-                    <div className="flex items-center justify-center space-x-2 mb-3">
+                    <div className="flex items-center justify-center space-x-1 mb-2">
                       {getStatusIcon(chain.healthCheck.status)}
-                      <Badge className={`${getStatusColor(chain.healthCheck.status)} border-0 text-xs`}>
+                      <Badge className={`${getStatusColor(chain.healthCheck.status)} border-0 text-xs px-2 py-0.5`}>
                         {chain.healthCheck.status}
                       </Badge>
                     </div>
                     
                     {/* Quick Health Check */}
                     {chainModule?.data.checks && (
-                      <div className="flex items-center justify-center space-x-4 text-xs mb-3">
-                        <div className="flex items-center space-x-1">
-                          <span className="text-slate-600">RPC:</span>
-                          <span className={chainModule.data.checks.rpcCall ? 'text-green-600' : 'text-red-600'}>
-                            {chainModule.data.checks.rpcCall ? '✓' : '✗'}
-                          </span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <span className="text-slate-600">Debug:</span>
-                          <span className={chainModule.data.checks.debugTraceCall ? 'text-green-600' : 'text-red-600'}>
-                            {chainModule.data.checks.debugTraceCall ? '✓' : '✗'}
-                          </span>
-                        </div>
+                      <div className="flex items-center justify-center space-x-3 text-xs mb-2">
+                        <span className={chainModule.data.checks.rpcCall ? 'text-green-600' : 'text-red-600'}>
+                          RPC {chainModule.data.checks.rpcCall ? '✓' : '✗'}
+                        </span>
+                        <span className={chainModule.data.checks.debugTraceCall ? 'text-green-600' : 'text-red-600'}>
+                          Debug {chainModule.data.checks.debugTraceCall ? '✓' : '✗'}
+                        </span>
                       </div>
                     )}
                     
                     {/* Expand Button */}
                     <div className="flex items-center justify-center">
                       {isExpanded ? (
-                        <ChevronDown className="h-4 w-4 text-slate-500" />
+                        <ChevronDown className="h-3 w-3 text-slate-500" />
                       ) : (
-                        <ChevronRight className="h-4 w-4 text-slate-500" />
+                        <ChevronRight className="h-3 w-3 text-slate-500" />
                       )}
                     </div>
                   </div>
