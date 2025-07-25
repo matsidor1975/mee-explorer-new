@@ -606,7 +606,7 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
     <div className="space-y-6">
       {/* Regular Operations Card */}
       {regularOperations.length > 0 && (
-        <div className="bg-white rounded-lg p-6">
+        <div className="glass-root-card rounded-lg p-6">
           <div className="pb-4 mb-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
@@ -644,7 +644,7 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
       )}
       {/* Cleanup Operations */}
       {cleanupOperations.length > 0 && (
-        <div className="bg-white rounded-lg p-6">
+        <div className="glass-root-card rounded-lg p-6">
           <div className="pb-4 mb-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">

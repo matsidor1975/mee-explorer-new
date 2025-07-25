@@ -139,3 +139,4 @@ The application is designed to be easily deployable on platforms like Replit, Ve
 - Created flat design approach without shadows while maintaining color gradients for visual separation
 - Added comprehensive gradient card classes (primary, secondary, accent, warning, success, subtle) for different content types
 - Updated all major components (HashOverview, PaymentInfo, UserOperations) to use gradient cards with appropriate color themes
+- Enhanced root cards with glass-morphism effect: subtle gray borders, 95% transparency, and 12px backdrop blur for modern appearance

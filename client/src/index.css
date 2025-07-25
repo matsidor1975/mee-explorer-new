@@ -86,6 +86,14 @@
       hsl(210, 40%, 95%) 100%);
     transition: background 0.2s ease-in-out;
   }
+
+  /* Glass morphism root cards */
+  .glass-root-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
 }
 
 @font-face {

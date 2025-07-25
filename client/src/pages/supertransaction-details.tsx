@@ -164,7 +164,7 @@ export default function SupertransactionDetails() {
         {/* Error State */}
         {showErrorState && (
           <div className="text-center py-12 sm:py-16">
-            <div className="max-w-md mx-auto bg-white rounded-lg p-8">
+            <div className="max-w-md mx-auto glass-root-card rounded-lg p-8">
               <div className="w-24 h-24 bg-gradient-to-br from-red-100 to-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
                 <TriangleAlert className="h-12 w-12 text-red-500" />
               </div>
