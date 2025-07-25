@@ -611,10 +611,10 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
           </div>
         </div>
       )}
-      {/* Cleanup Operations Toggle */}
+      {/* Cleanup Operations */}
       {cleanupOperations.length > 0 && (
         <div className="glass-card rounded">
-          <div>
+          <div className="border-b border-white/20 pb-3 mb-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <Settings className="h-4 w-4 text-slate-500" />
@@ -636,31 +636,30 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
               </Button>
             </div>
           </div>
-        </div>
-      )}
-      {/* Expanded Cleanup Operations Card */}
-      {cleanupOperations.length > 0 && showCleanupOperations && (
-        <div className="bg-blue-50 border border-slate-200 rounded">
-          <div className="p-6">
-            {/* Cleanup Explanation */}
-            <div className="p-4 bg-blue-100 border border-blue-200 rounded-lg mb-6">
-              <div className="flex items-start space-x-3">
-                <Settings className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                <div>
-                  <h4 className="text-sm font-medium text-blue-800 mb-2">About Cleanup Operations</h4>
-                  <p className="text-sm text-blue-700">
-                    Cleanup operations automatically execute after all regular operations complete. They remove any 
-                    remaining tokens from the smart account. If there are no tokens to cleanup, these operations 
-                    will not execute, which is completely normal behavior.
-                  </p>
+          
+          {/* Expanded Cleanup Operations Content */}
+          {showCleanupOperations && (
+            <div>
+              {/* Cleanup Explanation */}
+              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg mb-6">
+                <div className="flex items-start space-x-3">
+                  <Settings className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h4 className="text-sm font-medium text-blue-800 mb-2">About Cleanup Operations</h4>
+                    <p className="text-sm text-blue-700">
+                      Cleanup operations automatically execute after all regular operations complete. They remove any 
+                      remaining tokens from the smart account. If there are no tokens to cleanup, these operations 
+                      will not execute, which is completely normal behavior.
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="space-y-2">
-              {cleanupOperations.map((userOp, index) => renderOperation(userOp, index, true))}
+              <div className="space-y-2">
+                {cleanupOperations.map((userOp, index) => renderOperation(userOp, index, true))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       )}
       {/* No Operations Message */}
