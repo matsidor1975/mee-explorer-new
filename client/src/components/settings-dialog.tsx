@@ -34,7 +34,7 @@ const PRESET_NETWORKS = {
   },
   staging: {
     name: "Staging",
-    url: "https://staging-network.biconomy.io",
+    url: "https://mee-node-staging.biconomy.io",
     description: "Staging environment for testing"
   },
   custom: {
@@ -48,7 +48,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
   const [selectedNetwork, setSelectedNetwork] = useState(() => {
     const stored = localStorage.getItem('biconomy-network-url');
     if (!stored || stored === 'https://network.biconomy.io') return 'production';
-    if (stored === 'https://staging-network.biconomy.io') return 'staging';
+    if (stored === 'https://mee-node-staging.biconomy.io') return 'staging';
     return 'custom';
   });
 
