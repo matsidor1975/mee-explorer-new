@@ -239,7 +239,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
               <Receipt className="h-4 w-4 text-purple-500" />
               <span className="text-sm font-medium text-slate-600">Gas Fee</span>
             </div>
-            <div className="text-lg font-semibold text-slate-900 mb-1">
+            <div className="text-lg font-semibold text-slate-900 mb-1 metric-value">
               {paymentInfo.gasFee ? `$${paymentInfo.gasFee}` : 'N/A'}
             </div>
             <p className="text-xs text-slate-500">Paid to blockchain validators</p>
@@ -250,7 +250,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
               <Users className="h-4 w-4 text-orange-500" />
               <span className="text-sm font-medium text-slate-600">Orchestration Fee</span>
             </div>
-            <div className="text-lg font-semibold text-slate-900 mb-1">
+            <div className="text-lg font-semibold text-slate-900 mb-1 metric-value">
               {paymentInfo.orchestrationFee ? `$${paymentInfo.orchestrationFee}` : 'N/A'}
             </div>
             <p className="text-xs text-slate-500">Paid to Biconomy network relayers</p>
@@ -261,7 +261,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
               <DollarSign className="h-4 w-4 text-emerald-500" />
               <span className="text-sm font-medium text-slate-600">Total Fees</span>
             </div>
-            <div className="text-lg font-semibold text-emerald-600 mb-1">
+            <div className="text-lg font-semibold text-emerald-600 mb-1 metric-value">
               ${totalFees.toFixed(6)}
             </div>
             <p className="text-xs text-slate-500">Gas + Orchestration fees</p>
@@ -280,7 +280,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
                   className="w-4 h-4"
                 />
               )}
-              <span className="text-lg font-semibold text-slate-900">{tokenInfo?.symbol || 'Unknown'}</span>
+              <span className="text-lg font-semibold text-slate-900 metric-value">{tokenInfo?.symbol || 'Unknown'}</span>
             </div>
             <div className="flex items-center space-x-1">
               {getNetworkIcon(paymentInfo.chainId) && (

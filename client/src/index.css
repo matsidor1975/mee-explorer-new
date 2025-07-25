@@ -95,18 +95,40 @@
     -webkit-backdrop-filter: blur(12px);
   }
 
-  /* Font face declaration */
-  @font-face {
-    font-family: 'Cascadia Code';
-    src: url('/src/assets/fonts/CascadiaCode.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
+  /* Font imports for dashboard typography */
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&display=swap');
+
+  /* Global font family - Inter for UI */
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    font-feature-settings: 'cv01', 'cv02', 'cv03', 'cv04';
   }
 
-  /* Global font family */
-  body {
-    font-family: 'Cascadia Code', 'Cascadia Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+  /* Monospace font for code and data */
+  code, .font-mono, .mobile-hash {
+    font-family: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', 'Consolas', 'Monaco', monospace;
+    font-feature-settings: 'liga', 'calt';
+  }
+
+  /* Dashboard-specific typography improvements */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+
+  /* Data table and metric text */
+  .metric-value {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Button and UI element text */
+  button, .btn {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
   }
 }
 
