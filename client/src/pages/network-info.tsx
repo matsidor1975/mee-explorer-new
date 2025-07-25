@@ -224,11 +224,7 @@ export default function NetworkInfo() {
             <nav className="hidden md:flex items-center space-x-6">
               <Link 
                 href="/" 
-                className={`flex items-center space-x-1.5 px-2 py-1 rounded-md transition-all duration-200 ${
-                  isActive("/") 
-                    ? "bg-biconomy-orange text-white shadow-sm" 
-                    : "text-slate-700 hover:text-white hover:bg-biconomy-orange/80"
-                }`}
+                className="flex items-center space-x-1.5 px-2 py-1 rounded-md transition-all duration-200 text-slate-700 hover:text-white hover:bg-biconomy-orange/80 pl-[16px] pr-[16px] pt-[10px] pb-[10px]"
               >
                 <Search className="h-3 w-3" />
                 <span className="text-xs font-semibold uppercase tracking-wider">Explorer</span>
