@@ -35,10 +35,10 @@ export function MobileNav({ isOpen, onClose, currentPath }: MobileNavProps) {
           <Link 
             href="/" 
             onClick={onClose}
-            className={`flex items-center space-x-3 px-3 py-2 rounded-md transition-all duration-200 ${
+            className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${
               isActive("/") 
                 ? "bg-biconomy-orange text-white shadow-sm" 
-                : "text-slate-700 hover:text-white hover:bg-biconomy-orange/80"
+                : "text-slate-700 hover:text-biconomy-orange"
             }`}
           >
             <Search className="h-4 w-4" />
@@ -48,10 +48,10 @@ export function MobileNav({ isOpen, onClose, currentPath }: MobileNavProps) {
           <Link 
             href="/network-info" 
             onClick={onClose}
-            className={`flex items-center space-x-3 px-3 py-2 rounded-md transition-all duration-200 ${
+            className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${
               isActive("/network-info") 
                 ? "bg-biconomy-orange text-white shadow-sm" 
-                : "text-slate-700 hover:text-white hover:bg-biconomy-orange/80"
+                : "text-slate-700 hover:text-biconomy-orange"
             }`}
           >
             <Activity className="h-4 w-4" />
@@ -63,7 +63,7 @@ export function MobileNav({ isOpen, onClose, currentPath }: MobileNavProps) {
             target="_blank" 
             rel="noopener noreferrer"
             onClick={onClose}
-            className="flex items-center space-x-3 px-3 py-2 text-slate-700 hover:text-white hover:bg-biconomy-orange/80 transition-all duration-200 rounded-md"
+            className="flex items-center space-x-3 px-4 py-3 text-slate-700 hover:text-biconomy-orange transition-all duration-200 rounded-lg"
           >
             <FileText className="h-4 w-4" />
             <span className="font-medium uppercase tracking-wider">Docs</span>

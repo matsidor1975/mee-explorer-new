@@ -76,10 +76,10 @@ export default function Explorer() {
             <nav className="hidden md:flex items-center space-x-6">
               <Link 
                 href="/" 
-                className={`flex items-center space-x-1.5 px-2 py-1 rounded-md transition-all duration-200 ${
+                className={`flex items-center space-x-1.5 px-4 py-2 rounded-lg transition-all duration-200 ${
                   isActive("/") 
                     ? "bg-biconomy-orange text-white shadow-sm" 
-                    : "text-slate-700 hover:text-white hover:bg-biconomy-orange/80"
+                    : "text-slate-700 hover:text-biconomy-orange"
                 }`}
               >
                 <Search className="h-3 w-3" />
@@ -88,10 +88,10 @@ export default function Explorer() {
               
               <Link 
                 href="/network-info" 
-                className={`flex items-center space-x-1.5 px-2 py-1 rounded-md transition-all duration-200 ${
+                className={`flex items-center space-x-1.5 px-4 py-2 rounded-lg transition-all duration-200 ${
                   isActive("/network-info") 
                     ? "bg-biconomy-orange text-white shadow-sm" 
-                    : "text-slate-700 hover:text-white hover:bg-biconomy-orange/80"
+                    : "text-slate-700 hover:text-biconomy-orange"
                 }`}
               >
                 <Activity className="h-3 w-3" />
@@ -102,7 +102,7 @@ export default function Explorer() {
                 href="https://docs.biconomy.io" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="flex items-center space-x-1.5 px-2 py-1 text-slate-700 hover:text-white hover:bg-biconomy-orange/80 transition-all duration-200 rounded-md"
+                className="flex items-center space-x-1.5 px-4 py-2 text-slate-700 hover:text-biconomy-orange transition-all duration-200 rounded-lg"
               >
                 <FileText className="h-3 w-3" />
                 <span className="text-xs font-semibold uppercase tracking-wider">Docs</span>
