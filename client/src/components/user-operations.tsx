@@ -604,6 +604,17 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
               </Badge>
             </div>
           </div>
+          
+          {/* Information Callout */}
+          <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="flex items-start space-x-2">
+              <FileText className="h-4 w-4 text-blue-600 mt-0.5 shrink-0" />
+              <p className="text-sm text-blue-800">
+                <strong>Note:</strong> One User Operation can contain multiple function calls and token transfers. All actions on a single chain are executed atomically.
+              </p>
+            </div>
+          </div>
+          
           <div>
             <div className="space-y-2">
               {regularOperations.map((userOp, index) => renderOperation(userOp, index, false))}
