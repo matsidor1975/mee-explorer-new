@@ -234,7 +234,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
         
         {/* Fee Information Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-          <div className="gradient-card-subtle rounded-lg p-3 border border-black/3">
+          <div className="gradient-card-subtle rounded-lg p-3 border" style={{ borderColor: 'rgba(0,0,0,0.03)' }}>
             <div className="flex items-center space-x-2 mb-1">
               <Receipt className="h-4 w-4 text-purple-500" />
               <span className="text-sm font-medium text-slate-600">Gas Fee</span>
@@ -245,7 +245,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
             <p className="text-xs text-slate-500">Paid to blockchain validators</p>
           </div>
           
-          <div className="gradient-card-subtle rounded-lg p-3 border border-black/3">
+          <div className="gradient-card-subtle rounded-lg p-3 border" style={{ borderColor: 'rgba(0,0,0,0.03)' }}>
             <div className="flex items-center space-x-2 mb-1">
               <Users className="h-4 w-4 text-orange-500" />
               <span className="text-sm font-medium text-slate-600">Orchestration Fee</span>
@@ -256,7 +256,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
             <p className="text-xs text-slate-500">Paid to Biconomy network relayers</p>
           </div>
           
-          <div className="gradient-card-subtle rounded-lg p-3 border border-black/3">
+          <div className="gradient-card-subtle rounded-lg p-3 border" style={{ borderColor: 'rgba(0,0,0,0.03)' }}>
             <div className="flex items-center space-x-2 mb-1">
               <DollarSign className="h-4 w-4 text-emerald-500" />
               <span className="text-sm font-medium text-slate-600">Total Fees</span>
@@ -267,7 +267,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
             <p className="text-xs text-slate-500">Gas + Orchestration fees</p>
           </div>
           
-          <div className="gradient-card-subtle rounded-lg p-3 border border-black/3">
+          <div className="gradient-card-subtle rounded-lg p-3 border" style={{ borderColor: 'rgba(0,0,0,0.03)' }}>
             <div className="flex items-center space-x-2 mb-1">
               <CreditCard className="h-4 w-4 text-blue-500" />
               <span className="text-sm font-medium text-slate-600">Payment Method</span>

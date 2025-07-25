@@ -142,4 +142,4 @@ The application is designed to be easily deployable on platforms like Replit, Ve
 - Enhanced root cards with glass-morphism effect: subtle gray borders, 95% transparency, and 12px backdrop blur for modern appearance
 - Implemented professional typography system: Inter font for UI elements, JetBrains Mono for code/data, with optimized font features and tabular numbers for metrics
 - Applied minimalist root card titles using thin (font-weight 400), small (0.75rem), uppercase styling with increased letter spacing and muted color for subtle visual hierarchy
-- Enhanced card styling with lighter gradient backgrounds (99.5% to 98% lightness) and more subtle borders (black/3 opacity) for softer visual appearance
+- Enhanced card styling with lighter gradient backgrounds (99.5% to 98% lightness) and ultra-subtle borders (rgba(0,0,0,0.03)) for minimal visual separation on sub-cards
