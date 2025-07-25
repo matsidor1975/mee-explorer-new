@@ -8,7 +8,7 @@ import UserOperations from "@/components/user-operations";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, TriangleAlert, Search, Activity, FileText, Menu } from "lucide-react";
 import { addToSearchHistory } from "@/lib/storage";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { MobileNav } from "@/components/ui/mobile-nav";
 import { useMobileNav } from "@/hooks/use-mobile-nav";
 
@@ -24,16 +24,37 @@ export default function SupertransactionDetails() {
     retry: false,
   });
 
+  // Check if any user operations are in pending state
+  const hasPendingOperations = useMemo(() => {
+    if (!hashDetails?.userOps) return false;
+    return hashDetails.userOps.some(userOp => {
+      const status = userOp.executionStatus.toLowerCase();
+      return status.includes('pending') || status.includes('processing') || status.includes('submitted');
+    });
+  }, [hashDetails?.userOps]);
+
+  // Set up polling query with conditional refetch interval
+  const { data: pollingHashDetails } = useQuery<HashDetails>({
+    queryKey: ['/api/hash-details-polling', hash],
+    queryFn: () => getHashDetails(hash!),
+    enabled: !!hash && hasPendingOperations,
+    refetchInterval: 300,
+    refetchIntervalInBackground: true,
+  });
+
+  // Use the most recent data
+  const currentHashDetails = pollingHashDetails || hashDetails;
+
   const showErrorState = error && !isLoading;
-  const showHashDetails = hashDetails && !isLoading && !error;
+  const showHashDetails = currentHashDetails && !isLoading && !error;
 
   // Save successful searches to history
   useEffect(() => {
-    if (hash && hashDetails && !error) {
+    if (hash && currentHashDetails && !error) {
       // Save to history with hash as identifier
       addToSearchHistory(hash);
     }
-  }, [hash, hashDetails, error]);
+  }, [hash, currentHashDetails, error]);
 
   const isActive = (path: string) => {
     if (path === "/" && location === "/") return true;
@@ -131,12 +152,12 @@ export default function SupertransactionDetails() {
         {/* Hash Details */}
         {showHashDetails && (
           <div className="space-y-4 sm:space-y-6">
-            <HashOverview hashDetails={hashDetails!} />
+            <HashOverview hashDetails={currentHashDetails!} />
             <PaymentInfo 
-              paymentInfo={hashDetails!.paymentInfo} 
-              feePayerUserOp={hashDetails!.userOps[0]} 
+              paymentInfo={currentHashDetails!.paymentInfo} 
+              feePayerUserOp={currentHashDetails!.userOps[0]} 
             />
-            <UserOperations userOps={hashDetails!.userOps.slice(1)} />
+            <UserOperations userOps={currentHashDetails!.userOps.slice(1)} isPolling={hasPendingOperations} />
           </div>
         )}
 

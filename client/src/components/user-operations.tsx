@@ -11,9 +11,10 @@ import { simulateUserOperation } from "@/lib/tenderly";
 
 interface UserOperationsProps {
   userOps: UserOp[];
+  isPolling?: boolean;
 }
 
-export default function UserOperations({ userOps }: UserOperationsProps) {
+export default function UserOperations({ userOps, isPolling = false }: UserOperationsProps) {
   const [expandedOps, setExpandedOps] = useState<Set<number>>(new Set());
   const [expandedCleanupOps, setExpandedCleanupOps] = useState<Set<number>>(new Set());
   const [showCleanupOperations, setShowCleanupOperations] = useState<boolean>(false);
@@ -598,6 +599,12 @@ export default function UserOperations({ userOps }: UserOperationsProps) {
               <div className="flex items-center space-x-3">
                 <Layers className="h-4 w-4 text-blue-500" />
                 <h3 className="text-base font-semibold text-slate-900">User Operations</h3>
+                {isPolling && (
+                  <div className="flex items-center space-x-1.5 text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded-full border border-blue-200">
+                    <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
+                    <span className="font-medium">Auto-refreshing</span>
+                  </div>
+                )}
               </div>
               <Badge className="px-3 py-1 text-xs bg-blue-100 text-blue-800 border border-blue-200 badge">
                 {regularOperations.length} operation{regularOperations.length !== 1 ? 's' : ''}
