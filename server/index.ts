@@ -1,6 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { getHashDetails, generateMetaTags, generateDynamicHTML } from "./meta-generator";
 
 const app = express();
 app.use(express.json());
@@ -37,6 +38,47 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  // Add dynamic meta tag route for supertransaction details
+  app.get('/supertransaction/:hash', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { hash } = req.params;
+      
+      // Validate hash format
+      const hashRegex = /^0x[a-fA-F0-9]{64}$/;
+      if (!hashRegex.test(hash)) {
+        return next(); // Let client handle invalid hashes
+      }
+      
+      // Check if this is a bot/crawler requesting the page
+      const userAgent = req.get('User-Agent') || '';
+      const isBotOrCrawler = /bot|crawler|spider|crawling|facebookexternalhit|twitterbot|linkedinbot|whatsapp|telegram|slackbot|discordbot/i.test(userAgent);
+      
+      // Also check for specific crawler headers
+      const isOpenGraphRequest = req.get('Accept')?.includes('text/html') && 
+                                 (isBotOrCrawler || req.get('X-Purpose') === 'preview');
+      
+      if (isBotOrCrawler || isOpenGraphRequest) {
+        try {
+          const hashDetails = await getHashDetails(hash);
+          const metaTags = generateMetaTags(hashDetails, hash);
+          const html = generateDynamicHTML(metaTags);
+          
+          res.setHeader('Content-Type', 'text/html');
+          return res.send(html);
+        } catch (error) {
+          console.error('Error generating meta tags:', error);
+          // Fall through to serve normal client app
+        }
+      }
+      
+      // For regular browsers, serve the normal client app
+      next();
+    } catch (error) {
+      console.error('Error in supertransaction route:', error);
+      next();
+    }
+  });
+
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
