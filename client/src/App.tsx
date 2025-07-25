@@ -9,10 +9,23 @@ import NetworkInfo from "@/pages/network-info";
 import NotFound from "@/pages/not-found";
 import { useChainInfo } from "@/hooks/use-chain-info";
 import { Activity, Search } from "lucide-react";
+import { useEffect } from "react";
 
 function Router() {
   // Initialize chain info fetching
   useChainInfo();
+  
+  const [location, setLocation] = useLocation();
+  
+  useEffect(() => {
+    // Check if we have a stored redirect path from the 404.html fallback
+    const redirectPath = sessionStorage.getItem('redirectPath');
+    if (redirectPath && location === '/') {
+      // Clear the stored path and navigate to it
+      sessionStorage.removeItem('redirectPath');
+      setLocation(redirectPath);
+    }
+  }, [location, setLocation]);
   
   return (
     <Switch>

@@ -62,7 +62,9 @@ const html404Content = `<!DOCTYPE html>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Redirecting...</title>
   <script>
-    // Redirect to main app with the current path
+    // Store the current path in sessionStorage and redirect to root
+    // This allows the SPA to pick up the intended route
+    sessionStorage.setItem('redirectPath', window.location.pathname + window.location.search + window.location.hash);
     window.location.replace('/');
   </script>
 </head>
