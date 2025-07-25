@@ -236,11 +236,7 @@ export default function NetworkInfo() {
               
               <Link 
                 href="/network-info" 
-                className={`flex items-center space-x-1.5 px-2 py-1 rounded-md transition-all duration-200 ${
-                  isActive("/network-info") 
-                    ? "bg-biconomy-orange text-white shadow-sm" 
-                    : "text-slate-700 hover:text-white hover:bg-biconomy-orange/80"
-                }`}
+                className="flex items-center space-x-1.5 px-2 py-1 rounded-md transition-all duration-200 bg-biconomy-orange text-white shadow-sm pt-[10px] pb-[10px] pl-[16px] pr-[16px]"
               >
                 <Activity className="h-3 w-3" />
                 <span className="text-xs font-semibold uppercase tracking-wider">Network Status</span>
@@ -269,10 +265,8 @@ export default function NetworkInfo() {
           </div>
         </div>
       </header>
-
       {/* Mobile Navigation */}
       <MobileNav isOpen={isOpen} onClose={closeNav} currentPath={location} />
-      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="text-center mb-6">
