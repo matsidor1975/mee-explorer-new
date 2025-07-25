@@ -35,47 +35,47 @@
     @apply space-x-2 sm:space-x-4 md:space-x-6;
   }
 
-  /* Flat Gradient Card System */
+  /* Flat Gradient Card System - Lighter Backgrounds */
   .gradient-card-primary {
     background: linear-gradient(145deg, 
-      hsl(220, 100%, 99%) 0%, 
-      hsl(220, 60%, 97%) 50%, 
-      hsl(210, 40%, 96%) 100%);
+      hsl(220, 100%, 99.5%) 0%, 
+      hsl(220, 60%, 98.5%) 50%, 
+      hsl(210, 40%, 98%) 100%);
   }
   
   .gradient-card-secondary {
     background: linear-gradient(145deg, 
-      hsl(210, 100%, 99%) 0%, 
-      hsl(210, 60%, 97%) 50%, 
-      hsl(200, 40%, 96%) 100%);
+      hsl(210, 100%, 99.5%) 0%, 
+      hsl(210, 60%, 98.5%) 50%, 
+      hsl(200, 40%, 98%) 100%);
   }
   
   .gradient-card-accent {
     background: linear-gradient(145deg, 
-      hsl(24, 100%, 99%) 0%, 
-      hsl(24, 60%, 97%) 50%, 
-      hsl(20, 40%, 96%) 100%);
+      hsl(24, 100%, 99.5%) 0%, 
+      hsl(24, 60%, 98.5%) 50%, 
+      hsl(20, 40%, 98%) 100%);
   }
   
   .gradient-card-success {
     background: linear-gradient(145deg, 
-      hsl(120, 100%, 99%) 0%, 
-      hsl(120, 60%, 97%) 50%, 
-      hsl(110, 40%, 96%) 100%);
+      hsl(120, 100%, 99.5%) 0%, 
+      hsl(120, 60%, 98.5%) 50%, 
+      hsl(110, 40%, 98%) 100%);
   }
   
   .gradient-card-warning {
     background: linear-gradient(145deg, 
-      hsl(45, 100%, 99%) 0%, 
-      hsl(45, 60%, 97%) 50%, 
-      hsl(40, 40%, 96%) 100%);
+      hsl(45, 100%, 99.5%) 0%, 
+      hsl(45, 60%, 98.5%) 50%, 
+      hsl(40, 40%, 98%) 100%);
   }
   
   .gradient-card-subtle {
     background: linear-gradient(145deg, 
-      hsl(0, 0%, 99%) 0%, 
-      hsl(0, 0%, 97%) 50%, 
-      hsl(0, 0%, 96%) 100%);
+      hsl(0, 0%, 99.5%) 0%, 
+      hsl(0, 0%, 98.5%) 50%, 
+      hsl(0, 0%, 98%) 100%);
   }
   
   /* Hover states for interactive gradient cards - flat style */
