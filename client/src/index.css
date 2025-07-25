@@ -94,6 +94,20 @@
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
+
+  /* Font face declaration */
+  @font-face {
+    font-family: 'Cascadia Code';
+    src: url('/src/assets/fonts/CascadiaCode.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  /* Global font family */
+  body {
+    font-family: 'Cascadia Code', 'Cascadia Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+  }
 }
 
 @font-face {
