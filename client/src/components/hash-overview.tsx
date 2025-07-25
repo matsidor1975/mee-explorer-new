@@ -45,21 +45,24 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
     showCopy?: boolean;
     truncate?: boolean;
   }) => (
-    <div className="glass-card-subtle border border-white/20 rounded-lg">
-      <div className="flex items-center space-x-2 mb-1">
-        <Icon className="h-4 w-4 text-gray-500" />
-        <span className="text-sm font-medium text-slate-600">{label}</span>
+    <div className="glass-card-subtle border border-white/20 rounded-lg p-3 sm:p-4">
+      <div className="flex items-center space-x-2 mb-2">
+        <Icon className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 flex-shrink-0" />
+        <span className="text-xs sm:text-sm font-medium text-slate-600">{label}</span>
       </div>
-      <div className="flex items-center justify-between">
-        <code className={`text-sm font-mono text-gray-900 ${truncate ? 'truncate' : 'break-all'} flex-1 ${!value ? 'text-gray-400' : ''}`}>
-          {value || 'Not available'}
+      <div className="flex items-start justify-between gap-2">
+        <code className={`text-xs sm:text-sm font-mono text-gray-900 ${truncate ? 'truncate' : 'break-all'} flex-1 ${!value ? 'text-gray-400' : ''} leading-relaxed`}>
+          {!value ? 'Not available' : truncate && value.length > 30 && window.innerWidth < 640 
+            ? `${value.slice(0, 12)}...${value.slice(-8)}` 
+            : value
+          }
         </code>
         {showCopy && value && (
           <Button
             variant="ghost"
             size="sm"
             onClick={() => copyToClipboard(value, label)}
-            className="text-gray-400 hover:text-[var(--biconomy-orange)] shrink-0 ml-2"
+            className="text-gray-400 hover:text-[var(--biconomy-orange)] shrink-0 p-1 h-auto"
           >
             <Copy className="h-3 w-3" />
           </Button>
@@ -70,35 +73,35 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
 
   return (
     <div className="glass-card rounded">
-      <div className="border-b border-white/20 pb-2 mb-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+      <div className="border-b border-white/20 pb-3 mb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center space-x-2 sm:space-x-3">
             <Hash className="h-4 w-4 text-orange-500" />
-            <h3 className="text-base font-semibold text-slate-900">Supertransaction Details</h3>
+            <h3 className="text-sm sm:text-base font-semibold text-slate-900">Supertransaction Details</h3>
           </div>
-          <Badge className={`${statusColorClass} font-medium px-2 py-1 text-xs`}>
+          <Badge className={`${statusColorClass} font-medium px-2 py-1 text-xs flex items-center self-start sm:self-auto`}>
             <CheckCircle className="h-3 w-3 mr-1" />
             {overallStatus}
           </Badge>
         </div>
       </div>
       <div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-4 sm:gap-6">
           {/* Supertx Hash */}
-          <div className="glass-card-subtle border border-white/20 rounded">
-            <div className="flex items-center space-x-2 mb-1">
-              <Hash className="h-4 w-4 text-gray-500" />
-              <span className="text-sm font-medium text-slate-600">Supertransaction Hash</span>
+          <div className="glass-card-subtle border border-white/20 rounded p-3 sm:p-4">
+            <div className="flex items-center space-x-2 mb-2">
+              <Hash className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 flex-shrink-0" />
+              <span className="text-xs sm:text-sm font-medium text-slate-600">Supertransaction Hash</span>
             </div>
-            <div className="flex items-center justify-between">
-              <code className="text-sm font-mono text-gray-900 truncate flex-1">
+            <div className="flex items-start justify-between gap-2">
+              <code className="text-xs sm:text-sm font-mono text-gray-900 break-all flex-1 leading-relaxed">
                 {hashDetails.itxHash}
               </code>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => copyToClipboard(hashDetails.itxHash, "Supertransaction Hash")}
-                className="text-gray-400 hover:text-[var(--biconomy-orange)] shrink-0 ml-2"
+                className="text-gray-400 hover:text-[var(--biconomy-orange)] shrink-0 p-1 h-auto"
               >
                 <Copy className="h-3 w-3" />
               </Button>
@@ -106,20 +109,20 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
           </div>
 
           {/* Executing Relayer */}
-          <div className="glass-card-subtle border border-white/20 rounded">
-            <div className="flex items-center space-x-2 mb-1">
-              <Server className="h-4 w-4 text-gray-500" />
-              <span className="text-sm font-medium text-slate-600">Executing Relayer</span>
+          <div className="glass-card-subtle border border-white/20 rounded p-3 sm:p-4">
+            <div className="flex items-center space-x-2 mb-2">
+              <Server className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 flex-shrink-0" />
+              <span className="text-xs sm:text-sm font-medium text-slate-600">Executing Relayer</span>
             </div>
-            <div className="flex items-center justify-between">
-              <code className="text-sm font-mono text-gray-900 truncate flex-1">
+            <div className="flex items-start justify-between gap-2">
+              <code className="text-xs sm:text-sm font-mono text-gray-900 break-all flex-1 leading-relaxed">
                 {hashDetails.node}
               </code>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => copyToClipboard(hashDetails.node, "Executing Relayer")}
-                className="text-gray-400 hover:text-[var(--biconomy-orange)] shrink-0 ml-2"
+                className="text-gray-400 hover:text-[var(--biconomy-orange)] shrink-0 p-1 h-auto"
               >
                 <Copy className="h-3 w-3" />
               </Button>

@@ -2,6 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Mobile-specific optimizations */
+@layer utilities {
+  /* Improved mobile text truncation */
+  .mobile-truncate {
+    @apply truncate max-w-[120px] sm:max-w-none;
+  }
+  
+  /* Mobile-friendly hash display */
+  .mobile-hash {
+    @apply text-xs sm:text-sm font-mono;
+    word-break: break-all;
+  }
+  
+  /* Mobile table cell styling */
+  .mobile-table-cell {
+    @apply text-xs sm:text-sm px-2 sm:px-4 py-2 sm:py-3;
+  }
+  
+  /* Mobile card padding */
+  .mobile-card {
+    @apply p-3 sm:p-4 lg:p-6;
+  }
+  
+  /* Mobile button sizing */
+  .mobile-btn {
+    @apply text-xs sm:text-sm px-2 sm:px-3 py-1.5 sm:py-2;
+  }
+  
+  /* Mobile navigation spacing */
+  .mobile-nav {
+    @apply space-x-2 sm:space-x-4 md:space-x-6;
+  }
+}
+
 @font-face {
   font-family: 'Cascadia Code';
   src: url('./assets/fonts/CascadiaCode.ttf') format('truetype');

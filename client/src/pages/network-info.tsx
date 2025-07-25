@@ -2,14 +2,17 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getBiconomyInfo, BiconomyInfo } from "@/lib/api";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, XCircle, Clock, Network, Server, Zap, Activity, ChevronDown, ChevronRight, Search, FileText } from "lucide-react";
+import { CheckCircle, XCircle, Clock, Network, Server, Zap, Activity, ChevronDown, ChevronRight, Search, FileText, Menu } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { getNetworkIcon } from "@/lib/format";
 import { Link, useLocation } from "wouter";
+import { MobileNav } from "@/components/ui/mobile-nav";
+import { useMobileNav } from "@/hooks/use-mobile-nav";
 
 export default function NetworkInfo() {
   const [expandedChains, setExpandedChains] = useState<Set<string>>(new Set());
   const [location] = useLocation();
+  const { isOpen, isMobile, toggleNav, closeNav } = useMobileNav();
   
   const { data: networkInfo, isLoading, error } = useQuery<BiconomyInfo>({
     queryKey: ['/info'],

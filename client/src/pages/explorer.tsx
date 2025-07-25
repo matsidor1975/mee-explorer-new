@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "wouter";
 import HashSearch from "@/components/hash-search";
-import { Search, Activity, Clock, X, Trash2, FileText } from "lucide-react";
+import { Search, Activity, Clock, X, Trash2, FileText, Menu } from "lucide-react";
 import { getSearchHistory, removeFromSearchHistory, clearSearchHistory, type HistoryItem } from "@/lib/storage";
 import { Button } from "@/components/ui/button";
+import { MobileNav } from "@/components/ui/mobile-nav";
+import { useMobileNav } from "@/hooks/use-mobile-nav";
 
 export default function Explorer() {
   const [searchHash, setSearchHash] = useState<string>("");
   const [, navigate] = useLocation();
   const [location] = useLocation();
   const [history, setHistory] = useState<HistoryItem[]>([]);
+  const { isOpen, isMobile, toggleNav, closeNav } = useMobileNav();
 
   useEffect(() => {
     setHistory(getSearchHistory());
@@ -59,16 +62,18 @@ export default function Explorer() {
     <div className="min-h-screen">
       {/* Header */}
       <header className="glass-card border-b border-white/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-10">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <img 
                 src={new URL('@/assets/biconomy-explorer.webp', import.meta.url).href} 
                 alt="Biconomy Explorer"
-                className="h-6"
+                className="h-5 sm:h-6"
               />
             </div>
-            <nav className="flex items-center space-x-6">
+            
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center space-x-6">
               <Link 
                 href="/" 
                 className={`flex items-center space-x-1.5 px-2 py-1 rounded-md transition-all duration-200 ${
@@ -82,15 +87,15 @@ export default function Explorer() {
               </Link>
               
               <Link 
-                href="/network" 
+                href="/network-info" 
                 className={`flex items-center space-x-1.5 px-2 py-1 rounded-md transition-all duration-200 ${
-                  isActive("/network") 
+                  isActive("/network-info") 
                     ? "bg-biconomy-orange/90 text-white shadow-sm" 
                     : "text-slate-600 hover:text-biconomy-orange hover:bg-white/60"
                 }`}
               >
                 <Activity className="h-3 w-3" />
-                <span className="text-xs font-semibold uppercase tracking-wider">Network</span>
+                <span className="text-xs font-semibold uppercase tracking-wider">Network Status</span>
               </Link>
               
               <a 
@@ -103,9 +108,22 @@ export default function Explorer() {
                 <span className="text-xs font-semibold uppercase tracking-wider">Docs</span>
               </a>
             </nav>
+
+            {/* Mobile Menu Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleNav}
+              className="md:hidden"
+            >
+              <Menu className="h-4 w-4" />
+            </Button>
           </div>
         </div>
       </header>
+
+      {/* Mobile Navigation */}
+      <MobileNav isOpen={isOpen} onClose={closeNav} currentPath={location} />
 
       {/* Search Section */}
       <div className="bg-slate-900 border-b border-slate-200">
@@ -135,21 +153,21 @@ export default function Explorer() {
         
         {/* Search History */}
         {history.length > 0 && (
-          <div className="mb-12">
+          <div className="mb-8 sm:mb-12">
             <div className="glass-card rounded-lg">
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 space-y-2 sm:space-y-0">
                 <div className="flex items-center space-x-2">
-                  <Clock className="h-5 w-5 text-slate-500" />
-                  <h2 className="text-lg font-semibold text-slate-900">Recent Searches</h2>
+                  <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-slate-500" />
+                  <h2 className="text-base sm:text-lg font-semibold text-slate-900">Recent Searches</h2>
                 </div>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={handleClearHistory}
-                  className="text-slate-500 hover:text-slate-700"
+                  className="text-slate-500 hover:text-slate-700 self-end sm:self-auto"
                 >
-                  <Trash2 className="h-4 w-4" />
-                  Clear
+                  <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
+                  <span className="text-xs sm:text-sm">Clear</span>
                 </Button>
               </div>
               
@@ -157,15 +175,18 @@ export default function Explorer() {
                 {history.map((item) => (
                   <div
                     key={item.hash}
-                    className="flex items-center justify-between p-3 border border-slate-100 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors group"
+                    className="flex items-center justify-between p-2 sm:p-3 border border-slate-100 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors group"
                     onClick={() => handleHistoryClick(item.hash)}
                   >
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-2 h-2 bg-biconomy-orange rounded-full flex-shrink-0"></div>
+                      <div className="flex items-center space-x-2 sm:space-x-3">
+                        <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-biconomy-orange rounded-full flex-shrink-0"></div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-mono text-slate-900 truncate">
-                            {item.hash}
+                          <p className="text-xs sm:text-sm font-mono text-slate-900 truncate">
+                            {item.hash.length > 20 && window.innerWidth < 640 
+                              ? `${item.hash.slice(0, 10)}...${item.hash.slice(-8)}`
+                              : item.hash
+                            }
                           </p>
                           <p className="text-xs text-slate-500">
                             {formatTimestamp(item.timestamp)}
@@ -177,9 +198,9 @@ export default function Explorer() {
                       variant="ghost"
                       size="sm"
                       onClick={(e) => handleRemoveHistoryItem(item.hash, e)}
-                      className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-slate-600"
+                      className="opacity-70 sm:opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-slate-600 p-1 sm:p-2"
                     >
-                      <X className="h-4 w-4" />
+                      <X className="h-3 w-3 sm:h-4 sm:w-4" />
                     </Button>
                   </div>
                 ))}

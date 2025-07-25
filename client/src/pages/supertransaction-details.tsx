@@ -6,13 +6,16 @@ import HashOverview from "@/components/hash-overview";
 import PaymentInfo from "@/components/payment-info";
 import UserOperations from "@/components/user-operations";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, TriangleAlert, Search, Activity, FileText } from "lucide-react";
+import { ArrowLeft, TriangleAlert, Search, Activity, FileText, Menu } from "lucide-react";
 import { addToSearchHistory } from "@/lib/storage";
 import { useEffect } from "react";
+import { MobileNav } from "@/components/ui/mobile-nav";
+import { useMobileNav } from "@/hooks/use-mobile-nav";
 
 export default function SupertransactionDetails() {
   const { hash } = useParams();
   const [location] = useLocation();
+  const { isOpen, isMobile, toggleNav, closeNav } = useMobileNav();
 
   const { data: hashDetails, isLoading, error } = useQuery<HashDetails>({
     queryKey: ['/api/hash-details', hash],
@@ -42,22 +45,24 @@ export default function SupertransactionDetails() {
     <div className="min-h-screen">
       {/* Header */}
       <header className="glass-card border-b border-white/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-10">
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2 sm:space-x-3">
               <Link href="/">
-                <Button variant="ghost" size="sm" className="flex items-center space-x-1.5 text-slate-600 hover:text-biconomy-orange hover:bg-white/60 px-2 py-1 h-7">
+                <Button variant="ghost" size="sm" className="flex items-center space-x-1 sm:space-x-1.5 text-slate-600 hover:text-biconomy-orange hover:bg-white/60 px-1.5 sm:px-2 py-1 h-6 sm:h-7">
                   <ArrowLeft className="h-3 w-3" />
-                  <span className="text-xs font-medium">Back</span>
+                  <span className="text-xs font-medium hidden sm:inline">Back</span>
                 </Button>
               </Link>
               <img 
                 src={new URL('@/assets/biconomy-explorer.webp', import.meta.url).href} 
                 alt="Biconomy Explorer"
-                className="h-6"
+                className="h-5 sm:h-6"
               />
             </div>
-            <nav className="flex items-center space-x-6">
+            
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center space-x-6">
               <Link 
                 href="/" 
                 className={`flex items-center space-x-1.5 px-2 py-1 rounded-md transition-all duration-200 ${
@@ -71,15 +76,15 @@ export default function SupertransactionDetails() {
               </Link>
               
               <Link 
-                href="/network" 
+                href="/network-info" 
                 className={`flex items-center space-x-1.5 px-2 py-1 rounded-md transition-all duration-200 ${
-                  isActive("/network") 
+                  isActive("/network-info") 
                     ? "bg-biconomy-orange/90 text-white shadow-sm" 
                     : "text-slate-600 hover:text-biconomy-orange hover:bg-white/60"
                 }`}
               >
                 <Activity className="h-3 w-3" />
-                <span className="text-xs font-semibold uppercase tracking-wider">Network</span>
+                <span className="text-xs font-semibold uppercase tracking-wider">Network Status</span>
               </Link>
               
               <a 
@@ -92,38 +97,52 @@ export default function SupertransactionDetails() {
                 <span className="text-xs font-semibold uppercase tracking-wider">Docs</span>
               </a>
             </nav>
+
+            {/* Mobile Menu Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleNav}
+              className="md:hidden"
+            >
+              <Menu className="h-4 w-4" />
+            </Button>
           </div>
         </div>
       </header>
 
+      {/* Mobile Navigation */}
+      <MobileNav isOpen={isOpen} onClose={closeNav} currentPath={location} />
+
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <main className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
+        <div className="space-y-4 sm:space-y-8">
         
         {/* Loading State */}
         {isLoading && (
-          <div className="text-center py-12">
+          <div className="text-center py-8 sm:py-12">
             <div className="inline-flex items-center space-x-3 text-[var(--biconomy-orange)]">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--biconomy-orange)]"></div>
-              <span className="text-lg font-medium">Loading Supertransaction details...</span>
+              <div className="animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-[var(--biconomy-orange)]"></div>
+              <span className="text-base sm:text-lg font-medium">Loading Supertransaction details...</span>
             </div>
           </div>
         )}
 
         {/* Hash Details */}
         {showHashDetails && (
-          <div className="space-y-6">
-            <HashOverview hashDetails={hashDetails} />
+          <div className="space-y-4 sm:space-y-6">
+            <HashOverview hashDetails={hashDetails!} />
             <PaymentInfo 
-              paymentInfo={hashDetails.paymentInfo} 
-              feePayerUserOp={hashDetails.userOps[0]} 
+              paymentInfo={hashDetails!.paymentInfo} 
+              feePayerUserOp={hashDetails!.userOps[0]} 
             />
-            <UserOperations userOps={hashDetails.userOps.slice(1)} />
+            <UserOperations userOps={hashDetails!.userOps.slice(1)} />
           </div>
         )}
 
         {/* Error State */}
         {showErrorState && (
-          <div className="text-center py-16">
+          <div className="text-center py-12 sm:py-16">
             <div className="max-w-md mx-auto">
               <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <TriangleAlert className="h-12 w-12 text-red-500" />
@@ -140,10 +159,9 @@ export default function SupertransactionDetails() {
             </div>
           </div>
         )}
-
+        
+        </div>
       </main>
-
-
     </div>
   );
 }
