@@ -6,6 +6,7 @@ import { getSearchHistory, removeFromSearchHistory, clearSearchHistory, type His
 import { Button } from "@/components/ui/button";
 import { MobileNav } from "@/components/ui/mobile-nav";
 import { useMobileNav } from "@/hooks/use-mobile-nav";
+import { SettingsButton } from "@/components/settings-dialog";
 
 export default function Explorer() {
   const [searchHash, setSearchHash] = useState<string>("");
@@ -107,6 +108,8 @@ export default function Explorer() {
                 <FileText className="h-3 w-3" />
                 <span className="text-xs font-semibold uppercase tracking-wider">Docs</span>
               </a>
+              
+              <SettingsButton />
             </nav>
 
             {/* Mobile Menu Button */}

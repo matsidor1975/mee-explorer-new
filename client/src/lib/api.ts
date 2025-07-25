@@ -1,7 +1,16 @@
 import { HashDetails } from "@/types";
 
-const API_KEY = import.meta.env.VITE_BICONOMY_API_KEY || 'mee_3ZRMgikCcc3UdwfZkoofBPqs';
-const NODE_URL = 'https://network.biconomy.io';
+const getApiKey = (): string => {
+  return localStorage.getItem('biconomy-api-key') || 
+         import.meta.env.VITE_BICONOMY_API_KEY || 
+         'mee_3ZRMgikCcc3UdwfZkoofBPqs';
+};
+
+const getNodeUrl = (): string => {
+  return localStorage.getItem('biconomy-network-url') || 
+         import.meta.env.VITE_BICONOMY_NODE_URL || 
+         'https://network.biconomy.io';
+};
 
 export interface ChainInfo {
   chainId: string;
@@ -23,7 +32,7 @@ export interface BiconomyInfo {
 }
 
 export const getBiconomyInfo = async (): Promise<BiconomyInfo> => {
-  const response = await fetch(`${NODE_URL}/info`, {
+  const response = await fetch(`${getNodeUrl()}/info`, {
     headers: { 
       'Content-Type': 'application/json'
     },
@@ -41,9 +50,9 @@ export const getHashDetails = async (hash: string): Promise<HashDetails> => {
   // Ensure hash is lowercase before sending to server
   const lowercaseHash = hash.toLowerCase();
   
-  const response = await fetch(`${NODE_URL}/v1/explorer/${lowercaseHash}`, {
+  const response = await fetch(`${getNodeUrl()}/v1/explorer/${lowercaseHash}`, {
     headers: { 
-      'X-API-KEY': API_KEY,
+      'X-API-KEY': getApiKey(),
       'Content-Type': 'application/json'
     },
   });
@@ -64,9 +73,9 @@ export const isValidSupertransactionHash = (hash: string): boolean => {
 
 export const fetchTokenInfo = async (tokenAddress: string, chainId: string): Promise<{ name: string; symbol: string; decimals: number } | null> => {
   try {
-    const response = await fetch(`${NODE_URL}/info?tokenAddress=${tokenAddress}&chainId=${chainId}`, {
+    const response = await fetch(`${getNodeUrl()}/info?tokenAddress=${tokenAddress}&chainId=${chainId}`, {
       headers: {
-        'X-API-KEY': API_KEY,
+        'X-API-KEY': getApiKey(),
         'Content-Type': 'application/json'
       }
     });

@@ -1,6 +1,8 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { X, Search, Activity, FileText } from "lucide-react";
+import { X, Search, Activity, FileText, Settings } from "lucide-react";
+import { SettingsDialog } from "@/components/settings-dialog";
+import { useState } from "react";
 
 interface MobileNavProps {
   isOpen: boolean;
@@ -9,6 +11,8 @@ interface MobileNavProps {
 }
 
 export function MobileNav({ isOpen, onClose, currentPath }: MobileNavProps) {
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  
   if (!isOpen) return null;
 
   const isActive = (path: string) => {
@@ -68,7 +72,17 @@ export function MobileNav({ isOpen, onClose, currentPath }: MobileNavProps) {
             <FileText className="h-4 w-4" />
             <span className="font-medium uppercase tracking-wider">Docs</span>
           </a>
+          
+          <button
+            onClick={() => setSettingsOpen(true)}
+            className="flex items-center space-x-3 px-4 py-3 text-slate-700 hover:text-biconomy-orange transition-all duration-200 rounded-lg w-full text-left"
+          >
+            <Settings className="h-4 w-4" />
+            <span className="font-medium uppercase tracking-wider">Settings</span>
+          </button>
         </nav>
+        
+        <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
       </div>
     </div>
   );

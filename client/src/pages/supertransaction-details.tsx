@@ -11,6 +11,7 @@ import { addToSearchHistory } from "@/lib/storage";
 import { useEffect, useMemo } from "react";
 import { MobileNav } from "@/components/ui/mobile-nav";
 import { useMobileNav } from "@/hooks/use-mobile-nav";
+import { SettingsButton } from "@/components/settings-dialog";
 
 export default function SupertransactionDetails() {
   const { hash } = useParams();
@@ -117,6 +118,8 @@ export default function SupertransactionDetails() {
                 <FileText className="h-3 w-3" />
                 <span className="text-xs font-semibold uppercase tracking-wider">Docs</span>
               </a>
+              
+              <SettingsButton />
             </nav>
 
             {/* Mobile Menu Button */}
