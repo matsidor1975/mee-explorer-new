@@ -38,7 +38,10 @@ export const getBiconomyInfo = async (): Promise<BiconomyInfo> => {
 };
 
 export const getHashDetails = async (hash: string): Promise<HashDetails> => {
-  const response = await fetch(`${NODE_URL}/v1/explorer/${hash}`, {
+  // Ensure hash is lowercase before sending to server
+  const lowercaseHash = hash.toLowerCase();
+  
+  const response = await fetch(`${NODE_URL}/v1/explorer/${lowercaseHash}`, {
     headers: { 
       'X-API-KEY': API_KEY,
       'Content-Type': 'application/json'
