@@ -248,7 +248,7 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
                      userOp.executionStatus.toLowerCase().includes('submitted');
 
     return (
-      <div key={index} className={`gradient-card-subtle rounded-lg overflow-hidden ${isPending ? 'animate-pulse' : ''}`}>
+      <div key={index} className={`gradient-card-subtle rounded-lg overflow-hidden border border-black/5 ${isPending ? 'animate-pulse' : ''}`}>
         {/* Compact Operation Header */}
         <div className="p-4">
           {/* Desktop Layout - Everything Inline */}
