@@ -626,7 +626,9 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
           </div>
           
           {/* Information Callout */}
-          <div className="mb-4 p-3 gradient-card-primary rounded-lg">
+          <div className="mb-4 p-3 rounded-lg border border-black/5" style={{
+            background: 'linear-gradient(145deg, hsl(220, 100%, 99%) 0%, hsl(220, 60%, 97%) 50%, hsl(210, 40%, 96%) 100%)'
+          }}>
             <div className="flex items-start space-x-2">
               <FileText className="h-4 w-4 text-blue-600 mt-0.5 shrink-0" />
               <p className="text-sm text-blue-800">
