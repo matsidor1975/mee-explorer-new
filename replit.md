@@ -135,3 +135,7 @@ The application is designed to be easily deployable on platforms like Replit, Ve
 - Implemented auto-refresh functionality for pending UserOperations with 300ms polling interval
 - Added visual feedback for pending operations: animate-pulse effect on entire operation cards and spinning loader icons
 - Enhanced user experience with real-time status updates and clear visual indicators during operation processing
+- Redesigned entire UI from border-based to gradient-based card system with 6 different gradient styles
+- Created flat design approach without shadows while maintaining color gradients for visual separation
+- Added comprehensive gradient card classes (primary, secondary, accent, warning, success, subtle) for different content types
+- Updated all major components (HashOverview, PaymentInfo, UserOperations) to use gradient cards with appropriate color themes
