@@ -79,7 +79,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
     subtitle: string;
     color: string;
   }) => (
-    <div className="bg-white border border-slate-200 p-3 rounded">
+    <div className="gradient-card-secondary rounded-lg p-3">
       <div className="flex items-center space-x-2 mb-1">
         <Icon className={`h-4 w-4 ${color}`} />
         <span className="text-sm font-medium text-slate-600">{label}</span>
@@ -127,8 +127,8 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
   );
 
   return (
-    <div className="glass-card rounded-lg shadow-sm">
-      <div className="border-b border-white/20 pb-2 mb-3">
+    <div className="gradient-card-accent rounded-lg p-6">
+      <div className="pb-4 mb-6">
         {/* Desktop Layout */}
         <div className="hidden md:flex items-center justify-between">
           <div className="flex items-center space-x-4">

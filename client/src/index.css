@@ -34,6 +34,76 @@
   .mobile-nav {
     @apply space-x-2 sm:space-x-4 md:space-x-6;
   }
+
+  /* Gradient Card System */
+  .gradient-card-primary {
+    background: linear-gradient(145deg, 
+      hsl(220, 100%, 99%) 0%, 
+      hsl(220, 60%, 97%) 50%, 
+      hsl(210, 40%, 96%) 100%);
+    box-shadow: 
+      0 1px 3px hsl(220, 43%, 91%), 
+      0 4px 12px hsl(220, 43%, 96%);
+  }
+  
+  .gradient-card-secondary {
+    background: linear-gradient(145deg, 
+      hsl(210, 100%, 99%) 0%, 
+      hsl(210, 60%, 97%) 50%, 
+      hsl(200, 40%, 96%) 100%);
+    box-shadow: 
+      0 1px 3px hsl(210, 43%, 91%), 
+      0 4px 12px hsl(210, 43%, 96%);
+  }
+  
+  .gradient-card-accent {
+    background: linear-gradient(145deg, 
+      hsl(24, 100%, 99%) 0%, 
+      hsl(24, 60%, 97%) 50%, 
+      hsl(20, 40%, 96%) 100%);
+    box-shadow: 
+      0 1px 3px hsl(24, 43%, 91%), 
+      0 4px 12px hsl(24, 43%, 96%);
+  }
+  
+  .gradient-card-success {
+    background: linear-gradient(145deg, 
+      hsl(120, 100%, 99%) 0%, 
+      hsl(120, 60%, 97%) 50%, 
+      hsl(110, 40%, 96%) 100%);
+    box-shadow: 
+      0 1px 3px hsl(120, 43%, 91%), 
+      0 4px 12px hsl(120, 43%, 96%);
+  }
+  
+  .gradient-card-warning {
+    background: linear-gradient(145deg, 
+      hsl(45, 100%, 99%) 0%, 
+      hsl(45, 60%, 97%) 50%, 
+      hsl(40, 40%, 96%) 100%);
+    box-shadow: 
+      0 1px 3px hsl(45, 43%, 91%), 
+      0 4px 12px hsl(45, 43%, 96%);
+  }
+  
+  .gradient-card-subtle {
+    background: linear-gradient(145deg, 
+      hsl(0, 0%, 99%) 0%, 
+      hsl(0, 0%, 97%) 50%, 
+      hsl(0, 0%, 96%) 100%);
+    box-shadow: 
+      0 1px 3px hsl(0, 0%, 91%), 
+      0 3px 8px hsl(0, 0%, 95%);
+  }
+  
+  /* Hover states for interactive gradient cards */
+  .gradient-card-interactive:hover {
+    transform: translateY(-1px);
+    box-shadow: 
+      0 2px 6px hsl(220, 43%, 88%), 
+      0 8px 24px hsl(220, 43%, 93%);
+    transition: all 0.2s ease-in-out;
+  }
 }
 
 @font-face {

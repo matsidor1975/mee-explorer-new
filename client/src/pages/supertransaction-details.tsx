@@ -164,8 +164,8 @@ export default function SupertransactionDetails() {
         {/* Error State */}
         {showErrorState && (
           <div className="text-center py-12 sm:py-16">
-            <div className="max-w-md mx-auto">
-              <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="max-w-md mx-auto gradient-card-subtle rounded-lg p-8">
+              <div className="w-24 h-24 bg-gradient-to-br from-red-100 to-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
                 <TriangleAlert className="h-12 w-12 text-red-500" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Supertransaction Not Found</h3>
@@ -185,7 +185,7 @@ export default function SupertransactionDetails() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-16 py-8 pb-16 border-t border-white/20">
+      <footer className="mt-16 py-8 pb-16">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="flex justify-center">
             <img 

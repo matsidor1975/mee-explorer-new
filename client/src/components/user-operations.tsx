@@ -157,7 +157,7 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
     const hasExplorer = hasExplorerSupport(chainId);
     
     return (
-      <div className="glass-card-subtle border border-white/20 rounded">
+      <div className="gradient-card-subtle rounded-lg p-3">
         <div className="flex items-center space-x-2 mb-2">
           <ExternalLink className="h-4 w-4 text-gray-500" />
           <span className="text-sm font-medium text-gray-600">On-Chain Transaction</span>
@@ -209,7 +209,7 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
     label: string;
     value: string;
   }) => (
-    <div className="glass-card-subtle border border-white/20 rounded">
+    <div className="gradient-card-subtle rounded-lg p-3">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center space-x-2">
           <Icon className="h-4 w-4 text-gray-500" />
@@ -248,9 +248,9 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
                      userOp.executionStatus.toLowerCase().includes('submitted');
 
     return (
-      <div key={index} className={`border border-gray-200 rounded overflow-hidden ${isPending ? 'animate-pulse' : ''}`}>
+      <div key={index} className={`gradient-card-subtle rounded-lg overflow-hidden ${isPending ? 'animate-pulse' : ''}`}>
         {/* Compact Operation Header */}
-        <div className="p-2 bg-gray-50/50">
+        <div className="p-4">
           {/* Desktop Layout - Everything Inline */}
           <div className="hidden md:flex items-center justify-between">
             <div className="flex items-center space-x-4 flex-1">
@@ -606,8 +606,8 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
     <div className="space-y-6">
       {/* Regular Operations Card */}
       {regularOperations.length > 0 && (
-        <div className="glass-card rounded">
-          <div className="border-b border-white/20 pb-3 mb-4">
+        <div className="gradient-card-secondary rounded-lg p-6">
+          <div className="pb-4 mb-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <Layers className="h-4 w-4 text-blue-500" />
@@ -626,7 +626,7 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
           </div>
           
           {/* Information Callout */}
-          <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+          <div className="mb-4 p-3 gradient-card-primary rounded-lg">
             <div className="flex items-start space-x-2">
               <FileText className="h-4 w-4 text-blue-600 mt-0.5 shrink-0" />
               <p className="text-sm text-blue-800">
@@ -644,8 +644,8 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
       )}
       {/* Cleanup Operations */}
       {cleanupOperations.length > 0 && (
-        <div className="glass-card rounded">
-          <div className="border-b border-white/20 pb-3 mb-4">
+        <div className="gradient-card-warning rounded-lg p-6">
+          <div className="pb-4 mb-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <Settings className="h-4 w-4 text-slate-500" />

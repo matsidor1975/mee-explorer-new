@@ -45,7 +45,7 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
     showCopy?: boolean;
     truncate?: boolean;
   }) => (
-    <div className="glass-card-subtle border border-white/20 rounded-lg p-3 sm:p-4">
+    <div className="gradient-card-subtle rounded-lg p-3 sm:p-4">
       <div className="flex items-center space-x-2 mb-2">
         <Icon className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 flex-shrink-0" />
         <span className="text-xs sm:text-sm font-medium text-slate-600">{label}</span>
@@ -72,8 +72,8 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
   );
 
   return (
-    <div className="glass-card rounded">
-      <div className="border-b border-white/20 pb-3 mb-4">
+    <div className="gradient-card-primary rounded-lg p-6">
+      <div className="pb-4 mb-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center space-x-2 sm:space-x-3">
             <Hash className="h-4 w-4 text-orange-500" />
@@ -88,7 +88,7 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
       <div>
         <div className="grid grid-cols-1 gap-4 sm:gap-6">
           {/* Supertx Hash */}
-          <div className="glass-card-subtle border border-white/20 rounded p-3 sm:p-4">
+          <div className="gradient-card-subtle rounded-lg p-3 sm:p-4">
             <div className="flex items-center space-x-2 mb-2">
               <Hash className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 flex-shrink-0" />
               <span className="text-xs sm:text-sm font-medium text-slate-600">Supertransaction Hash</span>
@@ -109,7 +109,7 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
           </div>
 
           {/* Executing Relayer */}
-          <div className="glass-card-subtle border border-white/20 rounded p-3 sm:p-4">
+          <div className="gradient-card-subtle rounded-lg p-3 sm:p-4">
             <div className="flex items-center space-x-2 mb-2">
               <Server className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 flex-shrink-0" />
               <span className="text-xs sm:text-sm font-medium text-slate-600">Executing Relayer</span>
