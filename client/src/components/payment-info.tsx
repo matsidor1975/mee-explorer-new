@@ -128,7 +128,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
 
   return (
     <div className="glass-root-card rounded-lg p-6">
-      <div className="pb-4 mb-6">
+      <div className="pb-2 mb-4 border-b border-gray-100 mx-[-12px] px-3">
         {/* Desktop Layout */}
         <div className="hidden md:flex items-center justify-between">
           <div className="flex items-center space-x-4">
