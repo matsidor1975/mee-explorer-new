@@ -129,4 +129,6 @@ The application is designed to be easily deployable on platforms like Replit, Ve
 - Redesigned network info page with compact 3x3 grid layout for desktop view showing supported chains
 - Optimized chain cards to be more compact with reduced padding, smaller icons (8x8), and streamlined status indicators
 - Removed chain ID display and added text truncation to prevent overflow in compact cards
-- Project is ready for static build and publishing
+- Fixed SPA routing for static hosting by adding _redirects and 404.html files to handle direct links
+- Updated build script to automatically create SPA routing files during deployment builds
+- Project is ready for static build and publishing with proper routing support
