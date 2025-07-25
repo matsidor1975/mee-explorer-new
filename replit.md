@@ -141,4 +141,4 @@ The application is designed to be easily deployable on platforms like Replit, Ve
 - Updated all major components (HashOverview, PaymentInfo, UserOperations) to use gradient cards with appropriate color themes
 - Enhanced root cards with glass-morphism effect: subtle gray borders, 95% transparency, and 12px backdrop blur for modern appearance
 - Implemented professional typography system: Inter font for UI elements, JetBrains Mono for code/data, with optimized font features and tabular numbers for metrics
-- Updated root card titles to use smaller, uppercase styling with letter tracking for improved visual hierarchy
+- Redesigned root card titles with larger text, gradient styling, and more descriptive naming for better visual appeal and clarity

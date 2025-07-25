@@ -130,6 +130,15 @@
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 600;
   }
+
+  /* Root card titles with subtle gradient text */
+  .root-card-title {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+  }
 }
 
 @font-face {

@@ -77,7 +77,7 @@ export default function HashOverview({ hashDetails }: HashOverviewProps) {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center space-x-2 sm:space-x-3">
             <Hash className="h-4 w-4 text-orange-500" />
-            <h3 className="text-xs sm:text-sm font-semibold text-slate-900 uppercase tracking-wide">Supertransaction Details</h3>
+            <h3 className="text-lg sm:text-xl root-card-title">Transaction Overview</h3>
           </div>
           <Badge className={`${statusColorClass} font-medium px-2 py-1 text-xs flex items-center self-start sm:self-auto`}>
             <CheckCircle className="h-3 w-3 mr-1" />
