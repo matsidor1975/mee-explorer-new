@@ -300,171 +300,297 @@ export default function NetworkInfo() {
       </div>
 
       {/* Supported Chains */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-bold text-slate-900 mb-3">Supported Chains</h2>
+      <div>
+        <h2 className="text-xl font-bold text-slate-900 mb-6">Supported Chains</h2>
         
-        {networkInfo?.supportedChains?.map((chain) => {
-          const isExpanded = expandedChains.has(chain.chainId);
-          const chainModule = chain.healthCheck.modules?.find(m => m.type === 'chain');
-          
-          return (
-            <div key={chain.chainId} className="bg-white border border-slate-200 rounded-lg">
-              {/* Chain Header - Always Visible */}
-              <div 
-                className="p-4 cursor-pointer hover:bg-slate-50 transition-colors"
-                onClick={() => toggleChain(chain.chainId)}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    {getNetworkIcon(chain.chainId) ? (
-                      <img 
-                        src={getNetworkIcon(chain.chainId)!} 
-                        alt={chain.name}
-                        className="w-6 h-6"
-                      />
-                    ) : (
-                      <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                        <span className="text-xs font-bold text-white">
-                          {chain.name.charAt(0)}
-                        </span>
-                      </div>
-                    )}
-                    <div>
-                      <h3 className="text-base font-semibold text-slate-900">{chain.name}</h3>
-                      <p className="text-xs text-slate-600">Chain ID: {chain.chainId}</p>
+        {/* Desktop 3x3 Grid */}
+        <div className="hidden md:grid md:grid-cols-3 md:gap-6">
+          {networkInfo?.supportedChains?.map((chain) => {
+            const isExpanded = expandedChains.has(chain.chainId);
+            const chainModule = chain.healthCheck.modules?.find(m => m.type === 'chain');
+            
+            return (
+              <div key={chain.chainId} className="bg-white border border-slate-200 rounded-lg hover:shadow-md transition-shadow">
+                {/* Chain Card Content */}
+                <div 
+                  className="p-4 cursor-pointer hover:bg-slate-50 transition-colors"
+                  onClick={() => toggleChain(chain.chainId)}
+                >
+                  <div className="text-center">
+                    {/* Chain Icon */}
+                    <div className="mb-3">
+                      {getNetworkIcon(chain.chainId) ? (
+                        <img 
+                          src={getNetworkIcon(chain.chainId)!} 
+                          alt={chain.name}
+                          className="w-12 h-12 mx-auto"
+                        />
+                      ) : (
+                        <div className="w-12 h-12 mx-auto rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                          <span className="text-lg font-bold text-white">
+                            {chain.name.charAt(0)}
+                          </span>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-3">
-                    {/* Chain Health Check Summary */}
-                    {chainModule?.data.checks && (
-                      <div className="flex items-center space-x-2 text-xs">
-                        <span className="text-slate-600">RPC:</span>
-                        <span className={chainModule.data.checks.rpcCall ? 'text-green-600' : 'text-red-600'}>
-                          {chainModule.data.checks.rpcCall ? '✓' : '✗'}
-                        </span>
-                        <span className="text-slate-600">Debug:</span>
-                        <span className={chainModule.data.checks.debugTraceCall ? 'text-green-600' : 'text-red-600'}>
-                          {chainModule.data.checks.debugTraceCall ? '✓' : '✗'}
-                        </span>
-                      </div>
-                    )}
                     
-                    <div className="flex items-center space-x-2">
+                    {/* Chain Name */}
+                    <h3 className="text-base font-semibold text-slate-900 mb-1">{chain.name}</h3>
+                    <p className="text-xs text-slate-600 mb-3">Chain ID: {chain.chainId}</p>
+                    
+                    {/* Status Badge */}
+                    <div className="flex items-center justify-center space-x-2 mb-3">
                       {getStatusIcon(chain.healthCheck.status)}
                       <Badge className={`${getStatusColor(chain.healthCheck.status)} border-0 text-xs`}>
                         {chain.healthCheck.status}
                       </Badge>
                     </div>
                     
-                    {isExpanded ? (
-                      <ChevronDown className="h-4 w-4 text-slate-500" />
-                    ) : (
-                      <ChevronRight className="h-4 w-4 text-slate-500" />
+                    {/* Quick Health Check */}
+                    {chainModule?.data.checks && (
+                      <div className="flex items-center justify-center space-x-4 text-xs mb-3">
+                        <div className="flex items-center space-x-1">
+                          <span className="text-slate-600">RPC:</span>
+                          <span className={chainModule.data.checks.rpcCall ? 'text-green-600' : 'text-red-600'}>
+                            {chainModule.data.checks.rpcCall ? '✓' : '✗'}
+                          </span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <span className="text-slate-600">Debug:</span>
+                          <span className={chainModule.data.checks.debugTraceCall ? 'text-green-600' : 'text-red-600'}>
+                            {chainModule.data.checks.debugTraceCall ? '✓' : '✗'}
+                          </span>
+                        </div>
+                      </div>
                     )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Expanded Content */}
-              {isExpanded && (
-                <div className="border-t border-slate-200 p-4">
-                  {/* Health Check Info */}
-                  <div className="mb-4">
-                    <div className="flex items-center space-x-2 mb-2">
-                      <Clock className="h-3 w-3 text-slate-500" />
-                      <span className="text-xs text-slate-600">
-                        Last checked: {formatDistanceToNow(new Date(chain.healthCheck.lastChecked), { addSuffix: true })}
-                      </span>
+                    
+                    {/* Expand Button */}
+                    <div className="flex items-center justify-center">
+                      {isExpanded ? (
+                        <ChevronDown className="h-4 w-4 text-slate-500" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4 text-slate-500" />
+                      )}
                     </div>
                   </div>
+                </div>
 
-                  {/* Modules Table */}
-                  <div>
-                    <h4 className="text-sm font-medium text-slate-900 mb-2">Module Status</h4>
-                    <div className="overflow-x-auto">
-                      <table className="w-full border border-slate-200 rounded">
-                        <thead>
-                          <tr className="bg-slate-50 border-b border-slate-200">
-                            <th className="text-left p-2 text-xs font-medium text-slate-700">Module</th>
-                            <th className="text-left p-2 text-xs font-medium text-slate-700">Status</th>
-                            <th className="text-left p-2 text-xs font-medium text-slate-700">Details</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {chain.healthCheck.modules?.map((module, index) => (
-                            <tr key={index} className="border-b border-slate-200 last:border-b-0">
-                              <td className="p-2">
-                                <div className="flex items-center space-x-2">
-                                  {getStatusIcon(module.data.status)}
-                                  <span className="text-xs font-medium text-slate-700 capitalize">{module.type}</span>
-                                </div>
-                              </td>
-                              <td className="p-2">
-                                <Badge className={`${getStatusColor(module.data.status)} border-0 text-xs`}>
-                                  {module.data.status}
-                                </Badge>
-                              </td>
-                              <td className="p-2">
-                                <div className="text-xs text-slate-600">
-                                  {/* Module-specific data */}
-                                  {module.type === 'chain' && module.data.checks && (
-                                    <div className="space-y-1">
-                                      <div className="flex items-center space-x-2">
-                                        <span>RPC Call:</span>
-                                        <span className={module.data.checks.rpcCall ? 'text-green-600' : 'text-red-600'}>
-                                          {module.data.checks.rpcCall ? '✓' : '✗'}
-                                        </span>
-                                      </div>
-                                      <div className="flex items-center space-x-2">
-                                        <span>Debug Trace:</span>
-                                        <span className={module.data.checks.debugTraceCall ? 'text-green-600' : 'text-red-600'}>
-                                          {module.data.checks.debugTraceCall ? '✓' : '✗'}
-                                        </span>
-                                      </div>
-                                    </div>
-                                  )}
-                                  
-                                  {(module.type === 'simulator' || module.type === 'executor') && module.data.totalJobs && (
-                                    <div className="space-y-1">
-                                      <div>Active: {module.data.totalJobs.active}</div>
-                                      <div>Waiting: {module.data.totalJobs.waiting}</div>
-                                      <div>Delayed: {module.data.totalJobs.delayed}</div>
-                                      <div>Paused: {module.data.totalJobs.paused}</div>
-                                    </div>
-                                  )}
+                {/* Expanded Content */}
+                {isExpanded && (
+                  <div className="border-t border-slate-200 p-4">
+                    {/* Health Check Info */}
+                    <div className="mb-4 text-center">
+                      <div className="flex items-center justify-center space-x-2 mb-2">
+                        <Clock className="h-3 w-3 text-slate-500" />
+                        <span className="text-xs text-slate-600">
+                          Last checked: {formatDistanceToNow(new Date(chain.healthCheck.lastChecked), { addSuffix: true })}
+                        </span>
+                      </div>
+                    </div>
 
-                                  {module.type === 'node' && module.data.master && (
-                                    <div className="space-y-1">
-                                      <div>Master Active: {module.data.master.active ? '✓' : '✗'}</div>
-                                      <div>Workers: {Object.keys(module.data.workers || {}).length}</div>
-                                      <div>Paymaster Deployed: {module.data.paymaster?.deployed ? '✓' : '✗'}</div>
-                                    </div>
-                                  )}
-
-                                  {module.type === 'workers' && module.data.workers && (
-                                    <div className="space-y-1">
-                                      <div>Simulator: {module.data.workers.simulator?.length || 0} online</div>
-                                      <div>Executor: {module.data.workers.executor?.length || 0} online</div>
-                                    </div>
-                                  )}
-
-                                  {module.type === 'redis' && module.data.clients && (
-                                    <div>Total Clients: {module.data.clients.totalClients}</div>
-                                  )}
-                                </div>
-                              </td>
+                    {/* Modules Table */}
+                    <div>
+                      <h4 className="text-sm font-medium text-slate-900 mb-2">Module Status</h4>
+                      <div className="overflow-x-auto">
+                        <table className="w-full border border-slate-200 rounded text-xs">
+                          <thead>
+                            <tr className="bg-slate-50 border-b border-slate-200">
+                              <th className="text-left p-2 text-xs font-medium text-slate-700">Module</th>
+                              <th className="text-left p-2 text-xs font-medium text-slate-700">Status</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody>
+                            {chain.healthCheck.modules?.map((module, index) => (
+                              <tr key={index} className="border-b border-slate-200 last:border-b-0">
+                                <td className="p-2">
+                                  <div className="flex items-center space-x-2">
+                                    {getStatusIcon(module.data.status)}
+                                    <span className="text-xs font-medium text-slate-700 capitalize">{module.type}</span>
+                                  </div>
+                                </td>
+                                <td className="p-2">
+                                  <Badge className={`${getStatusColor(module.data.status)} border-0 text-xs`}>
+                                    {module.data.status}
+                                  </Badge>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Mobile List View */}
+        <div className="md:hidden space-y-4">
+          {networkInfo?.supportedChains?.map((chain) => {
+            const isExpanded = expandedChains.has(chain.chainId);
+            const chainModule = chain.healthCheck.modules?.find(m => m.type === 'chain');
+            
+            return (
+              <div key={chain.chainId} className="bg-white border border-slate-200 rounded-lg">
+                {/* Chain Header - Always Visible */}
+                <div 
+                  className="p-4 cursor-pointer hover:bg-slate-50 transition-colors"
+                  onClick={() => toggleChain(chain.chainId)}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      {getNetworkIcon(chain.chainId) ? (
+                        <img 
+                          src={getNetworkIcon(chain.chainId)!} 
+                          alt={chain.name}
+                          className="w-6 h-6"
+                        />
+                      ) : (
+                        <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                          <span className="text-xs font-bold text-white">
+                            {chain.name.charAt(0)}
+                          </span>
+                        </div>
+                      )}
+                      <div>
+                        <h3 className="text-base font-semibold text-slate-900">{chain.name}</h3>
+                        <p className="text-xs text-slate-600">Chain ID: {chain.chainId}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center space-x-3">
+                      {/* Chain Health Check Summary */}
+                      {chainModule?.data.checks && (
+                        <div className="flex items-center space-x-2 text-xs">
+                          <span className="text-slate-600">RPC:</span>
+                          <span className={chainModule.data.checks.rpcCall ? 'text-green-600' : 'text-red-600'}>
+                            {chainModule.data.checks.rpcCall ? '✓' : '✗'}
+                          </span>
+                          <span className="text-slate-600">Debug:</span>
+                          <span className={chainModule.data.checks.debugTraceCall ? 'text-green-600' : 'text-red-600'}>
+                            {chainModule.data.checks.debugTraceCall ? '✓' : '✗'}
+                          </span>
+                        </div>
+                      )}
+                      
+                      <div className="flex items-center space-x-2">
+                        {getStatusIcon(chain.healthCheck.status)}
+                        <Badge className={`${getStatusColor(chain.healthCheck.status)} border-0 text-xs`}>
+                          {chain.healthCheck.status}
+                        </Badge>
+                      </div>
+                      
+                      {isExpanded ? (
+                        <ChevronDown className="h-4 w-4 text-slate-500" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4 text-slate-500" />
+                      )}
                     </div>
                   </div>
                 </div>
-              )}
-            </div>
-          );
-        })}
+
+                {/* Expanded Content */}
+                {isExpanded && (
+                  <div className="border-t border-slate-200 p-4">
+                    {/* Health Check Info */}
+                    <div className="mb-4">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <Clock className="h-3 w-3 text-slate-500" />
+                        <span className="text-xs text-slate-600">
+                          Last checked: {formatDistanceToNow(new Date(chain.healthCheck.lastChecked), { addSuffix: true })}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Modules Table */}
+                    <div>
+                      <h4 className="text-sm font-medium text-slate-900 mb-2">Module Status</h4>
+                      <div className="overflow-x-auto">
+                        <table className="w-full border border-slate-200 rounded">
+                          <thead>
+                            <tr className="bg-slate-50 border-b border-slate-200">
+                              <th className="text-left p-2 text-xs font-medium text-slate-700">Module</th>
+                              <th className="text-left p-2 text-xs font-medium text-slate-700">Status</th>
+                              <th className="text-left p-2 text-xs font-medium text-slate-700">Details</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {chain.healthCheck.modules?.map((module, index) => (
+                              <tr key={index} className="border-b border-slate-200 last:border-b-0">
+                                <td className="p-2">
+                                  <div className="flex items-center space-x-2">
+                                    {getStatusIcon(module.data.status)}
+                                    <span className="text-xs font-medium text-slate-700 capitalize">{module.type}</span>
+                                  </div>
+                                </td>
+                                <td className="p-2">
+                                  <Badge className={`${getStatusColor(module.data.status)} border-0 text-xs`}>
+                                    {module.data.status}
+                                  </Badge>
+                                </td>
+                                <td className="p-2">
+                                  <div className="text-xs text-slate-600">
+                                    {/* Module-specific data */}
+                                    {module.type === 'chain' && module.data.checks && (
+                                      <div className="space-y-1">
+                                        <div className="flex items-center space-x-2">
+                                          <span>RPC Call:</span>
+                                          <span className={module.data.checks.rpcCall ? 'text-green-600' : 'text-red-600'}>
+                                            {module.data.checks.rpcCall ? '✓' : '✗'}
+                                          </span>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                          <span>Debug Trace:</span>
+                                          <span className={module.data.checks.debugTraceCall ? 'text-green-600' : 'text-red-600'}>
+                                            {module.data.checks.debugTraceCall ? '✓' : '✗'}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    )}
+                                    
+                                    {(module.type === 'simulator' || module.type === 'executor') && module.data.totalJobs && (
+                                      <div className="space-y-1">
+                                        <div>Active: {module.data.totalJobs.active}</div>
+                                        <div>Waiting: {module.data.totalJobs.waiting}</div>
+                                        <div>Delayed: {module.data.totalJobs.delayed}</div>
+                                        <div>Paused: {module.data.totalJobs.paused}</div>
+                                      </div>
+                                    )}
+
+                                    {module.type === 'node' && module.data.master && (
+                                      <div className="space-y-1">
+                                        <div>Master Active: {module.data.master.active ? '✓' : '✗'}</div>
+                                        <div>Workers: {Object.keys(module.data.workers || {}).length}</div>
+                                        <div>Paymaster Deployed: {module.data.paymaster?.deployed ? '✓' : '✗'}</div>
+                                      </div>
+                                    )}
+
+                                    {module.type === 'workers' && module.data.workers && (
+                                      <div className="space-y-1">
+                                        <div>Simulator: {module.data.workers.simulator?.length || 0} online</div>
+                                        <div>Executor: {module.data.workers.executor?.length || 0} online</div>
+                                      </div>
+                                    )}
+
+                                    {module.type === 'redis' && module.data.clients && (
+                                      <div>Total Clients: {module.data.clients.totalClients}</div>
+                                    )}
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
       </div>
 
