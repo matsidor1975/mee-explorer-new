@@ -642,7 +642,7 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-sm text-slate-700 leading-relaxed">
-                  <div className="font-semibold text-blue-700 mb-1">Quick Note</div>
+                  <div className="font-semibold text-blue-700 mb-0.5">Quick Note</div>
                   <div>One User Operation can contain multiple function calls and token transfers. All actions on a single chain are executed atomically.</div>
                 </div>
               </div>
