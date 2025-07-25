@@ -18,7 +18,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Explorer} />
       <Route path="/explorer" component={Explorer} />
-      <Route path="/network" component={NetworkInfo} />
+      <Route path="/network-info" component={NetworkInfo} />
       <Route path="/details/:hash" component={SupertransactionDetails} />
       <Route component={NotFound} />
     </Switch>
