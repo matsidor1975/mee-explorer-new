@@ -245,7 +245,7 @@ export default function Explorer() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-16 py-8 border-t border-white/20">
+      <footer className="mt-16 py-8 pb-16 border-t border-white/20">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="flex justify-center">
             <img 
