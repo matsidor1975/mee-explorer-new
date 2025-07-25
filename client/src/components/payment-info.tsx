@@ -79,7 +79,7 @@ export default function PaymentInfoComponent({ paymentInfo, feePayerUserOp }: Pa
     subtitle: string;
     color: string;
   }) => (
-    <div className="gradient-card-secondary rounded-lg p-3">
+    <div className="gradient-card-subtle rounded-lg p-3 border border-black/5">
       <div className="flex items-center space-x-2 mb-1">
         <Icon className={`h-4 w-4 ${color}`} />
         <span className="text-sm font-medium text-slate-600">{label}</span>
