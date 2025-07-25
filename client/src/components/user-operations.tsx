@@ -626,15 +626,25 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
           </div>
           
           {/* Information Callout */}
-          <div className="mb-4 p-3 rounded-lg border" style={{
-            background: 'linear-gradient(145deg, hsl(220, 100%, 99.5%) 0%, hsl(220, 60%, 98.5%) 50%, hsl(210, 40%, 98%) 100%)',
-            borderColor: 'rgba(0,0,0,0.03)'
+          <div className="mb-4 relative overflow-hidden rounded-xl" style={{
+            background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.04) 0%, rgba(147, 197, 253, 0.06) 50%, rgba(219, 234, 254, 0.04) 100%)',
+            border: '1px solid rgba(59, 130, 246, 0.08)'
           }}>
-            <div className="flex items-start space-x-2">
-              <FileText className="h-4 w-4 text-blue-600 mt-0.5 shrink-0" />
-              <p className="text-sm text-blue-800">
-                <strong>Note:</strong> One User Operation can contain multiple function calls and token transfers. All actions on a single chain are executed atomically.
-              </p>
+            <div className="absolute inset-0 opacity-30" style={{
+              background: 'radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%)'
+            }}></div>
+            <div className="relative p-4 flex items-start space-x-3">
+              <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center" style={{
+                background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 197, 253, 0.15) 100%)',
+                border: '1px solid rgba(59, 130, 246, 0.2)'
+              }}>
+                <FileText className="h-4 w-4 text-blue-600" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-slate-700 leading-relaxed">
+                  <span className="font-semibold text-blue-700">Quick Note:</span> One User Operation can contain multiple function calls and token transfers. All actions on a single chain are executed atomically.
+                </p>
+              </div>
             </div>
           </div>
           
