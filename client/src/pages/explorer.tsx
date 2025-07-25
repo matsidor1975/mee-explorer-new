@@ -244,7 +244,18 @@ export default function Explorer() {
 
       </main>
 
-
+      {/* Footer */}
+      <footer className="mt-16 py-8 border-t border-white/20">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+          <div className="flex justify-center">
+            <img 
+              src={new URL('@/assets/biconomy-explorer.webp', import.meta.url).href} 
+              alt="Biconomy"
+              className="h-6 opacity-60"
+            />
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
