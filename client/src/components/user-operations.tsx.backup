@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Copy, ChevronDown, Code, User, Hash, Fuel, Clock, Zap, Layers, Settings, AlertTriangle, CheckCircle, ExternalLink, Wallet, CreditCard, Play, FileText, Key, Timer, Database, ShieldCheck, Signature, Loader2, Info } from "lucide-react";
 import { UserOp } from "@/types";
 import { formatHash, formatGas, formatTimestamp, getExecutionStatusColor, parseAccountGasLimits, parseGasFees, getExplorerUrl, getExplorerName, hasExplorerSupport, getNetworkIcon } from "@/lib/format";
@@ -86,7 +87,7 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
       window.open(simulationUrl, '_blank');
       
       toast({
-        title: "Simulation created",
+        title: "Simulation created!",
         description: "Tenderly simulation opened in new tab.",
       });
     } catch (error) {
@@ -98,6 +99,36 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
       });
     }
   };
+
+  const DataField = ({ icon: Icon, label, value, showCopy = true }: {
+    icon: React.ComponentType<any>;
+    label: string;
+    value: string;
+    showCopy?: boolean;
+  }) => (
+    <div className="glass-card-subtle border border-white/20 rounded">
+      <div className="flex items-center space-x-2 mb-2">
+        <Icon className="h-4 w-4 text-gray-500" />
+      </div>
+      <div className="flex items-center justify-between">
+        <div className="flex-1 text-right">
+          <code className={`text-sm font-mono text-gray-900 ${!value ? 'text-gray-400' : ''}`}>
+            {value || 'Not available'}
+          </code>
+        </div>
+        {showCopy && value && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => copyToClipboard(value, label)}
+            className="text-gray-400 hover:text-[var(--biconomy-orange)] shrink-0 ml-2"
+          >
+            <Copy className="h-4 w-4" />
+          </Button>
+        )}
+      </div>
+    </div>
+  );
 
   const TableDataField = ({ icon: Icon, label, value, showCopy = true }: {
     icon: React.ComponentType<any>;
@@ -115,16 +146,16 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
       <td className="py-2 pl-4">
         <div className="flex items-center justify-between">
           <div className="flex-1 text-right">
-            <code className={`text-sm font-mono text-gray-900 break-all ${!value ? 'text-gray-400' : ''}`}>
-              {value || 'Not available'}
+            <code className={`text-sm font-mono text-gray-900 ${!value ? 'text-gray-400' : ''}`}>
+              {value ? (value.length > 50 ? `${value.substring(0, 24)}...${value.substring(value.length - 24)}` : value) : 'N/A'}
             </code>
           </div>
-          {value && showCopy && (
+          {showCopy && value && (
             <Button
               variant="ghost"
               size="sm"
               onClick={() => copyToClipboard(value, label)}
-              className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 ml-2 shrink-0"
+              className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 shrink-0 ml-2"
             >
               <Copy className="h-3 w-3" />
             </Button>
@@ -134,7 +165,7 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
     </tr>
   );
 
-  const TransactionHashDisplay = ({ chainId, txHash }: { chainId: string; txHash: string }) => {
+  const ExplorerLink = ({ txHash, chainId }: { txHash: string; chainId: string }) => {
     const explorerUrl = getExplorerUrl(chainId, txHash);
     const explorerName = getExplorerName(chainId);
     const hasExplorer = hasExplorerSupport(chainId);
@@ -186,6 +217,36 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
       </div>
     );
   };
+
+  const CodeField = ({ icon: Icon, label, value }: {
+    icon: React.ComponentType<any>;
+    label: string;
+    value: string;
+  }) => (
+    <div className="gradient-card-subtle rounded-lg p-3">
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center space-x-2">
+          <Icon className="h-4 w-4 text-gray-500" />
+
+        </div>
+        {value && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => copyToClipboard(value, label)}
+            className="text-gray-400 hover:text-[var(--biconomy-orange)]"
+          >
+            <Copy className="h-3 w-3" />
+          </Button>
+        )}
+      </div>
+      <div className="bg-gray-50 p-2 rounded border max-h-32 overflow-y-auto">
+        <code className={`text-xs font-mono text-gray-900 break-all block ${!value ? 'text-gray-400' : ''}`}>
+          {value || 'Not available'}
+        </code>
+      </div>
+    </div>
+  );
 
   const renderOperation = (userOp: UserOp, index: number, isCleanup: boolean = false) => {
     const isExpanded = isCleanup ? expandedCleanupOps.has(index) : expandedOps.has(index);
@@ -272,10 +333,16 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
                   <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge text-xs`}>
                     {userOp.executionStatus}
                   </Badge>
-                  <Info 
-                    className="h-3 w-3 text-gray-400 hover:text-gray-600 cursor-help" 
-                    title={getStatusDescription(userOp.executionStatus)}
-                  />
+                  
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Info className="h-3 w-3 text-gray-400 hover:text-gray-600 cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent side="top" className="max-w-xs">
+                        <p className="text-sm">{getStatusDescription(userOp.executionStatus)}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  
                 </div>
                 {userOp.executionStatus === "MINED_SUCCESS" && (
                   <>
@@ -391,10 +458,16 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
                   <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge text-xs`}>
                     {userOp.executionStatus}
                   </Badge>
-                  <Info 
-                    className="h-3 w-3 text-gray-400 hover:text-gray-600 cursor-help" 
-                    title={getStatusDescription(userOp.executionStatus)}
-                  />
+                  
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Info className="h-3 w-3 text-gray-400 hover:text-gray-600 cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent side="top" className="max-w-xs">
+                        <p className="text-sm">{getStatusDescription(userOp.executionStatus)}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  
                 </div>
                 {userOp.executionStatus === "MINED_SUCCESS" && (
                   <>
@@ -459,11 +532,11 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
                 </table>
               </div>
 
-              {/* Gas Information */}
+              {/* Gas & Fee Configuration */}
               <div>
                 <h5 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-2">
                   <Fuel className="h-4 w-4" />
-                  <span>Gas Information</span>
+                  <span>Gas & Fee Configuration</span>
                 </h5>
                 <table className="w-full text-sm">
                   <colgroup>
@@ -471,11 +544,11 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
                     <col className="w-auto" />
                   </colgroup>
                   <tbody>
-                    <TableDataField icon={Zap} label="Verification Gas Limit" value={formatGas(verificationGasLimit)} showCopy={false} />
-                    <TableDataField icon={Zap} label="Call Gas Limit" value={formatGas(callGasLimit)} showCopy={false} />
-                    <TableDataField icon={Fuel} label="Pre Verification Gas" value={formatGas(userOp.userOp.preVerificationGas)} showCopy={false} />
-                    <TableDataField icon={Fuel} label="Max Priority Fee Per Gas" value={formatGas(maxPriorityFeePerGas) + ' wei'} showCopy={false} />
-                    <TableDataField icon={Fuel} label="Max Fee Per Gas" value={formatGas(maxFeePerGas) + ' wei'} showCopy={false} />
+                    <TableDataField icon={Fuel} label="Account Gas Limits" value={userOp.userOp.accountGasLimits} />
+                    <TableDataField icon={Zap} label="Gas Fees" value={userOp.userOp.gasFees} />
+                    <TableDataField icon={Fuel} label="Pre-Verification Gas" value={userOp.userOp.preVerificationGas} />
+                    <TableDataField icon={Zap} label="Max Gas Limit" value={userOp.maxGasLimit} showCopy={false} />
+                    <TableDataField icon={Zap} label="Max Fee Per Gas" value={userOp.maxFeePerGas} showCopy={false} />
                   </tbody>
                 </table>
               </div>
@@ -588,7 +661,8 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
   };
 
   return (
-    <div className="space-y-6">
+    
+      <div className="space-y-6">
       {/* Regular Operations Card */}
       {regularOperations.length > 0 && (
         <div className="glass-root-card rounded-lg p-6">
@@ -706,6 +780,7 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </TooltipProvider>
   );
 }
