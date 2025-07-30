@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Copy, ChevronDown, Code, User, Hash, Fuel, Clock, Zap, Layers, Settings, AlertTriangle, CheckCircle, ExternalLink, Wallet, CreditCard, Play, FileText, Key, Timer, Database, ShieldCheck, Signature, Loader2 } from "lucide-react";
+import { Copy, ChevronDown, Code, User, Hash, Fuel, Clock, Zap, Layers, Settings, AlertTriangle, CheckCircle, ExternalLink, Wallet, CreditCard, Play, FileText, Key, Timer, Database, ShieldCheck, Signature, Loader2, Info } from "lucide-react";
 import { UserOp } from "@/types";
 import { formatHash, formatGas, formatTimestamp, getExecutionStatusColor, parseAccountGasLimits, parseGasFees, getExplorerUrl, getExplorerName, hasExplorerSupport, getNetworkIcon } from "@/lib/format";
 import { useToast } from "@/hooks/use-toast";
@@ -329,18 +329,21 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
               {/* Status and Time - show status always, time only for mined operations */}
               <div className="flex items-center space-x-2">
                 <span className="text-gray-400">•</span>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge text-xs cursor-help`}>
-                        {userOp.executionStatus}
-                      </Badge>
-                    </TooltipTrigger>
-                    <TooltipContent side="top" className="max-w-xs">
-                      <p className="text-sm">{getStatusDescription(userOp.executionStatus)}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <div className="flex items-center space-x-1">
+                  <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge text-xs`}>
+                    {userOp.executionStatus}
+                  </Badge>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Info className="h-3 w-3 text-gray-400 hover:text-gray-600 cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent side="top" className="max-w-xs">
+                        <p className="text-sm">{getStatusDescription(userOp.executionStatus)}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
                 {userOp.executionStatus === "MINED_SUCCESS" && (
                   <>
                     <span className="text-gray-400">•</span>
@@ -451,18 +454,21 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
             {/* Status and Time Row - show status always, time only for mined operations */}
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge text-xs cursor-help`}>
-                        {userOp.executionStatus}
-                      </Badge>
-                    </TooltipTrigger>
-                    <TooltipContent side="top" className="max-w-xs">
-                      <p className="text-sm">{getStatusDescription(userOp.executionStatus)}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <div className="flex items-center space-x-1">
+                  <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge text-xs`}>
+                    {userOp.executionStatus}
+                  </Badge>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Info className="h-3 w-3 text-gray-400 hover:text-gray-600 cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent side="top" className="max-w-xs">
+                        <p className="text-sm">{getStatusDescription(userOp.executionStatus)}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
                 {userOp.executionStatus === "MINED_SUCCESS" && (
                   <>
                     <Clock className="h-3 w-3 text-gray-500" />
