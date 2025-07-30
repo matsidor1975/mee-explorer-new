@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Copy, ChevronDown, Code, User, Hash, Fuel, Clock, Zap, Layers, Settings, AlertTriangle, CheckCircle, ExternalLink, Wallet, CreditCard, Play, FileText, Key, Timer, Database, ShieldCheck, Signature, Loader2 } from "lucide-react";
 import { UserOp } from "@/types";
 import { formatHash, formatGas, formatTimestamp, getExecutionStatusColor, parseAccountGasLimits, parseGasFees, getExplorerUrl, getExplorerName, hasExplorerSupport, getNetworkIcon } from "@/lib/format";
@@ -57,6 +58,19 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
         description: "Could not copy to clipboard.",
         variant: "destructive",
       });
+    }
+  };
+
+  const getStatusDescription = (status: string): string => {
+    switch (status.toUpperCase()) {
+      case 'FAILED':
+        return 'Node simulated the transaction until Upper Bound time was reached. Since the transaction was still reverting, it did not commit the transaction.';
+      case 'MINED_FAIL':
+        return 'Node attempted to execute the transaction but it failed on-chain during execution.';
+      case 'MINED_SUCCESS':
+        return 'Node executed the transaction successfully and it was included in a block on the target blockchain.';
+      default:
+        return 'Transaction is being processed by the node.';
     }
   };
 
@@ -315,9 +329,18 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
               {/* Status and Time - show status always, time only for mined operations */}
               <div className="flex items-center space-x-2">
                 <span className="text-gray-400">•</span>
-                <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge text-xs`}>
-                  {userOp.executionStatus}
-                </Badge>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge text-xs cursor-help`}>
+                        {userOp.executionStatus}
+                      </Badge>
+                    </TooltipTrigger>
+                    <TooltipContent side="top" className="max-w-xs">
+                      <p className="text-sm">{getStatusDescription(userOp.executionStatus)}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
                 {userOp.executionStatus === "MINED_SUCCESS" && (
                   <>
                     <span className="text-gray-400">•</span>
@@ -428,9 +451,18 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
             {/* Status and Time Row - show status always, time only for mined operations */}
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge text-xs`}>
-                  {userOp.executionStatus}
-                </Badge>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge text-xs cursor-help`}>
+                        {userOp.executionStatus}
+                      </Badge>
+                    </TooltipTrigger>
+                    <TooltipContent side="top" className="max-w-xs">
+                      <p className="text-sm">{getStatusDescription(userOp.executionStatus)}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
                 {userOp.executionStatus === "MINED_SUCCESS" && (
                   <>
                     <Clock className="h-3 w-3 text-gray-500" />
