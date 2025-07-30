@@ -329,7 +329,17 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
             </div>
             
             <div className="flex items-center space-x-2">
-              {userOp.executionStatus !== "MINED_SUCCESS" && (
+              {userOp.executionStatus === "MINED_FAIL" && userOp.executionData ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => window.open(`https://dashboard.tenderly.co/tx/${userOp.executionData}`, '_blank')}
+                  className="text-xs pt-[14px] pb-[14px] pl-[16px] pr-[16px] flex items-center space-x-1 hover:bg-blue-500 hover:text-white"
+                >
+                  <ExternalLink className="h-3 w-3" />
+                  <span>View on Tenderly</span>
+                </Button>
+              ) : userOp.executionStatus !== "MINED_SUCCESS" && userOp.executionStatus !== "MINED_FAIL" && (
                 <Button
                   variant="outline"
                   size="sm"
@@ -383,7 +393,17 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
               </div>
               
               <div className="flex items-center space-x-2">
-                {userOp.executionStatus !== "MINED_SUCCESS" && (
+                {userOp.executionStatus === "MINED_FAIL" && userOp.executionData ? (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => window.open(`https://dashboard.tenderly.co/tx/${userOp.executionData}`, '_blank')}
+                    className="text-xs pt-[14px] pb-[14px] pl-[16px] pr-[16px] flex items-center hover:bg-blue-500 hover:text-white"
+                  >
+                    <ExternalLink className="h-3 w-3 mr-1" />
+                    <span>View on Tenderly</span>
+                  </Button>
+                ) : userOp.executionStatus !== "MINED_SUCCESS" && userOp.executionStatus !== "MINED_FAIL" && (
                   <Button
                     variant="outline"
                     size="sm"

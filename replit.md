@@ -150,3 +150,4 @@ The application is designed to be easily deployable on platforms like Replit, Ve
 - Implemented network configuration settings with support for production, staging (https://mee-node-staging.biconomy.io), and custom network URLs
 - Added settings dialog accessible from all navigation bars with persistent local storage and automatic page reload on network changes
 - Enhanced mobile navigation with settings option for complete feature parity across desktop and mobile interfaces
+- Updated Tenderly integration: MINED_FAIL transactions now show direct Tenderly explorer links (https://dashboard.tenderly.co/tx/{txhash}) instead of simulation buttons
