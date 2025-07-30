@@ -15,33 +15,6 @@ interface UserOperationsProps {
   isPolling?: boolean;
 }
 
-// Status Tooltip Component
-const StatusTooltip = ({ status }: { status: string }) => {
-  const getStatusDescription = (status: string): string => {
-    switch (status.toUpperCase()) {
-      case 'FAILED':
-        return 'Node simulated the transaction until Upper Bound time was reached. Since the transaction was still reverting, it did not commit the transaction.';
-      case 'MINED_FAIL':
-        return 'Node attempted to execute the transaction but it failed on-chain during execution.';
-      case 'MINED_SUCCESS':
-        return 'Node executed the transaction successfully and it was included in a block on the target blockchain.';
-      default:
-        return 'Transaction is being processed by the node.';
-    }
-  };
-
-  return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Info className="h-3 w-3 text-gray-400 hover:text-gray-600 cursor-help" />
-      </TooltipTrigger>
-      <TooltipContent side="top" className="max-w-xs">
-        <p className="text-sm">{getStatusDescription(status)}</p>
-      </TooltipContent>
-    </Tooltip>
-  );
-};
-
 export default function UserOperations({ userOps, isPolling = false }: UserOperationsProps) {
   const [expandedOps, setExpandedOps] = useState<Set<number>>(new Set());
   const [expandedCleanupOps, setExpandedCleanupOps] = useState<Set<number>>(new Set());
@@ -85,6 +58,19 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
         description: "Could not copy to clipboard.",
         variant: "destructive",
       });
+    }
+  };
+
+  const getStatusDescription = (status: string): string => {
+    switch (status.toUpperCase()) {
+      case 'FAILED':
+        return 'Node simulated the transaction until Upper Bound time was reached. Since the transaction was still reverting, it did not commit the transaction.';
+      case 'MINED_FAIL':
+        return 'Node attempted to execute the transaction but it failed on-chain during execution.';
+      case 'MINED_SUCCESS':
+        return 'Node executed the transaction successfully and it was included in a block on the target blockchain.';
+      default:
+        return 'Transaction is being processed by the node.';
     }
   };
 
@@ -148,6 +134,59 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
       </td>
     </tr>
   );
+
+  const TransactionHashDisplay = ({ chainId, txHash }: { chainId: string; txHash: string }) => {
+    const explorerUrl = getExplorerUrl(chainId, txHash);
+    const explorerName = getExplorerName(chainId);
+    const hasExplorer = hasExplorerSupport(chainId);
+    
+    return (
+      <div className="gradient-card-subtle rounded-lg p-3">
+        <div className="flex items-center space-x-2 mb-2">
+          <ExternalLink className="h-4 w-4 text-gray-500" />
+          <span className="text-sm font-medium text-gray-600">On-Chain Transaction</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="flex-1 text-right">
+            <code className="text-sm font-mono text-gray-900">
+              {formatHash(txHash)}
+            </code>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => copyToClipboard(txHash, "Transaction Hash")}
+              className="text-gray-400 hover:text-[var(--biconomy-orange)] shrink-0"
+            >
+              <Copy className="h-3 w-3" />
+            </Button>
+            {hasExplorer ? (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => window.open(explorerUrl!, '_blank')}
+                className="text-xs flex items-center space-x-1 hover:bg-[var(--biconomy-orange)] hover:text-white"
+              >
+                <ExternalLink className="h-3 w-3" />
+                <span>{explorerName}</span>
+              </Button>
+            ) : (
+              <span className="text-xs text-gray-500 px-2">
+                No explorer available
+              </span>
+            )}
+          </div>
+        </div>
+        <p className="text-xs text-gray-500 mt-1">
+          {hasExplorer 
+            ? "View transaction details on blockchain explorer"
+            : "Copy the transaction hash above to view in your preferred explorer"
+          }
+        </p>
+      </div>
+    );
+  };
 
   const renderOperation = (userOp: UserOp, index: number, isCleanup: boolean = false) => {
     const isExpanded = isCleanup ? expandedCleanupOps.has(index) : expandedOps.has(index);
@@ -234,7 +273,10 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
                   <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge text-xs`}>
                     {userOp.executionStatus}
                   </Badge>
-                  <StatusTooltip status={userOp.executionStatus} />
+                  <Info 
+                    className="h-3 w-3 text-gray-400 hover:text-gray-600 cursor-help" 
+                    title={getStatusDescription(userOp.executionStatus)}
+                  />
                 </div>
                 {userOp.executionStatus === "MINED_SUCCESS" && (
                   <>
@@ -350,7 +392,10 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
                   <Badge className={`${getExecutionStatusColor(userOp.executionStatus)} badge text-xs`}>
                     {userOp.executionStatus}
                   </Badge>
-                  <StatusTooltip status={userOp.executionStatus} />
+                  <Info 
+                    className="h-3 w-3 text-gray-400 hover:text-gray-600 cursor-help" 
+                    title={getStatusDescription(userOp.executionStatus)}
+                  />
                 </div>
                 {userOp.executionStatus === "MINED_SUCCESS" && (
                   <>
@@ -546,123 +591,123 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
   return (
     <TooltipProvider>
       <div className="space-y-6">
-        {/* Regular Operations Card */}
-        {regularOperations.length > 0 && (
-          <div className="glass-root-card rounded-lg p-6">
-            <div className="pb-2 mb-4 border-b border-gray-100 mx-[-12px] px-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <Layers className="h-4 w-4 text-blue-500" />
-                  <h3 className="root-card-title">User Operations</h3>
-                  {isPolling && (
-                    <div className="flex items-center space-x-1.5 text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded-full border border-blue-200">
-                      <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
-                      <span className="font-medium">Auto-refreshing</span>
-                    </div>
-                  )}
-                </div>
-                <Badge className="px-3 py-1 text-xs bg-blue-100 text-blue-800 border border-blue-200 badge">
-                  {regularOperations.length} operation{regularOperations.length !== 1 ? 's' : ''}
-                </Badge>
-              </div>
-            </div>
-            
-            {/* Information Callout */}
-            <div className="mb-4 relative overflow-hidden rounded-xl" style={{
-              background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.04) 0%, rgba(147, 197, 253, 0.06) 50%, rgba(219, 234, 254, 0.04) 100%)',
-              border: '1px solid rgba(59, 130, 246, 0.08)'
-            }}>
-              <div className="absolute inset-0 opacity-30" style={{
-                background: 'radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%)'
-              }}></div>
-              <div className="relative p-4 flex items-center space-x-3">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center" style={{
-                  background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 197, 253, 0.15) 100%)',
-                  border: '1px solid rgba(59, 130, 246, 0.2)'
-                }}>
-                  <FileText className="h-4 w-4 text-blue-600" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm text-slate-700 leading-relaxed">
-                    <div className="font-semibold text-blue-700 mb-0.5">Quick Note</div>
-                    <div>One User Operation can contain multiple function calls and token transfers. All actions on a single chain are executed atomically.</div>
+      {/* Regular Operations Card */}
+      {regularOperations.length > 0 && (
+        <div className="glass-root-card rounded-lg p-6">
+          <div className="pb-2 mb-4 border-b border-gray-100 mx-[-12px] px-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <Layers className="h-4 w-4 text-blue-500" />
+                <h3 className="root-card-title">User Operations</h3>
+                {isPolling && (
+                  <div className="flex items-center space-x-1.5 text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded-full border border-blue-200">
+                    <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
+                    <span className="font-medium">Auto-refreshing</span>
                   </div>
-                </div>
+                )}
               </div>
+              <Badge className="px-3 py-1 text-xs bg-blue-100 text-blue-800 border border-blue-200 badge">
+                {regularOperations.length} operation{regularOperations.length !== 1 ? 's' : ''}
+              </Badge>
             </div>
-            
-            <div>
-              <div className="space-y-2">
-                {regularOperations.map((userOp, index) => renderOperation(userOp, index, false))}
+          </div>
+          
+          {/* Information Callout */}
+          <div className="mb-4 relative overflow-hidden rounded-xl" style={{
+            background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.04) 0%, rgba(147, 197, 253, 0.06) 50%, rgba(219, 234, 254, 0.04) 100%)',
+            border: '1px solid rgba(59, 130, 246, 0.08)'
+          }}>
+            <div className="absolute inset-0 opacity-30" style={{
+              background: 'radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%)'
+            }}></div>
+            <div className="relative p-4 flex items-center space-x-3">
+              <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center" style={{
+                background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 197, 253, 0.15) 100%)',
+                border: '1px solid rgba(59, 130, 246, 0.2)'
+              }}>
+                <FileText className="h-4 w-4 text-blue-600" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm text-slate-700 leading-relaxed">
+                  <div className="font-semibold text-blue-700 mb-0.5">Quick Note</div>
+                  <div>One User Operation can contain multiple function calls and token transfers. All actions on a single chain are executed atomically.</div>
+                </div>
               </div>
             </div>
           </div>
-        )}
-        {/* Cleanup Operations */}
-        {cleanupOperations.length > 0 && (
-          <div className="glass-root-card rounded-lg p-6">
-            <div className="pb-2 mb-4 border-b border-gray-100 mx-[-12px] px-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <Settings className="h-4 w-4 text-slate-500" />
+          
+          <div>
+            <div className="space-y-2">
+              {regularOperations.map((userOp, index) => renderOperation(userOp, index, false))}
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Cleanup Operations */}
+      {cleanupOperations.length > 0 && (
+        <div className="glass-root-card rounded-lg p-6">
+          <div className="pb-2 mb-4 border-b border-gray-100 mx-[-12px] px-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <Settings className="h-4 w-4 text-slate-500" />
+                <div>
+                  <h3 className="root-card-title">Cleanup Operations</h3>
+                  <p className="text-sm text-slate-500">
+                    {cleanupOperations.length} cleanup operation{cleanupOperations.length !== 1 ? 's' : ''} available
+                  </p>
+                </div>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowCleanupOperations(!showCleanupOperations)}
+                className="flex items-center space-x-2 hover:bg-slate-50 border-slate-200 pt-[14px] pb-[14px] pl-[16px] pr-[16px]"
+              >
+                <span>{showCleanupOperations ? 'Hide' : 'Show'} Cleanup Operations</span>
+                <ChevronDown className={`h-4 w-4 transition-transform ${showCleanupOperations ? 'rotate-180' : ''}`} />
+              </Button>
+            </div>
+          </div>
+          
+          {/* Expanded Cleanup Operations Content */}
+          {showCleanupOperations && (
+            <div>
+              {/* Cleanup Explanation */}
+              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg mb-6">
+                <div className="flex items-start space-x-3">
+                  <Settings className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
                   <div>
-                    <h3 className="root-card-title">Cleanup Operations</h3>
-                    <p className="text-sm text-slate-500">
-                      {cleanupOperations.length} cleanup operation{cleanupOperations.length !== 1 ? 's' : ''} available
+                    <h4 className="text-sm font-medium text-blue-800 mb-2">About Cleanup Operations</h4>
+                    <p className="text-sm text-blue-700">
+                      Cleanup operations automatically execute after all regular operations complete. They remove any 
+                      remaining tokens from the smart account. If there are no tokens to cleanup, these operations 
+                      will not execute, which is completely normal behavior.
                     </p>
                   </div>
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setShowCleanupOperations(!showCleanupOperations)}
-                  className="flex items-center space-x-2 hover:bg-slate-50 border-slate-200 pt-[14px] pb-[14px] pl-[16px] pr-[16px]"
-                >
-                  <span>{showCleanupOperations ? 'Hide' : 'Show'} Cleanup Operations</span>
-                  <ChevronDown className={`h-4 w-4 transition-transform ${showCleanupOperations ? 'rotate-180' : ''}`} />
-                </Button>
               </div>
-            </div>
-            
-            {/* Expanded Cleanup Operations Content */}
-            {showCleanupOperations && (
-              <div>
-                {/* Cleanup Explanation */}
-                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg mb-6">
-                  <div className="flex items-start space-x-3">
-                    <Settings className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <h4 className="text-sm font-medium text-blue-800 mb-2">About Cleanup Operations</h4>
-                      <p className="text-sm text-blue-700">
-                        Cleanup operations automatically execute after all regular operations complete. They remove any 
-                        remaining tokens from the smart account. If there are no tokens to cleanup, these operations 
-                        will not execute, which is completely normal behavior.
-                      </p>
-                    </div>
-                  </div>
-                </div>
 
-                <div className="space-y-2">
-                  {cleanupOperations.map((userOp, index) => renderOperation(userOp, index, true))}
-                </div>
+              <div className="space-y-2">
+                {cleanupOperations.map((userOp, index) => renderOperation(userOp, index, true))}
               </div>
-            )}
-          </div>
-        )}
-        {/* No Operations Message */}
-        {regularOperations.length === 0 && cleanupOperations.length === 0 && (
-          <div className="bg-white border border-slate-200 rounded">
-            <div className="p-6">
-              <div className="flex items-center space-x-3 mb-4">
-                <Layers className="h-4 w-4 text-orange-500" />
-                <div>
-                  <h3 className="root-card-title">User Operations</h3>
-                  <p className="text-sm text-slate-500">No operations found</p>
-                </div>
+            </div>
+          )}
+        </div>
+      )}
+      {/* No Operations Message */}
+      {regularOperations.length === 0 && cleanupOperations.length === 0 && (
+        <div className="bg-white border border-slate-200 rounded">
+          <div className="p-6">
+            <div className="flex items-center space-x-3 mb-4">
+              <Layers className="h-4 w-4 text-orange-500" />
+              <div>
+                <h3 className="root-card-title">User Operations</h3>
+                <p className="text-sm text-slate-500">No operations found</p>
               </div>
             </div>
           </div>
-        )}
+        </div>
+      )}
       </div>
     </TooltipProvider>
   );
