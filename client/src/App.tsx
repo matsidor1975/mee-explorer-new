@@ -41,7 +41,7 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
+      <TooltipProvider delayDuration={100}>
         {/* Gradient Background with Floating Circles */}
         <div className="gradient-background">
           <div className="floating-circle-1"></div>

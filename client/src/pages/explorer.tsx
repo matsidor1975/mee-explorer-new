@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "wouter";
 import HashSearch from "@/components/hash-search";
-import { Search, Activity, Clock, X, Trash2, FileText, Menu } from "lucide-react";
+import { Search, Activity, Clock, X, Trash2, FileText, Menu, Info } from "lucide-react";
 import { getSearchHistory, removeFromSearchHistory, clearSearchHistory, type HistoryItem } from "@/lib/storage";
 import { Button } from "@/components/ui/button";
 import { MobileNav } from "@/components/ui/mobile-nav";
 import { useMobileNav } from "@/hooks/use-mobile-nav";
 import { SettingsButton } from "@/components/settings-dialog";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function Explorer() {
   const [searchHash, setSearchHash] = useState<string>("");
@@ -146,6 +147,19 @@ export default function Explorer() {
                 onSearch={handleSearch}
                 isLoading={false}
               />
+              
+              {/* Debug tooltip test */}
+              <div className="mt-4 flex items-center justify-center space-x-2">
+                <span className="text-slate-400 text-sm">Tooltip Test:</span>
+                <Tooltip delayDuration={100}>
+                  <TooltipTrigger asChild>
+                    <Info className="h-4 w-4 text-blue-400 cursor-help" />
+                  </TooltipTrigger>
+                  <TooltipContent side="top" className="bg-slate-900 text-white">
+                    <p>This is a test tooltip to verify the system is working!</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
             </div>
           </div>
         </div>

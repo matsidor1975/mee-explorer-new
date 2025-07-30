@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Copy, ChevronDown, Code, User, Hash, Fuel, Clock, Zap, Layers, Settings, AlertTriangle, CheckCircle, ExternalLink, Wallet, CreditCard, Play, FileText, Key, Timer, Database, ShieldCheck, Signature, Loader2, Info } from "lucide-react";
 import { UserOp } from "@/types";
 import { formatHash, formatGas, formatTimestamp, getExecutionStatusColor, parseAccountGasLimits, parseGasFees, getExplorerUrl, getExplorerName, hasExplorerSupport, getNetworkIcon } from "@/lib/format";
@@ -31,11 +31,11 @@ const StatusTooltip = ({ status }: { status: string }) => {
   };
 
   return (
-    <Tooltip>
+    <Tooltip delayDuration={100}>
       <TooltipTrigger asChild>
         <Info className="h-3 w-3 text-gray-400 hover:text-gray-600 cursor-help" />
       </TooltipTrigger>
-      <TooltipContent side="top" className="max-w-xs">
+      <TooltipContent side="top" className="max-w-xs z-50 bg-slate-900 text-white">
         <p className="text-sm">{getStatusDescription(status)}</p>
       </TooltipContent>
     </Tooltip>
@@ -544,7 +544,6 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
   };
 
   return (
-    <TooltipProvider>
       <div className="space-y-6">
         {/* Regular Operations Card */}
         {regularOperations.length > 0 && (
@@ -664,6 +663,5 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
           </div>
         )}
       </div>
-    </TooltipProvider>
   );
 }
