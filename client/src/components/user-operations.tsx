@@ -131,40 +131,47 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
     }
   };
 
-  const TableDataField = ({ icon: Icon, label, value, showCopy = true }: {
+  const TableDataField = ({ icon: Icon, label, value, showCopy = true, truncateLength }: {
     icon: React.ComponentType<any>;
     label: string;
     value: string;
     showCopy?: boolean;
-  }) => (
-    <tr className="border-b border-gray-100">
-      <td className="py-2 pr-4">
-        <div className="flex items-center space-x-2">
-          <Icon className="h-4 w-4 text-gray-500 shrink-0" />
-          <span className="text-sm text-gray-600 font-medium">{label}</span>
-        </div>
-      </td>
-      <td className="py-2 pl-4">
-        <div className="flex items-center justify-between">
-          <div className="flex-1 text-right">
-            <code className={`text-sm font-mono text-gray-900 break-all ${!value ? 'text-gray-400' : ''}`}>
-              {value || 'Not available'}
-            </code>
+    truncateLength?: number;
+  }) => {
+    const shouldTruncate = truncateLength && value && value.length > truncateLength;
+    const displayValue = shouldTruncate ? `${value.slice(0, truncateLength)}...` : value;
+    
+    return (
+      <tr className="border-b border-gray-100">
+        <td className="py-2 pr-4">
+          <div className="flex items-center space-x-2">
+            <Icon className="h-4 w-4 text-gray-500 shrink-0" />
+            <span className="text-sm text-gray-600 font-medium">{label}</span>
           </div>
-          {value && showCopy && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => copyToClipboard(value, label)}
-              className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 ml-2 shrink-0"
-            >
-              <Copy className="h-3 w-3" />
-            </Button>
-          )}
-        </div>
-      </td>
-    </tr>
-  );
+        </td>
+        <td className="py-2 pl-4">
+          <div className="flex items-center justify-between">
+            <div className="flex-1 text-right">
+              <code className={`text-sm font-mono text-gray-900 break-all ${!value ? 'text-gray-400' : ''}`}>
+                {displayValue || 'Not available'}
+              </code>
+            </div>
+            {value && showCopy && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => copyToClipboard(value, label)}
+                className="text-gray-400 hover:text-[var(--biconomy-orange)] h-4 w-4 p-0 ml-2 shrink-0"
+                title={shouldTruncate ? `Copy full ${label} (${value.length} characters)` : `Copy ${label}`}
+              >
+                <Copy className="h-3 w-3" />
+              </Button>
+            )}
+          </div>
+        </td>
+      </tr>
+    );
+  };
 
   const renderOperation = (userOp: UserOp, index: number, isCleanup: boolean = false) => {
     const isExpanded = isCleanup ? expandedCleanupOps.has(index) : expandedOps.has(index);
@@ -465,9 +472,9 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
                     <col className="w-auto" />
                   </colgroup>
                   <tbody>
-                    <TableDataField icon={CreditCard} label="Paymaster Data" value={userOp.userOp.paymasterAndData} />
-                    <TableDataField icon={FileText} label="Init Code" value={userOp.userOp.initCode} />
-                    <TableDataField icon={Signature} label="Signature" value={userOp.userOp.signature} />
+                    <TableDataField icon={CreditCard} label="Paymaster Data" value={userOp.userOp.paymasterAndData} truncateLength={100} />
+                    <TableDataField icon={FileText} label="Init Code" value={userOp.userOp.initCode} truncateLength={100} />
+                    <TableDataField icon={Signature} label="Signature" value={userOp.userOp.signature} truncateLength={100} />
                   </tbody>
                 </table>
               </div>
@@ -484,7 +491,7 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
                     <col className="w-auto" />
                   </colgroup>
                   <tbody>
-                    <TableDataField icon={Code} label="Call Data" value={userOp.userOp.callData} />
+                    <TableDataField icon={Code} label="Call Data" value={userOp.userOp.callData} truncateLength={100} />
                     <TableDataField icon={CheckCircle} label="Execution Status" value={userOp.executionStatus} showCopy={false} />
                     {userOp.executionData && (
                       <tr className="border-b border-gray-100">
