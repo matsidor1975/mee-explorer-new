@@ -95,10 +95,27 @@ export default function UserOperations({ userOps, isPolling = false }: UserOpera
         description: "Creating Tenderly simulation for this operation.",
       });
       
+      console.log('Starting Tenderly simulation for userOp:', userOp);
       const simulationUrl = await simulateUserOperation(userOp);
+      console.log('Received simulation URL:', simulationUrl);
       
-      // Open the simulation in a new tab
-      window.open(simulationUrl, '_blank');
+      if (!simulationUrl) {
+        throw new Error("No simulation URL received from Tenderly");
+      }
+      
+      // Attempt to open the simulation in a new tab
+      const newTab = window.open(simulationUrl, '_blank');
+      
+      if (!newTab) {
+        // Popup was blocked or failed to open
+        console.error('Failed to open new tab - popup blocker might be active');
+        toast({
+          title: "Popup blocked",
+          description: `Please allow popups and try again. URL: ${simulationUrl}`,
+          variant: "destructive",
+        });
+        return;
+      }
       
       toast({
         title: "Simulation created",
