@@ -7,6 +7,20 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Allow iframe embedding by removing X-Frame-Options restrictions
+app.use((req: Request, res: Response, next: NextFunction) => {
+  // Remove X-Frame-Options to allow iframe embedding
+  res.removeHeader('X-Frame-Options');
+  
+  // Set CSP to allow iframe embedding from any origin
+  res.setHeader('Content-Security-Policy', "frame-ancestors *;");
+  
+  // Alternatively, you can set X-Frame-Options to ALLOWALL (non-standard but widely supported)
+  // res.setHeader('X-Frame-Options', 'ALLOWALL');
+  
+  next();
+});
+
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
