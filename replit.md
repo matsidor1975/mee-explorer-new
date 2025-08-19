@@ -152,3 +152,6 @@ The application is designed to be easily deployable on platforms like Replit, Ve
 - Enhanced mobile navigation with settings option for complete feature parity across desktop and mobile interfaces
 - Updated Tenderly integration: MINED_FAIL transactions now show direct Tenderly explorer links (https://dashboard.tenderly.co/tx/{txhash}) instead of simulation buttons
 - Added descriptive tooltips to transaction status badges explaining the differences between FAILED, MINED_FAIL, and MINED_SUCCESS states
+- Enhanced long data field display with truncation: calldata, paymaster data, init code, and signature fields now show first 100 characters with copy-to-clipboard functionality for full data
+- Configured iframe embedding support by removing X-Frame-Options restrictions and adding permissive Content-Security-Policy headers
+- Added favicon.png from assets to public directory and configured proper favicon links in HTML for brand consistency
